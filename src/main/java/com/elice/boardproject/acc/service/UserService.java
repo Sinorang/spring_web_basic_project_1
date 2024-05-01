@@ -26,10 +26,6 @@ public class UserService {
     }
 
     public List<User> getLoginUser(String id, String pwd) {
-        return userRepository.findDelByIdAndPwd(id, pwd);
-    }
-
-    public List<User> getLoginAdmin(String id, String pwd) {
-        return userRepository.findAdminByIdAndPwd(id, pwd);
+        return userRepository.findUserByIdAndPwd(id, pwd);
     }
 }

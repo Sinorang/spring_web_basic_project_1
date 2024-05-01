@@ -42,11 +42,6 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    @Column(name = "is_del")
-    private int isDel;
-    @Column(name = "is_admin")
-    private int isAdmin;
-
     @Column(name = "join_date")
     @CreationTimestamp
     private Date joinDate;

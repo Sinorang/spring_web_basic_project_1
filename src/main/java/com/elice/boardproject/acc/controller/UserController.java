@@ -71,7 +71,6 @@ public class UserController {
         }
     }
 
-
     @RequestMapping("/acc/logout")
     public String logout(HttpSession session) {
         // 세션에서 사용자 정보 삭제
@@ -84,24 +83,5 @@ public class UserController {
         }
 
         return "redirect:/acc/index"; // 로그아웃 후 홈 페이지로 리다이렉트
-    }
-
-
-    @RequestMapping("/acc/adminLogin")
-    public String adminLoginPage() {
-        return "acc/admin/login";
-    }
-
-    @PostMapping("/acc/adminLogin")
-    public String adminLogin(UserDTO userDTO, Model model, HttpSession session) {
-        List<User> loginAdmin = userService.getLoginAdmin(userDTO.getId(), userDTO.getPwd());
-
-        if (!loginAdmin.isEmpty()) {
-            session.setAttribute("loginAdmin", loginAdmin.get(0));
-            return "redirect:/acc/admin/index";
-        } else {
-            model.addAttribute("error", "관리자 정보를 확인해주세요.");
-            return "acc/admin/login";
-        }
     }
 }

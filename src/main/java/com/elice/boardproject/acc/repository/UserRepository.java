@@ -16,11 +16,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User save(User user);
 
     // 로그인
-    // user
-    @Query("SELECT u FROM User u WHERE u.isDel = 0 AND u.isAdmin = 0 AND u.id = :id AND u.pwd = :pwd")
-    List<User> findDelByIdAndPwd(@Param("id") String id, @Param("pwd") String pwd);
-
-    // admin
-    @Query("SELECT u FROM User u WHERE u.isDel = 0 AND u.isAdmin = 1 AND u.id = :id AND u.pwd = :pwd")
-    List<User> findAdminByIdAndPwd(@Param("id") String id, @Param("pwd") String pwd);
+    @Query("SELECT u FROM User u WHERE u.id = :id AND u.pwd = :pwd")
+    List<User> findUserByIdAndPwd(@Param("id") String id, @Param("pwd") String pwd);
 }
