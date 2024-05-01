@@ -1,1 +1,49 @@
-<h1>signup page</h1>
+<div th:replace="~{/base}"> <!-- base.html을 상속 -->
+    <div class="p-5 mb-4 bg-light rounded-3" th:fragment="content">
+        <h1><b>회원가입 페이지</b></h1>
+        <br>
+
+        <form action="/acc/signup" method="POST" enctype="multipart/form-data" th:object="${userDTO}" name="createForm">
+            <label class="form-label mt-5">ID</label>
+            <input type="text" class="form-control" name="id" placeholder="아이디" th:field="*{id}">
+<!--            <span th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></span>-->
+
+            <label class="form-label mt-4">PASSWORD</label>
+            <input type="password" class="form-control" name="pwd" placeholder="비밀번호" th:field="*{pwd}">
+
+            <label class="form-label mt-4">CHECK PASSWORD</label>
+            <input type="password" class="form-control" name="uchpassword">
+
+            <label class="form-label mt-4">NAME</label>
+            <input type="text" class="form-control" name="name" placeholder="user" th:field="*{name}">
+<!--            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>-->
+
+            <label class="form-label mt-4">NICKNAME</label>
+            <input type="text" class="form-control" name="nickname" placeholder="userNickname" th:field="*{nickname}">
+<!--            <span th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"></span>-->
+
+            <label class="form-label mt-4">EMAIL</label>
+            <input type="email" class="form-control" name="email" placeholder="example@elice.com" th:field="*{email}">
+<!--            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>-->
+
+            <div class="text-end mt-4">
+                <button class="btn btn-dark btn-lg" type="button" onclick="check()">회원가입</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    function check(){
+        var cf = document.createForm;
+        if(!cf.id.value){
+            alert("USERNAME을 입력해주세요");
+        } else if(!cf.pwd.value){
+            alert("PASSWORD를 입력해주세요");
+        } else if(cf.pwd.value != cf.uchpassword.value){
+            alert("PASSWORD를 확인해주세요 (불일치)");
+        } else{
+            cf.submit();
+        }
+    }
+</script>

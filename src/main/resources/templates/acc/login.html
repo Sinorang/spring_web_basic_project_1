@@ -1,15 +1,15 @@
-{% extends 'base.html' %}
+<div th:replace="~{/base}"> <!-- base.html을 상속 -->
+    <div class="p-5 mb-4 bg-light rounded-3" th:fragment="content">
+        <h1><b>로그인 페이지</b></h1>
+        <br>
+        <form action="/acc/login" method="POST">
+            <input type="text" class="form-control mt-5" placeholder="INPUT ID" name="id">
+            <input type="password" class="form-control mt-3" placeholder="INPUT PASSWORD" name="pwd">
+            <span th:if="${error}" style="color: red;" th:text="${error}"></span> <!-- 에러 메시지 표시 -->
 
-{% block con %}
-<h1><b>로그인 페이지</b></h1>
-<br>
-<form method="POST">
-    {% csrf_token %}
-    <input type="text" class="form-control mt-5" placeholder="INPUT ID" name="username">
-    <input type="password" class="form-control mt-3" placeholder="INPUT PASSWORD" name="password">
-
-    <div class="text-end mt-4">
-        <button class="btn btn-dark btn-lg">로그인</button>
+            <div class="text-end mt-4">
+                <button type="submit" class="btn btn-dark btn-lg">로그인</button>
+            </div>
+        </form>
     </div>
-</form>
-{% endblock %}
+</div>

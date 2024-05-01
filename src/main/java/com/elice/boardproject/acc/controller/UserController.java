@@ -71,6 +71,7 @@ public class UserController {
         }
     }
 
+
     @RequestMapping("/acc/logout")
     public String logout(HttpSession session) {
         // 세션에서 사용자 정보 삭제
