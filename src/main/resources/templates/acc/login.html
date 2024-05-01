@@ -1,1 +1,15 @@
-<h1>login page</h1>
+{% extends 'base.html' %}
+
+{% block con %}
+<h1><b>로그인 페이지</b></h1>
+<br>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" class="form-control mt-5" placeholder="INPUT ID" name="username">
+    <input type="password" class="form-control mt-3" placeholder="INPUT PASSWORD" name="password">
+
+    <div class="text-end mt-4">
+        <button class="btn btn-dark btn-lg">로그인</button>
+    </div>
+</form>
+{% endblock %}
