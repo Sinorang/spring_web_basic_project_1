@@ -46,6 +46,7 @@ public class UserController {
     @PostMapping("/acc/signup")
     public String signUp(@Valid UserDTO userDTO, Errors errors, Model model) {
         if (errors.hasErrors()) {
+            System.out.println(errors.getAllErrors());
             model.addAttribute("userDTO", userDTO);
             return "acc/signup";
         }
