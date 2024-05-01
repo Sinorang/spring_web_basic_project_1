@@ -27,6 +27,7 @@ public class UserDTO {
 
     @NotBlank(message = "이메일을 입력해주세요.")
     private String email;
+
     public User toEntity() {
         return User.builder()
                 .id(id)

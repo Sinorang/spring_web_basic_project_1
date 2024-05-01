@@ -50,5 +50,4 @@ public class User {
     @Column(name = "join_date")
     @CreationTimestamp
     private Date joinDate;
-
 }
