@@ -9,8 +9,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    // 관리자. 회원 목록 조회
     List<User> findAll();
+
+//    User findUserById(String id);
 
     // 회원가입
     User save(User user);

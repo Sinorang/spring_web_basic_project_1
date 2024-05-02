@@ -28,4 +28,8 @@ public class UserService {
     public List<User> getLoginUser(String id, String pwd) {
         return userRepository.findUserByIdAndPwd(id, pwd);
     }
+
+//    public User getUserById(String id) {
+//        return userRepository.findUserById(id);
+//    }
 }
