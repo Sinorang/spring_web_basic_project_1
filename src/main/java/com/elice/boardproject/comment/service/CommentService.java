@@ -19,10 +19,10 @@ public class CommentService {
     }
 
     public List<Comment> findComments() { return commentRepository.findAll(); } //댓글 전체 조회
-    public List<Comment> findCommentByPostId(int postId) { // 포스트 아이디로 댓글 조회
-        return commentRepository.findCommentsByPostPostId(postId);
+    public List<Comment> findCommentByPostId(Long postId) { // 포스트 아이디로 댓글 조회
+        return commentRepository.findCommentsByPostId(postId);
     }
-    public Comment findCommentByCommentId(int commentId){ // 댓글아이디로 댓글 조회
+    public Comment findCommentByCommentId(Long commentId){ // 댓글아이디로 댓글 조회
         return commentRepository.findById(commentId).orElse(null);
     }
 
@@ -32,13 +32,13 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Comment updateComment(int commentId, Comment comment){ //댓글 수정
+    public Comment updateComment(Long commentId, Comment comment){ //댓글 수정
         Comment updateComment = commentRepository.findCommentByCommentId(commentId);
         updateComment.setCommentContent(comment.getCommentContent());
         return commentRepository.save(updateComment);
     }
 
-    public void deleteComment(int commentId){ // 댓글삭제
+    public void deleteComment(Long commentId){ // 댓글삭제
         Comment deleteComment = commentRepository.findById(commentId).orElse(null);
         commentRepository.delete(deleteComment);
     }

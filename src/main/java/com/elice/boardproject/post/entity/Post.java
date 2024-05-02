@@ -26,7 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Table(name = "posts")
 public class Post {
     @Id
-    @Column(name = "post_id")
+    @Column(name = "post_Id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,4 +46,12 @@ public class Post {
     @Column(name = "post_date")
     @CreationTimestamp
     private Timestamp postDate;
+
+    // 일관성 유지
+    public void setBoard(Board board) {
+        this.board = board;
+        if (!this.board.getPosts().contains(this)) {
+            this.board.getPosts().add(this);
+        }
+    }
 }

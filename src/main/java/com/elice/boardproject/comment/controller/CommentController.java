@@ -41,7 +41,7 @@ public class CommentController {
     }
 
     @PostMapping("/comment/{comment_id}/edit") // 댓글 수정 요청
-    public String updateComment(@PathVariable int comment_id,
+    public String updateComment(@PathVariable Long comment_id,
                                 @ModelAttribute CommentDTO commentDTO,
                                 RedirectAttributes redirectAttributes,
                                 HttpSession session) {
@@ -62,7 +62,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/comment/{comment_id}/delete") //댓글 삭제 요청
-    public String deleteComment(@PathVariable int comment_id,
+    public String deleteComment(@PathVariable Long comment_id,
                                 RedirectAttributes redirectAttributes,
                                 HttpSession session) {
 
