@@ -51,7 +51,7 @@
         <h1 class="text-center">게시판 목록</h1>
       </div>
       <div class="d-flex justify-content-end mb-3">
-        <a th:href="@{/boards/create}" class="btn btn-primary">게시판 추가</a>
+        <a th:href="@{/board/create}" class="btn btn-primary">게시판 추가</a>
       </div>
       <div class="container p-0">
         <div class="row row-cols-3 position-relative">
@@ -67,13 +67,9 @@
             >
               <a
                 class="board-item pe-auto p-3 link-underline link-underline-opacity-0 d-flex"
-                th:href="@{/boards/{boardId}(boardId=${board.id})}"
+                th:href="@{/board/index/{boardIdx}(boardIdx=${board.getIdx()})}"
               >
-                <img
-                  class="img-thumbnail w-50 h-50 me-3"
-                  src="hellobit.png"
-                  alt="hellobit"
-                />
+                <img class="img-thumbnail w-50 h-50 me-3" th:src="@{/images/playlistWebImage_PNG.png}" alt="defaultImage" />
                 <div>
                   <h4
                     class="card-title fw-bold text-dark"
@@ -94,7 +90,7 @@
                 >
                   <button
                     class="btn btn-outline-primary lh-1"
-                    th:onclick="'event.preventDefault(); location.href=\'/boards/' + ${board.id} + '/edit\''"
+                    th:onclick="'event.preventDefault(); location.href=\'/board/boards/' + ${board.idx} + '/edit\''"
                   >
                     <span class="material-symbols-outlined"> edit </span>
                   </button>
@@ -102,7 +98,7 @@
                     class="btn btn-outline-danger lh-1"
                     data-bs-toggle="modal"
                     data-bs-target="#deleteModal"
-                    th:onclick="handleDeleteButton(event, [[${board.id}]]);"
+                    th:onclick="handleDeleteButton(event, [[${board.idx}]]);"
                   >
                     <span class="material-symbols-outlined"> delete </span>
                   </button>
@@ -165,15 +161,15 @@
     <script th:inline="javascript">
       let currentBoard;
 
-      function handleDeleteButton(e, boardId) {
+      function handleDeleteButton(e, boardIdx) {
         e.preventDefault();
-        currentBoard = boardId;
+        currentBoard = boardIdx;
       }
 
       function handleDeleteModalButton() {
-        fetch(`/boards/${currentBoard}/delete`, {
-          method: "DELETE",
-        }).then(() => (window.location.href = "/boards"));
+        fetch(`/board/boards/${currentBoard}/delete?boardIdx=${currentBoard}`, {
+          method: "GET",
+        }).then(() => (window.location.href = "/board/boards"));
       }
     </script>
 

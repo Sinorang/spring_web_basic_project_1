@@ -30,7 +30,7 @@
       <a
         class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2 d-block"
         style="transition: all 0.1s ease-in-out"
-        th:href="@{/boards}"
+        th:href="@{/board/boards}"
         >&larr; 게시판 목록으로 돌아가기</a
       >
       <div class="header mb-5">
@@ -55,7 +55,7 @@
           </div>
         </form>
         <a
-          th:href="@{/posts/create(boardId=${board.id})}"
+          th:href="@{/posts/create(boardIdx=${board.idx})}"
           class="btn btn-primary"
           >게시글 추가</a
         >
@@ -87,7 +87,7 @@
           >
             <a
               class="page-link"
-              th:href="@{/boards/{boardId}(page=${i}, size=${postPage.size}, boardId=${board.id}, keyword=${keyword})}"
+              th:href="@{/boards/{boardIdx}(page=${i}, size=${postPage.size}, boardIdx=${board.idx}, keyword=${keyword})}"
               th:text="${i + 1}"
               >0</a
             >

@@ -1,10 +1,7 @@
 package com.elice.boardproject;
 
-import com.elice.boardproject.board.Board;
 import com.elice.boardproject.board.repository.BoardRepository;
-import com.elice.boardproject.comment.Comment;
 import com.elice.boardproject.comment.repository.CommentRepository;
-import com.elice.boardproject.post.Post;
 import com.elice.boardproject.post.repository.PostRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

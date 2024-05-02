@@ -27,7 +27,7 @@
         <h1 class="text-center">게시판 수정</h1>
       </div>
       <form
-        th:action="@{/boards/{boardId}/edit(boardId=${board.id})}"
+        th:action="@{/board/boards/{boardIdx}/edit(boardIdx=${board.idx})}"
         method="post"
       >
         <div class="mb-3">
