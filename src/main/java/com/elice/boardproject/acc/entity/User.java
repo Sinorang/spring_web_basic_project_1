@@ -45,4 +45,12 @@ public class User {
     @Column(name = "join_date")
     @CreationTimestamp
     private Date joinDate;
+
+    public User(String id, String pwd, String name, String nickname, String email) {
+        this.id = id;
+        this.pwd = pwd;
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+    }
 }

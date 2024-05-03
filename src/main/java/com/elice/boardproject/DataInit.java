@@ -1,5 +1,7 @@
 package com.elice.boardproject;
 
+import com.elice.boardproject.acc.entity.User;
+import com.elice.boardproject.acc.repository.UserRepository;
 import com.elice.boardproject.board.repository.BoardRepository;
 import com.elice.boardproject.comment.repository.CommentRepository;
 import com.elice.boardproject.post.repository.PostRepository;
@@ -9,11 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataInit implements CommandLineRunner {
 
+    private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-    public DataInit(BoardRepository boardRepository, PostRepository postRepository, CommentRepository commentRepository) {
+    public DataInit(UserRepository userRepository, BoardRepository boardRepository, PostRepository postRepository, CommentRepository commentRepository) {
+        this.userRepository = userRepository;
         this.boardRepository = boardRepository;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
@@ -22,6 +26,8 @@ public class DataInit implements CommandLineRunner {
     @Override
     public void run(String... args) {
         // 초기 데이터 삽입
+        User user = new User("test", "1234", "testUser", "testNick", "test@example.com");
+        this.userRepository.save(user);
 
 //        Board board1 = new Board("Board 1");
 //        Board board2 = new Board("Board 2");

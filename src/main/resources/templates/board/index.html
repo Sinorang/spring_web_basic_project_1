@@ -55,7 +55,7 @@
           </div>
         </form>
         <a
-          th:href="@{/posts/create(boardIdx=${board.idx})}"
+          th:href="@{/post/create(boardIdx=${board.idx})}"
           class="btn btn-primary"
           >게시글 추가</a
         >
@@ -65,10 +65,10 @@
           class="board-item list-group-item p-3 list-group-item-action"
           th:unless="${postPage.isEmpty()}"
           th:each="post : ${postPage}"
-          th:href="@{/posts/{postId}(postId=${post.id})}"
+          th:href="@{/post/{postId}(postId=${post.id})}"
         >
           <h4 class="fw-bold mb-1" th:text="${post.title}">게시글 제목</h4>
-          <small class="text-secondary" th:text="${post.createdAt}"
+          <small class="text-secondary" th:text="${post.postDate}"
             >게시글 생성일</small
           >
         </a>

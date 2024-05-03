@@ -1,5 +1,6 @@
 package com.elice.boardproject;
 
+import com.elice.boardproject.acc.repository.UserRepository;
 import com.elice.boardproject.board.repository.BoardRepository;
 import com.elice.boardproject.comment.repository.CommentRepository;
 import com.elice.boardproject.post.repository.PostRepository;
@@ -19,8 +20,8 @@ public class BoardprojectApplication {
 
 //	@Bean
 //	@Profile("local")
-//	public DataInit stubDataInit(BoardRepository boardRepository, PostRepository postRepository, CommentRepository commentRepository) {
-//		return new DataInit(boardRepository, postRepository, commentRepository);
-//	}
+	public DataInit stubDataInit(UserRepository userRepository, BoardRepository boardRepository, PostRepository postRepository, CommentRepository commentRepository) {
+		return new DataInit(userRepository, boardRepository, postRepository, commentRepository);
+	}
 
 }

@@ -51,6 +51,24 @@ public class PostController {
         return "post/post";
     }
 
+    @GetMapping("/post/create") //게시글 생성창
+    public String createPostPage(@RequestParam Long boardIdx, Model model) {
+
+        model.addAttribute("boardIdx", boardIdx);
+        return "post/createPost";
+    }
+
+    @PostMapping("/post/create") // 게시글 생성 요청
+    public String createPost(@ModelAttribute PostDTO postDTO,
+                             @RequestParam Long boardIdx,
+                             HttpSession session) {
+
+        User loginUser = (User) session.getAttribute("loginUser");
+        Post post = postMapper.postDTOToPost(postDTO);
+        post.setUser(loginUser);
+        Post createPost = postService.createPost(post, boardIdx);
+        return "redirect:/board/index/" + createPost.getBoard().getIdx(); // 생성한 게시글 조회 화면으로 이동
+    }
 
     @GetMapping("/post/{post_id}/edit") // 게시글 수정창
     public String editPostPage(@PathVariable Long post_id, Model model,
@@ -85,27 +103,6 @@ public class PostController {
         return "redirect:/post/{post_id}"; // 수정한 게시글 조회 화면
     }
 
-
-    @GetMapping("/post/create") //게시글 생성창
-    public String createPostPage(@RequestParam Long boardIdx, Model model) {
-
-        model.addAttribute("boardId", boardIdx); // 수정?
-        return "post/createPost";
-    }
-
-    @PostMapping("/post/create") // 게시글 생성 요청
-    public String createPost(@ModelAttribute PostDTO postDTO,
-                             @RequestParam Long boardIdx,
-                             HttpSession session) {
-
-        User loginUser = (User) session.getAttribute("loginUser");
-        Post post = postMapper.postDTOToPost(postDTO);
-        post.setUser(loginUser);
-        Post createPost = postService.createPost(post, boardIdx);
-        return "redirect:/boards/" + createPost.getBoard().getIdx(); // 생성한 게시글 조회 화면으로 이동
-    }
-
-
     @DeleteMapping("post/{post_id}/delete")
     public String deletePost(@PathVariable Long post_id,
                              RedirectAttributes redirectAttributes,
@@ -121,7 +118,7 @@ public class PostController {
             }
             postService.deletePost(post_id);
             redirectAttributes.addFlashAttribute("message", "게시글이 삭제되었습니다!");
-            return "redirect:/boards"; //게시판 메인화면
+            return "redirect:/board/index"; //게시판 메인화면
         }
         else {
             System.out.println("게시글을 생성한 사람만 삭제할 수 있습니다!");

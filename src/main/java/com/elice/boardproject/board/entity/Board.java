@@ -36,6 +36,10 @@ public class Board {
     @Column(name = "board_idx")
     private Long idx;
 
+    @ManyToOne // 유저 : 게시판 = 1 : N
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL) // 게시판 : 게시글 = 1 : N
     private List<Post> posts = new ArrayList<>();
 
@@ -49,4 +53,10 @@ public class Board {
     @CreationTimestamp
     private Timestamp date;
 
+    public Board(Long idx, User user, String name, String description){
+        this.idx = idx;
+        this.user = user;
+        this.name = name;
+        this.description = description;
+    }
 }
