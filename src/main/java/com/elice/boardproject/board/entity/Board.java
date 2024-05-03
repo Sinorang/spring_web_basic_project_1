@@ -36,11 +36,11 @@ public class Board {
     @Column(name = "board_idx")
     private Long idx;
 
-    @ManyToOne // 유저 : 게시판 = 1 : N
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL) // 게시판 : 게시글 = 1 : N
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
     @Column(name = "board_name", nullable = false)
