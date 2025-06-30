@@ -19,4 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 로그인
     @Query("SELECT u FROM User u WHERE u.id = :id AND u.pwd = :pwd")
     List<User> findUserByIdAndPwd(@Param("id") String id, @Param("pwd") String pwd);
+
+    // 아이디로 사용자 조회 (JWT 인증용)
+    User findById(String id);
 }

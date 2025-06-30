@@ -3,7 +3,6 @@ package com.elice.boardproject.acc.controller;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,37 +51,5 @@ public class UserController {
         }
         userService.join(userDTO);
         return "redirect:/acc/index";
-    }
-
-    @RequestMapping("/acc/login")
-    public String loginPage(UserDTO userDTO) {
-        return "acc/login";
-    }
-
-    @PostMapping("/acc/login")
-    public String login(UserDTO userDTO, Model model, HttpSession session) {
-        List<User> loginUser = userService.getLoginUser(userDTO.getId(), userDTO.getPwd());
-        // 로그인 성공 여부를 체크하고 적절한 처리를 수행
-        if (!loginUser.isEmpty()) {
-            session.setAttribute("loginUser", loginUser.get(0));
-            return "redirect:/acc/index"; // 로그인 성공 시 홈 페이지로 리다이렉트
-        } else {
-            model.addAttribute("error", "로그인 정보가 일치하지 않습니다."); // 에러 메시지 전달
-            return "acc/login"; //로그인 폼 페이지로 다시 이동
-        }
-    }
-
-    @RequestMapping("/acc/logout")
-    public String logout(HttpSession session) {
-        // 세션에서 사용자 정보 삭제
-        if(session.getAttribute("loginUser") != null) {
-            session.invalidate();
-        } else if (session.getAttribute("adminLogin") != null) {
-            session.invalidate();
-        } else {
-            // do nothing
-        }
-
-        return "redirect:/acc/index"; // 로그아웃 후 홈 페이지로 리다이렉트
     }
 }
