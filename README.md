@@ -1,5 +1,5 @@
 # 🎧음악 추천 및 공유 플랫폼
-![main](/src/main/resources/static/images/playlistWebImage_GIF.gif)
+<img src="/src/main/resources/static/images/playlistWebImage_GIF.gif" width="400" alt=""/>
 
 ## 📆프로젝트 일정
 ✅ **프로젝트 기간**
