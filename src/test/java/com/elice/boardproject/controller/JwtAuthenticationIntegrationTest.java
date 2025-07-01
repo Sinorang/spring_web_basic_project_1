@@ -1,6 +1,6 @@
 package com.elice.boardproject.controller;
 
-import com.elice.boardproject.JwtUtil;
+import com.elice.boardproject.security.JwtUtil;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.repository.UserRepository;
@@ -11,6 +11,9 @@ import com.elice.boardproject.board.service.BoardService;
 import com.elice.boardproject.post.entity.Post;
 import com.elice.boardproject.post.entity.PostDTO;
 import com.elice.boardproject.post.service.PostService;
+import com.elice.boardproject.board.repository.BoardRepository;
+import com.elice.boardproject.post.repository.PostRepository;
+import com.elice.boardproject.comment.repository.CommentRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,9 +50,20 @@ class JwtAuthenticationIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private BoardRepository boardRepository;
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
     @BeforeEach
     void setUp() {
-        // 각 테스트 전에 데이터베이스 정리
+        commentRepository.deleteAll();
+        postRepository.deleteAll();
+        boardRepository.deleteAll();
         userRepository.deleteAll();
     }
 

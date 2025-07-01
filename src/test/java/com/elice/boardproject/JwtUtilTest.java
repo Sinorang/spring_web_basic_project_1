@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.elice.boardproject.security.JwtUtil;
+
 class JwtUtilTest {
 
     @Test

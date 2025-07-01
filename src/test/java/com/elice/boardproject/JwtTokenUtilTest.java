@@ -15,6 +15,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
+import com.elice.boardproject.security.JwtTokenUtil;
+import com.elice.boardproject.security.JwtUtil;
+
 @ExtendWith(MockitoExtension.class)
 class JwtTokenUtilTest {
 

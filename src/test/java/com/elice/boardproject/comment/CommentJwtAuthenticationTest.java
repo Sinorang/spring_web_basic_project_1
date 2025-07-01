@@ -1,6 +1,6 @@
 package com.elice.boardproject.comment;
 
-import com.elice.boardproject.JwtUtil;
+import com.elice.boardproject.security.JwtUtil;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.repository.UserRepository;
@@ -14,6 +14,9 @@ import com.elice.boardproject.comment.service.CommentService;
 import com.elice.boardproject.post.entity.Post;
 import com.elice.boardproject.post.entity.PostDTO;
 import com.elice.boardproject.post.service.PostService;
+import com.elice.boardproject.comment.repository.CommentRepository;
+import com.elice.boardproject.post.repository.PostRepository;
+import com.elice.boardproject.board.repository.BoardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -48,9 +51,20 @@ class CommentJwtAuthenticationTest {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private BoardRepository boardRepository;
+
     @BeforeEach
     void setUp() {
-        // 각 테스트 전에 데이터베이스 정리
+        commentRepository.deleteAll();
+        postRepository.deleteAll();
+        boardRepository.deleteAll();
         userRepository.deleteAll();
     }
 
