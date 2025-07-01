@@ -1,4 +1,4 @@
-package com.elice.boardproject.post.entity;
+package com.elice.boardproject.acc.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,9 +7,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class PostDTO {
-    private String title;
-    private String content;
-}
+@AllArgsConstructor
+public class LoginDTO {
+
+    private String id;
+    private String pwd;
+} 

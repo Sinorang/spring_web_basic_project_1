@@ -6,6 +6,8 @@ import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.entity.UserDetailsImpl;
 import com.elice.boardproject.acc.service.UserDetailsServiceImpl;
 import com.elice.boardproject.acc.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/acc")
+@RequestMapping("/api/acc")
 public class UserApiController {
     private final UserService userService;
     private final UserDetailsServiceImpl userDetailsService;
@@ -27,7 +29,7 @@ public class UserApiController {
 
     // JWT 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> login(@RequestBody UserDTO userDTO, HttpServletResponse response) {
         // 1. 사용자 인증
         List<User> loginUser = userService.getLoginUser(userDTO.getId(), userDTO.getPwd());
         if (loginUser.isEmpty()) {
@@ -36,12 +38,29 @@ public class UserApiController {
         // 2. JWT 토큰 생성
         UserDetailsImpl userDetails = new UserDetailsImpl(loginUser.get(0));
         String token = JwtUtil.generateToken(userDetails.getUsername());
+        
+        // 3. 쿠키에 JWT 토큰 설정
+        Cookie jwtCookie = new Cookie("jwt_token", token);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(false); // HTTPS 환경에서는 true로 설정
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(3600); // 1시간
+        response.addCookie(jwtCookie);
+        
         return ResponseEntity.ok().body("Bearer " + token);
     }
 
-    // JWT 로그아웃 (실제 서버 처리 없음, 프론트에서 토큰 삭제)
+    // JWT 로그아웃
     @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
-        return ResponseEntity.ok().body("클라이언트에서 토큰을 삭제하세요.");
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        // 쿠키에서 JWT 토큰 삭제
+        Cookie jwtCookie = new Cookie("jwt_token", null);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(false);
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(0); // 즉시 삭제
+        response.addCookie(jwtCookie);
+        
+        return ResponseEntity.ok().body("로그아웃되었습니다.");
     }
 } 

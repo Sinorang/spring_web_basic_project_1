@@ -1,5 +1,6 @@
 package com.elice.boardproject.post.controller;
 
+import com.elice.boardproject.JwtTokenUtil;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.service.UserService;
 import com.elice.boardproject.board.entity.Board;
@@ -11,7 +12,7 @@ import com.elice.boardproject.post.entity.Post;
 import com.elice.boardproject.post.entity.PostDTO;
 import com.elice.boardproject.post.mapper.PostMapper;
 import com.elice.boardproject.post.service.PostService;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +37,18 @@ public class PostController {
     private final PostMapper postMapper;
     private final CommentService commentService;
     private final UserService userService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/post/{post_id}") // 게시글 눌렀을 때 화면 : 게시글 조회
     public String postMain(@PathVariable Long post_id, Model model,
-                           HttpSession session){
+                           HttpServletRequest request){
 
-        User loginUser = (User) session.getAttribute("loginUser");
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
         Post post = postService.findPost(post_id);
         model.addAttribute("post", post);
-        model.addAttribute("loginId", loginUser.getId());
+        if (loginUser != null) {
+            model.addAttribute("loginId", loginUser.getId());
+        }
         //코멘트 추가
         List<Comment> commentList = commentService.findCommentByPostId(post_id);
         model.addAttribute("comments", commentList);
@@ -61,9 +65,9 @@ public class PostController {
     @PostMapping("/post/create") // 게시글 생성 요청
     public String createPost(@ModelAttribute PostDTO postDTO,
                              @RequestParam Long boardIdx,
-                             HttpSession session) {
+                             HttpServletRequest request) {
 
-        User loginUser = (User) session.getAttribute("loginUser");
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
         Post post = postMapper.postDTOToPost(postDTO);
         post.setUser(loginUser);
         Post createPost = postService.createPost(post, boardIdx);
@@ -72,9 +76,9 @@ public class PostController {
 
     @GetMapping("/post/{post_id}/edit") // 게시글 수정창
     public String editPostPage(@PathVariable Long post_id, Model model,
-                               HttpSession session) {
+                               HttpServletRequest request) {
 
-        User loginUser = (User) session.getAttribute("loginUser");
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
         Post post = postService.findPost(post_id);
         if (post.getUser().getId().equals(loginUser.getId())) {
             model.addAttribute("post", post);
@@ -106,9 +110,9 @@ public class PostController {
     @DeleteMapping("post/{post_id}/delete")
     public String deletePost(@PathVariable Long post_id,
                              RedirectAttributes redirectAttributes,
-                             HttpSession session) {
+                             HttpServletRequest request) {
 
-        User loginUser = (User) session.getAttribute("loginUser");
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
         Post post = postService.findPost(post_id);
         if (post.getUser().getId().equals(loginUser.getId())) {
             List<Comment> commentList = commentService.findCommentByPostId(post_id);
