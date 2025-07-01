@@ -4,7 +4,7 @@ import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.entity.LoginDTO;
 import com.elice.boardproject.acc.service.UserService;
-import com.elice.boardproject.JwtUtil;
+import com.elice.boardproject.security.JwtUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -39,33 +39,6 @@ public class UserController {
     @GetMapping("/acc/index")
     public String indexPage() {
         return "acc/index";
-    }
-
-    @ModelAttribute
-    public void addLoginUserToModel(HttpServletRequest request, Model model) {
-        // JWT 토큰에서 사용자 정보 추출
-        String token = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwt_token".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        
-        if (token != null && JwtUtil.validateToken(token)) {
-            try {
-                String username = JwtUtil.getUsernameFromToken(token);
-                User user = userService.getUserById(username);
-                if (user != null) {
-                    model.addAttribute("loginUser", user);
-                }
-            } catch (Exception e) {
-                logger.debug("JWT 토큰 파싱 실패: {}", e.getMessage());
-            }
-        }
     }
 
     @RequestMapping("/acc/users")
@@ -118,7 +91,7 @@ public class UserController {
         logger.info("로그인 성공 - ID: {}, 사용자명: {}", loginDTO.getId(), loginUser.get(0).getName());
         
         // JWT 토큰 생성 및 쿠키 설정
-        String token = com.elice.boardproject.JwtUtil.generateToken(loginDTO.getId());
+        String token = com.elice.boardproject.security.JwtUtil.generateToken(loginDTO.getId());
         logger.debug("JWT 토큰 생성 완료 - ID: {}", loginDTO.getId());
         
         Cookie jwtCookie = new Cookie("jwt_token", token);

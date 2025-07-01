@@ -88,8 +88,7 @@
                   class="btn btn-outline-primary lh-1"
                   data-bs-toggle="modal"
                   data-bs-target="#editCommentModal"
-                  th:onclick="handleEditCommentButton(event, [[${comment.commentId}]], [[${comment.commentContent}]],
-                                [[${session.getAttribute("loginUser").id}]], [[${comment.user.id}]], [[${post.id}]]);"
+                  th:onclick="handleEditCommentButton(event, [[${comment.commentId}]], [[${comment.commentContent}]], [[${loginId}]], [[${comment.user.id}]], [[${post.id}]])"
                 >
                   <span class="material-symbols-outlined"> edit </span>
                 </button>
@@ -97,8 +96,8 @@
                   class="btn btn-outline-danger lh-1"
                   data-bs-toggle="modal"
                   data-bs-target="#deleteCommentModal"
-                  th:onclick="handleDeleteCommentButton(event, [[${comment.commentId}]], [[${post.id}]],
-                                [[${comment.user.id}]], [[${session.getAttribute("loginUser").id}]]);"
+                  th:attr="data-comment-id=${comment.commentId}"
+                  th:onclick="handleDeleteCommentButton(event, [[${comment.commentId}]], [[${post.id}]], [[${comment.user.id}]], [[${loginId}]])"
                 >
                   <span class="material-symbols-outlined"> delete </span>
                 </button>
@@ -120,7 +119,7 @@
           <div class="input-group">
             <textarea
               class="form-control"
-              name="content"
+              name="commentContent"
               cols="6"
               placeholder="댓글 작성하기"
             ></textarea>
@@ -283,6 +282,7 @@
             <button
               type="button"
               class="btn btn-danger"
+              id="deleteBtn"
               onclick="handleDeleteCommentModalButton()"
             >
               삭제
@@ -323,15 +323,18 @@
         }
       }
 
-      function handleDeleteCommentButton(e,  commentId, postId, commentUser, loginId) {
+      function handleDeleteCommentButton(e, commentId, postId, commentUser, loginId) {
         currentComment = commentId;
         currentPost = postId;
         deleteCommentId = loginId;
         commentUserId = commentUser;
         elementToDelete = e.target.closest(".card");
 
+        // 모달에 commentId 저장
+        const modal = document.getElementById("deleteCommentModal");
+        modal.setAttribute("data-comment-id", commentId);
+        console.log("[DEBUG] currentComment:", currentComment);
         let btn = document.getElementById("deleteBtn");
-
         if(commentUserId === deleteCommentId){
           btn.style.display='block';
         }else{
@@ -340,30 +343,22 @@
       }
 
       function handleDeleteCommentModalButton() {
-        if(currentComment === deleteCommentId){
-          fetch(`/comments/${currentComment}`, {
-            method: "DELETE",
-          }).then(() => elementToDelete.remove());
-
-          const commentsCount = document.getElementById("commentsCount");
-          commentsCount.innerText = parseInt(commentsCount.innerText) - 1;
-
-          const modal = bootstrap.Modal.getInstance("#deleteCommentModal");
-          modal.hide();
-
-        }else{
-          fetch(`/comment/${currentComment}/delete`, {
-            method: "DELETE",
-          }).then(() => (window.location.href = `/post/${currentPost}`));
-
-          const commentsCount = document.getElementById("commentsCount");
-          commentsCount.innerText = parseInt(commentsCount.innerText) - 1;
-
-          const modal = bootstrap.Modal.getInstance("#deleteCommentModal");
-          modal.hide();
+        const modal = document.getElementById("deleteCommentModal");
+        const commentId = modal.getAttribute("data-comment-id");
+        if (!commentId || commentId === "undefined") {
+          alert("댓글 ID를 찾을 수 없습니다.");
+          return;
         }
-
-
+        fetch(`/comment/${commentId}/delete`, {
+          method: "DELETE",
+        }).then(() => {
+          if (elementToDelete) elementToDelete.remove();
+          const commentsCount = document.getElementById("commentsCount");
+          commentsCount.innerText = parseInt(commentsCount.innerText) - 1;
+          const modal = bootstrap.Modal.getInstance("#deleteCommentModal");
+          if (modal) modal.hide();
+          window.location.reload();
+        });
       }
 
       function handleEditCommentButton(_, commentId, content, commentLoginId, loginId) {

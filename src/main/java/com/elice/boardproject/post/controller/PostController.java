@@ -1,6 +1,6 @@
 package com.elice.boardproject.post.controller;
 
-import com.elice.boardproject.JwtTokenUtil;
+import com.elice.boardproject.security.JwtTokenUtil;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.service.UserService;
 import com.elice.boardproject.board.entity.Board;
@@ -48,6 +48,7 @@ public class PostController {
         model.addAttribute("post", post);
         if (loginUser != null) {
             model.addAttribute("loginId", loginUser.getId());
+            model.addAttribute("loginNickname", loginUser.getNickname());
         }
         //코멘트 추가
         List<Comment> commentList = commentService.findCommentByPostId(post_id);

@@ -1,6 +1,6 @@
 package com.elice.boardproject.comment.controller;
 
-import com.elice.boardproject.JwtTokenUtil;
+import com.elice.boardproject.security.JwtTokenUtil;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.service.UserService;
 import com.elice.boardproject.comment.entity.Comment;
@@ -75,12 +75,12 @@ public class CommentController {
         if(comment.getUser().getId().equals(loginUser.getId())){
             Long postId = comment.getPost().getId();
             commentService.deleteComment(comment_id);
-            return "/post/" + postId; // 해당 게시글 화면으로 다시 돌아감
+            return "redirect:/post/" + postId;
 
         } else {
             System.out.println("댓글을 작성한 사람만 삭제할 수 있습니다!");
             redirectAttributes.addAttribute("postId", comment.getPost().getId());
-            return "/post/{postId}";
+            return "redirect:/post/{postId}";
         }
     }
 

@@ -5,15 +5,11 @@ import com.elice.boardproject.comment.entity.CommentDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public class CommentMapper {
-    public Comment commentDtoToComment(CommentDTO commentDTO) {
-        if (commentDTO == null) {
-            return null;
-        } else {
-            Comment comment = new Comment();
-            comment.setCommentContent(commentDTO.getCommentContent());
-            return comment;
-        }
-    }
+public interface CommentMapper {
+    // DTO → Entity
+    Comment commentDtoToComment(CommentDTO commentDTO);
+
+    // Entity → DTO (필요시)
+    CommentDTO commentToCommentDto(Comment comment);
 }
 

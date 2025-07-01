@@ -1,4 +1,4 @@
-package com.elice.boardproject;
+package com.elice.boardproject.security;
 
 import com.elice.boardproject.acc.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
