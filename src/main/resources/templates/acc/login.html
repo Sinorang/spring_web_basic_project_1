@@ -5,7 +5,7 @@
         <form action="/acc/login" method="POST">
             <input type="text" class="form-control mt-5" placeholder="INPUT ID" name="id">
             <input type="password" class="form-control mt-3" placeholder="INPUT PASSWORD" name="pwd">
-            <span th:if="${error}" style="color: red;" th:text="${error}"></span> <!-- 에러 메시지 표시 -->
+            <span th:if="${loginError}" style="color: red;" th:text="${loginError}"></span> <!-- 로그인 에러 메시지 표시 -->
 
             <div class="text-end mt-4">
                 <button type="submit" class="btn btn-dark btn-lg">로그인</button>

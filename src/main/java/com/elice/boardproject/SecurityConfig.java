@@ -25,8 +25,13 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/acc/login", "/acc/signup", "/", "/acc/index", "/static/**", "/images/**").permitAll()
-                .anyRequest().authenticated()
+                // 공개 접근 가능한 페이지들
+                .requestMatchers("/acc/login", "/acc/signup", "/acc/logout", "/", "/acc/index", 
+                               "/static/**", "/images/**", "/css/**", "/js/**", "/favicon.ico",
+                               "/h2-console/**").permitAll()
+                // 인증이 필요한 페이지들 (컨트롤러에서 추가 검증)
+                .requestMatchers("/board/**", "/post/**", "/comment/**").permitAll()
+                .anyRequest().permitAll()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

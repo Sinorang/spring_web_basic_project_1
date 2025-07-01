@@ -53,7 +53,7 @@ public class Post {
     // 일관성 유지
     public void setBoard(Board board) {
         this.board = board;
-        if (!this.board.getPosts().contains(this)) {
+        if (this.board != null && this.board.getPosts() != null && !this.board.getPosts().contains(this)) {
             this.board.getPosts().add(this);
         }
     }

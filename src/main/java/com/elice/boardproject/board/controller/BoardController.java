@@ -1,5 +1,7 @@
 package com.elice.boardproject.board.controller;
 
+import com.elice.boardproject.JwtTokenUtil;
+import com.elice.boardproject.JwtUtil;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.service.UserService;
 import com.elice.boardproject.board.entity.Board;
@@ -9,7 +11,8 @@ import com.elice.boardproject.comment.entity.Comment;
 import com.elice.boardproject.comment.service.CommentService;
 import com.elice.boardproject.post.entity.Post;
 import com.elice.boardproject.post.service.PostService;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,15 +37,19 @@ public class BoardController {
     private final UserService userService;
     private final PostService postService;
     private final CommentService commentService;
+    private final JwtTokenUtil jwtTokenUtil;
+    
     @Autowired
     public BoardController(BoardService boardService,
                            PostService postService,
                            UserService userService,
-                           CommentService commentService){
+                           CommentService commentService,
+                           JwtTokenUtil jwtTokenUtil){
         this.boardService = boardService;
         this.postService = postService;
         this.userService = userService;
         this.commentService= commentService;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @RequestMapping("/board/boards")
@@ -49,6 +57,33 @@ public class BoardController {
         List<Board> boards = boardService.getAllBoards();
         model.addAttribute("boards", boards);
         return "board/boards";
+    }
+
+    @ModelAttribute
+    public void addLoginUserToModel(HttpServletRequest request, Model model) {
+        // JWT 토큰에서 사용자 정보 추출
+        String token = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt_token".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+        
+        if (token != null && JwtUtil.validateToken(token)) {
+            try {
+                String username = JwtUtil.getUsernameFromToken(token);
+                User user = userService.getUserById(username);
+                if (user != null) {
+                    model.addAttribute("loginUser", user);
+                }
+            } catch (Exception e) {
+                // 로그는 생략
+            }
+        }
     }
 
     @GetMapping("/board/index/{boardIdx}")
@@ -68,13 +103,13 @@ public class BoardController {
     }
 
     @GetMapping("/board/create")
-    public String createBoardPage(HttpSession session) {
+    public String createBoardPage(HttpServletRequest request) {
         return "board/createBoard";
     }
 
     @PostMapping("/board/create")
-    public String createBoard(BoardDTO boardDTO, HttpSession session) {
-        User loginUser = (User) session.getAttribute("loginUser");
+    public String createBoard(BoardDTO boardDTO, HttpServletRequest request) {
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
         boardDTO.setUser(loginUser);
         boardService.createBoard(boardDTO);
         return "redirect:/board/boards";
@@ -82,8 +117,8 @@ public class BoardController {
 
     @GetMapping("/board/boards/{boardIdx}/edit")
     public String editBoardPage(@PathVariable("boardIdx") Long boardIdx, Model model
-                                , HttpSession session) {
-        User loginUser = (User) session.getAttribute("loginUser");
+                                , HttpServletRequest request) {
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
         Board board = boardService.getBoardById(boardIdx);
 
         if(board.getUser().getIdx().equals(loginUser.getIdx())) {
@@ -107,8 +142,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/boards/{boardIdx}/delete")
-    public String deleteBoard(@RequestParam("boardIdx") Long boardIdx, HttpSession session) {
-        User loginUser = (User) session.getAttribute("loginUser");
+    public String deleteBoard(@RequestParam("boardIdx") Long boardIdx, HttpServletRequest request) {
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
         Board board = boardService.getBoardById(boardIdx);
 
         if(board.getUser().getIdx().equals(loginUser.getIdx())) {

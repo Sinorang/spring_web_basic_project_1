@@ -1,12 +1,13 @@
 package com.elice.boardproject.comment.controller;
 
+import com.elice.boardproject.JwtTokenUtil;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.service.UserService;
 import com.elice.boardproject.comment.entity.Comment;
 import com.elice.boardproject.comment.entity.CommentDTO;
 import com.elice.boardproject.comment.mapper.CommentMapper;
 import com.elice.boardproject.comment.service.CommentService;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -24,15 +25,16 @@ public class CommentController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
     private final UserService userService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/comment") // 댓글 작성 요청
     public String createComment(@ModelAttribute CommentDTO commentDTO,
                                 @RequestParam Long postId,
                                 RedirectAttributes redirectAttributes,
-                                HttpSession session) {
+                                HttpServletRequest request) {
 
         Comment comment = commentMapper.commentDtoToComment(commentDTO);
-        User loginUser = (User) session.getAttribute("loginUser");
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
         comment.setUser(loginUser);
         commentService.createComment(postId, comment);
         System.out.println(commentDTO.getCommentContent());
@@ -44,10 +46,10 @@ public class CommentController {
     public String updateComment(@PathVariable Long comment_id,
                                 @ModelAttribute CommentDTO commentDTO,
                                 RedirectAttributes redirectAttributes,
-                                HttpSession session) {
+                                HttpServletRequest request) {
 
         Comment basecomment = commentService.findCommentByCommentId(comment_id);
-        User loginUser = (User) session.getAttribute("loginUser");
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
 
         if (basecomment.getUser().getId().equals(loginUser.getId())) {
             Comment comment = commentMapper.commentDtoToComment(commentDTO);
@@ -64,9 +66,9 @@ public class CommentController {
     @DeleteMapping("/comment/{comment_id}/delete") //댓글 삭제 요청
     public String deleteComment(@PathVariable Long comment_id,
                                 RedirectAttributes redirectAttributes,
-                                HttpSession session) {
+                                HttpServletRequest request) {
 
-        User loginUser = (User) session.getAttribute("loginUser");
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
         Comment comment = commentService.findCommentByCommentId(comment_id);
         System.out.println(comment.getUser().getId());
 

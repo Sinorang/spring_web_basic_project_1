@@ -51,7 +51,7 @@ class UserApiControllerTest {
         loginDTO.setId("testuser");
         loginDTO.setPwd("testpass");
 
-        mockMvc.perform(post("/acc/login")
+        mockMvc.perform(post("/api/acc/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().isOk())
@@ -64,7 +64,42 @@ class UserApiControllerTest {
         loginDTO.setId("testuser");
         loginDTO.setPwd("wrongpass");
 
-        mockMvc.perform(post("/acc/login")
+        mockMvc.perform(post("/api/acc/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginDTO)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void 로그인_성공시_JWT_쿠키_설정() throws Exception {
+        UserDTO loginDTO = new UserDTO();
+        loginDTO.setId("testuser");
+        loginDTO.setPwd("testpass");
+
+        mockMvc.perform(post("/api/acc/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginDTO)))
+                .andExpect(status().isOk())
+                .andExpect(cookie().exists("jwt_token"))
+                .andExpect(cookie().httpOnly("jwt_token", true))
+                .andExpect(cookie().path("jwt_token", "/"))
+                .andExpect(cookie().maxAge("jwt_token", 3600));
+    }
+
+    @Test
+    void 로그아웃_성공시_쿠키_삭제() throws Exception {
+        mockMvc.perform(post("/api/acc/logout"))
+                .andExpect(status().isOk())
+                .andExpect(cookie().exists("jwt_token"));
+    }
+
+    @Test
+    void 존재하지_않는_사용자_로그인_실패() throws Exception {
+        UserDTO loginDTO = new UserDTO();
+        loginDTO.setId("nonexistent");
+        loginDTO.setPwd("testpass");
+
+        mockMvc.perform(post("/api/acc/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().isUnauthorized());
