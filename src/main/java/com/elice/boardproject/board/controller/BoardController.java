@@ -1,7 +1,7 @@
 package com.elice.boardproject.board.controller;
 
-import com.elice.boardproject.JwtTokenUtil;
-import com.elice.boardproject.JwtUtil;
+import com.elice.boardproject.security.JwtTokenUtil;
+import com.elice.boardproject.security.JwtUtil;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.service.UserService;
 import com.elice.boardproject.board.entity.Board;
@@ -57,33 +57,6 @@ public class BoardController {
         List<Board> boards = boardService.getAllBoards();
         model.addAttribute("boards", boards);
         return "board/boards";
-    }
-
-    @ModelAttribute
-    public void addLoginUserToModel(HttpServletRequest request, Model model) {
-        // JWT 토큰에서 사용자 정보 추출
-        String token = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("jwt_token".equals(cookie.getName())) {
-                    token = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        
-        if (token != null && JwtUtil.validateToken(token)) {
-            try {
-                String username = JwtUtil.getUsernameFromToken(token);
-                User user = userService.getUserById(username);
-                if (user != null) {
-                    model.addAttribute("loginUser", user);
-                }
-            } catch (Exception e) {
-                // 로그는 생략
-            }
-        }
     }
 
     @GetMapping("/board/index/{boardIdx}")

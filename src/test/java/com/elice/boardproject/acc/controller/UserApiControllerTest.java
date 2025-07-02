@@ -4,6 +4,9 @@ import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.repository.UserRepository;
 import com.elice.boardproject.acc.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.elice.boardproject.board.repository.BoardRepository;
+import com.elice.boardproject.post.repository.PostRepository;
+import com.elice.boardproject.comment.repository.CommentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +35,20 @@ class UserApiControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private BoardRepository boardRepository;
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
     @BeforeEach
     void setUp() {
+        commentRepository.deleteAll();
+        postRepository.deleteAll();
+        boardRepository.deleteAll();
         userRepository.deleteAll();
         // 테스트용 회원가입
         UserDTO userDTO = new UserDTO();

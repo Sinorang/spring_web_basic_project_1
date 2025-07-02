@@ -27,7 +27,8 @@ public class CommentService {
     }
 
     public Comment createComment(Long postId, Comment comment){ // 댓글 생성
-        Post post = postRepository.findById(postId).orElse(null);
+        Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다"));
         comment.setPost(post);
         return commentRepository.save(comment);
     }

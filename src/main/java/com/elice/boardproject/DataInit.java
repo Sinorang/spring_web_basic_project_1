@@ -50,13 +50,44 @@ public class DataInit implements CommandLineRunner {
         userDTO2.setEmail("admin@example.com");
         userService.join(userDTO2);  // UserService에서 자동으로 해싱됨
 
-//        Board board1 = new Board("Board 1");
-//        this.boardRepository.save(board1);
-//
-//        Post post1 = new Post("Post 1", "Content 1");
-//        this.postRepository.save(post1);
-//
-//        Comment comment1 = new Comment("Comment 1");
-//        this.commentRepository.save(comment1);
+        // 실제 User 엔티티 조회 (id로)
+        User user1 = userRepository.findById("testid");
+        User user2 = userRepository.findById("admin");
+
+        // Board 생성
+        var board1 = com.elice.boardproject.board.entity.Board.builder()
+                .user(user1)
+                .name("자유게시판")
+                .description("자유롭게 글을 쓸 수 있는 게시판입니다.")
+                .build();
+        var board2 = com.elice.boardproject.board.entity.Board.builder()
+                .user(user2)
+                .name("공지사항")
+                .description("공지사항을 올리는 게시판입니다.")
+                .build();
+        boardRepository.save(board1);
+        boardRepository.save(board2);
+
+        // Post 생성
+        var post1 = com.elice.boardproject.post.entity.Post.builder()
+                .board(board1)
+                .user(user1)
+                .title("첫 번째 자유글")
+                .content("안녕하세요! 자유게시판 첫 글입니다.")
+                .build();
+        var post2 = com.elice.boardproject.post.entity.Post.builder()
+                .board(board2)
+                .user(user2)
+                .title("공지사항 안내")
+                .content("공지사항 게시판입니다.")
+                .build();
+        postRepository.save(post1);
+        postRepository.save(post2);
+
+        // Comment 생성
+        var comment1 = new com.elice.boardproject.comment.entity.Comment(post1, user2, "관리자가 남긴 댓글입니다.");
+        var comment2 = new com.elice.boardproject.comment.entity.Comment(post2, user1, "유저가 남긴 댓글입니다.");
+        commentRepository.save(comment1);
+        commentRepository.save(comment2);
     }
 }

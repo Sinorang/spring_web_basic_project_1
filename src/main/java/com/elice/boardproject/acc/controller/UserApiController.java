@@ -1,6 +1,6 @@
 package com.elice.boardproject.acc.controller;
 
-import com.elice.boardproject.JwtUtil;
+import com.elice.boardproject.security.JwtUtil;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.entity.UserDetailsImpl;

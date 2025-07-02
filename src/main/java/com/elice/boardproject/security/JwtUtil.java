@@ -1,4 +1,4 @@
-package com.elice.boardproject;
+package com.elice.boardproject.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
