@@ -5,6 +5,7 @@ import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.entity.LoginDTO;
 import com.elice.boardproject.acc.service.UserService;
 import com.elice.boardproject.security.JwtUtil;
+import com.elice.boardproject.security.JwtTokenUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,10 +26,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtTokenUtil jwtTokenUtil) {
         this.userService = userService;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @GetMapping("/")

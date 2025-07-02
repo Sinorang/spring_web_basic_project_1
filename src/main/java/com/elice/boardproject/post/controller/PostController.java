@@ -15,7 +15,6 @@ import com.elice.boardproject.post.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -43,13 +42,8 @@ public class PostController {
     public String postMain(@PathVariable Long post_id, Model model,
                            HttpServletRequest request){
 
-        User loginUser = jwtTokenUtil.getCurrentUser(request);
         Post post = postService.findPost(post_id);
         model.addAttribute("post", post);
-        if (loginUser != null) {
-            model.addAttribute("loginId", loginUser.getId());
-            model.addAttribute("loginNickname", loginUser.getNickname());
-        }
         //코멘트 추가
         List<Comment> commentList = commentService.findCommentByPostId(post_id);
         model.addAttribute("comments", commentList);
