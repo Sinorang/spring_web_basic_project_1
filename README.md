@@ -1,5 +1,5 @@
 # 🎧음악 추천 및 공유 플랫폼
-<img src="/src/main/resources/static/images/playlistWebImage_GIF.gif" width="400" alt=""/>
+<img src="/src/main/resources/static/images/playlistWebImage_GIF.gif" width="450" alt="playlistWebImage GIF"/>
 
 ## 📆프로젝트 일정
 ✅ **프로젝트 기간**
@@ -24,6 +24,20 @@
 - 회원 가입을 하지 않아도 게시글을 구경할 수 있습니다.
 - 로그인 한 회원은 댓글 기능을 이용할 수 있습니다.
 - (기능 구현 x : 투표) 자신이 좋아하는 노래나 가수 혹은 선호하는 음원 스트리밍 플랫폼 등 여러 주제를 투표 안건으로 올려 사용자들의 여론을 파악할 수 있습니다.
+
+## 🗄️ 데이터베이스 구조 (ERD)
+<img src="/src/main/resources/static/images/database_erd.png" width="500" alt="Database ERD"/>
+
+**주요 엔티티 관계:**
+- **User**: 시스템 사용자 (회원가입/로그인)
+- **Board**: 게시판 (User가 생성)
+- **Post**: 게시글 (User가 작성, Board에 속함)
+- **Comment**: 댓글 (User가 작성, Post에 속함)
+
+**관계 구조:**
+- User (1) ←→ (N) Board, Post, Comment
+- Board (1) ←→ (N) Post
+- Post (1) ←→ (N) Comment
 
 # Git Convention
 ## Branch
@@ -93,8 +107,3 @@ feat: 게시글 생성 기능 구현
 - 각 컨트롤러에서 중복적으로 처리하던 로그인 사용자 정보(`loginId`, `loginNickname`) 주입 로직을 제거
 - `LoginInterceptor`와 `WebConfig`를 통해 모든 뷰에서 로그인 정보를 자동으로 사용할 수 있도록 개선
 - 코드 일관성 및 유지보수성 향상
-
-### 3. 네비게이션 바의 동적 렌더링
-- 로그인 여부에 따라 네비게이션 바에서 보여지는 메뉴가 자동으로 변경됨
-  - 로그인 시: 사용자명, 로그아웃, 프로필 등 표시
-  - 비로그인 시: 로그인, 회원가입 메뉴 표시
