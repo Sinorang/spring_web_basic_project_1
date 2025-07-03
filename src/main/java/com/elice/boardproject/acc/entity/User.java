@@ -30,7 +30,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String pwd;
 
     @Column(nullable = false)
@@ -45,6 +45,16 @@ public class User {
     @Column(name = "join_date")
     @CreationTimestamp
     private Date joinDate;
+
+    // OAuth 관련 필드
+    @Column(name = "oauth_provider")
+    private String oauthProvider;
+
+    @Column(name = "oauth_id")
+    private String oauthId;
+
+    @Column(name = "oauth_email")
+    private String oauthEmail;
 
     public User(String id, String pwd, String name, String nickname, String email) {
         this.id = id;

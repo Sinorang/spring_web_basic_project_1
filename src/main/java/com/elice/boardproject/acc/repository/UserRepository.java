@@ -17,4 +17,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 아이디로 사용자 조회 (JWT 인증용)
     @Query("SELECT u FROM User u WHERE u.id = :id")
     User findById(@Param("id") String id);
+    
+    // OAuth 관련 메서드들
+    @Query("SELECT u FROM User u WHERE u.oauthProvider = :provider AND u.oauthId = :oauthId")
+    User findByOauthProviderAndOauthId(@Param("provider") String provider, @Param("oauthId") String oauthId);
+    
+    @Query("SELECT u FROM User u WHERE u.email = :email")
+    User findByEmail(@Param("email") String email);
 }
