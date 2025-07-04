@@ -41,6 +41,11 @@
   <div th:replace="~{/base}"> <!-- base.html을 상속 -->
     <div th:fragment="content">
     <div class="container my-5 mx-auto">
+      <!-- Flash 메시지 표시 -->
+      <div th:if="${message}" class="alert alert-info alert-dismissible fade show" role="alert">
+        <span th:text="${message}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
       <a
         class="link link-offset-1 link-offset-2-hover text-sm fs-6 mb-2 d-block"
         style="transition: all 0.1s ease-in-out"
@@ -150,8 +155,7 @@
                 class="dropdown-item text-danger btn btn-danger d-flex align-items-center gap-2"
                 data-bs-toggle="modal"
                 data-bs-target="#deletePostModal"
-                th:onclick="handleDeletePostButton(event, [[${post.id}]], [[${post.board.idx}]],
-                            [[${post.user.id}]], [[${session.getAttribute("loginUser").id}]]);"
+                th:onclick="handleDeletePostButton(event, [[${post.id}]], [[${boardIdx} ?: ${post.board.idx}]], [[${post.user.id}]], [[${loginId}]])"
               >
                 <span class="material-symbols-outlined"> delete </span>삭제
               </button>
@@ -228,7 +232,7 @@
             <div class="modal-body">
               <textarea
                 class="form-control"
-                name="content"
+                name="commentContent"
                 id="commentContentTextarea"
                 placeholder="댓글 수정하기..."
               ></textarea>
@@ -241,7 +245,7 @@
               >
                 취소
               </button>
-              <button class="btn btn-primary">수정</button>
+              <button type="submit" class="btn btn-primary" id="editButton">수정</button>
             </div>
           </form>
         </div>
@@ -306,6 +310,11 @@
       let commentUserId;
 
       function handleDeletePostButton(_, postId, boardIdx, postUser, loginId) {
+        if (!postId || !boardIdx) {
+          alert("삭제 정보(postId/boardIdx)가 올바르지 않습니다. 새로고침 후 다시 시도하세요.");
+          console.log("DEBUG postId:", postId, "boardIdx:", boardIdx);
+          return;
+        }
         currentPost = postId;
         currentBoard = boardIdx;
         currentPostUser = postUser;
@@ -365,14 +374,13 @@
         let btn = document.getElementById("editButton");
 
         if (commentLoginId === loginId) {
-          document.getElementById("commentContentTextarea").innerText = content;
+          document.getElementById("commentContentTextarea").value = content;
           document
                   .getElementById("commentEditForm")
                   .setAttribute("action", `/comment/${commentId}/edit`);
           btn.style.display='block';
         } else {
-          document.getElementById("commentContentTextarea").innerText = "다른 사람의 댓글입니다";
-
+          document.getElementById("commentContentTextarea").value = "다른 사람의 댓글입니다";
           btn.style.display='none';
         }
       }

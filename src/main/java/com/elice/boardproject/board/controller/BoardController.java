@@ -93,10 +93,14 @@ public class BoardController {
                                 , HttpServletRequest request) {
         User loginUser = jwtTokenUtil.getCurrentUser(request);
         Board board = boardService.getBoardById(boardIdx);
+        
+        if (board == null) {
+            return "redirect:/board/boards";
+        }
 
         if(board.getUser().getIdx().equals(loginUser.getIdx())) {
             model.addAttribute("board", board);
-            return "/board/editBoard";
+            return "board/editBoard";
         }
         else {
             System.out.println("게시판을 생성한 사람만 수정할 수 있습니다!");
@@ -105,19 +109,33 @@ public class BoardController {
     }
 
     @PostMapping("/board/boards/{boardIdx}/edit")
-    public String updateBoard(@PathVariable Long boardIdx, @ModelAttribute Board board) {
-        // 엔티티 ID를 설정하여 해당 ID에 해당하는 엔티티를 수정합니다.
+    public String updateBoard(@PathVariable Long boardIdx, @ModelAttribute Board board, HttpServletRequest request) {
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
         Board editBoard = boardService.getBoardById(boardIdx);
-        editBoard.setName(board.getName());
-        editBoard.setDescription(board.getDescription());
-        boardService.updateBoard(editBoard);
-        return "redirect:/board/boards";
+        
+        if (editBoard == null) {
+            return "redirect:/board/boards";
+        }
+        
+        if (editBoard.getUser().getIdx().equals(loginUser.getIdx())) {
+            editBoard.setName(board.getName());
+            editBoard.setDescription(board.getDescription());
+            boardService.updateBoard(editBoard);
+            return "redirect:/board/boards";
+        } else {
+            System.out.println("게시판을 생성한 사람만 수정할 수 있습니다!");
+            return "redirect:/board/boards";
+        }
     }
 
-    @GetMapping("/board/boards/{boardIdx}/delete")
-    public String deleteBoard(@RequestParam("boardIdx") Long boardIdx, HttpServletRequest request) {
+    @DeleteMapping("/board/boards/{boardIdx}/delete")
+    public String deleteBoard(@PathVariable Long boardIdx, HttpServletRequest request) {
         User loginUser = jwtTokenUtil.getCurrentUser(request);
         Board board = boardService.getBoardById(boardIdx);
+        
+        if (board == null) {
+            return "redirect:/board/boards";
+        }
 
         if(board.getUser().getIdx().equals(loginUser.getIdx())) {
             List<Post> postList = postService.findPostsByBoardId(boardIdx);
@@ -137,7 +155,7 @@ public class BoardController {
         }
         else{
             System.out.println("게시판을 생성한 사람만 삭제할 수 있습니다!");
-            return "redirect:/board/baords";
+            return "redirect:/board/boards";
         }
     }
 }
