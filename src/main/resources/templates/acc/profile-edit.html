@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 수정 - 나만의 플리</title>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous"
+    />
+    <link
+        href="https://font.elice.io/css?family=Elice+DX+Neolli"
+        rel="stylesheet"
+    />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <style>
+        html, body {
+            font-family: "Elice DX Neolli", sans-serif;
+        }
+        .profile-card {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .readonly-field {
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        .password-section {
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{/base}">
+        <div th:fragment="content">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card profile-card">
+                            <div class="card-header bg-warning text-dark">
+                                <h3 class="mb-0">
+                                    <span class="material-symbols-outlined">edit</span>
+                                    프로필 수정
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <!-- 성공/에러 메시지 -->
+                                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <span th:text="${successMessage}"></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <span th:text="${errorMessage}"></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+
+                                <form id="profileForm">
+                                    <!-- 읽기 전용 필드들 -->
+                                    <div class="mb-3">
+                                        <label for="userId" class="form-label">아이디</label>
+                                        <input type="text" class="form-control readonly-field" id="userId" 
+                                               th:value="${user.id}" readonly>
+                                        <div class="form-text">아이디는 변경할 수 없습니다.</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="joinDate" class="form-label">가입일</label>
+                                        <input type="text" class="form-control readonly-field" id="joinDate" 
+                                               th:value="${user.joinDate != null ? #temporals.format(user.joinDate, 'yyyy년 M월 d일') : ''}" readonly>
+                                    </div>
+
+                                    <!-- 수정 가능한 필드들 -->
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">이름</label>
+                                        <input type="text" class="form-control readonly-field" id="name" 
+                                               th:value="${user.name}" readonly>
+                                        <div class="form-text">이름은 법적 요구사항으로 수정할 수 없습니다.</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="nickname" class="form-label">닉네임 <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nickname" 
+                                               th:value="${user.nickname}" required>
+                                        <div id="nicknameError" class="text-danger"></div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">이메일 <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="email" 
+                                               th:value="${user.email}" required>
+                                        <div id="emailError" class="text-danger"></div>
+                                    </div>
+
+                                    <!-- 비밀번호 변경 섹션 -->
+                                    <div class="mb-3 password-section">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <label class="form-label mb-0">비밀번호</label>
+                                            <button type="button" class="btn btn-outline-primary btn-sm" 
+                                                    data-bs-toggle="modal" data-bs-target="#passwordChangeModal">
+                                                <span class="material-symbols-outlined">lock</span>
+                                                비밀번호 변경
+                                            </button>
+                                        </div>
+                                        <div class="form-text">보안을 위해 비밀번호는 별도 팝업에서 변경할 수 있습니다.</div>
+                                    </div>
+
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <a href="/profile" class="btn btn-secondary me-md-2">
+                                            <span class="material-symbols-outlined">arrow_back</span>
+                                            프로필 보기
+                                        </a>
+                                        <button type="button" id="updateProfileBtn" class="btn btn-warning">
+                                            <span class="material-symbols-outlined">save</span>
+                                            프로필 수정
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 비밀번호 변경 모달 -->
+            <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="passwordChangeModalLabel">
+                                <span class="material-symbols-outlined">lock</span>
+                                비밀번호 변경
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="passwordChangeForm">
+                                <div class="mb-3">
+                                    <label for="currentPassword" class="form-label">현재 비밀번호 <span class="text-danger">*</span></label>
+                                    <input type="password" class="form-control" id="currentPassword" required>
+                                    <div id="currentPasswordError" class="text-danger"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="newPassword" class="form-label">새 비밀번호 <span class="text-danger">*</span></label>
+                                    <input type="password" class="form-control" id="newPassword" required>
+                                    <div class="form-text">6자 이상, 20자 이하의 영어 소문자, 대문자, 특수문자, 숫자를 포함해야 합니다.</div>
+                                    <div id="newPasswordError" class="text-danger"></div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="confirmNewPassword" class="form-label">새 비밀번호 확인 <span class="text-danger">*</span></label>
+                                    <input type="password" class="form-control" id="confirmNewPassword" required>
+                                    <div id="passwordMatch" class="form-text"></div>
+                                    <div id="confirmPasswordError" class="text-danger"></div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            <button type="button" class="btn btn-primary" id="changePasswordBtn">
+                                <span class="material-symbols-outlined">save</span>
+                                비밀번호 변경
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"
+    ></script>
+    
+    <script>
+        // 비밀번호 확인 기능 (모달용)
+        document.getElementById('newPassword').addEventListener('input', checkPasswordMatch);
+        document.getElementById('confirmNewPassword').addEventListener('input', checkPasswordMatch);
+
+        function checkPasswordMatch() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+            const matchDiv = document.getElementById('passwordMatch');
+            
+            if (newPassword === '' && confirmNewPassword === '') {
+                matchDiv.textContent = '';
+                matchDiv.className = 'form-text';
+                return;
+            }
+            
+            if (newPassword === confirmNewPassword) {
+                matchDiv.textContent = '비밀번호가 일치합니다.';
+                matchDiv.className = 'form-text text-success';
+            } else {
+                matchDiv.textContent = '비밀번호가 일치하지 않습니다.';
+                matchDiv.className = 'form-text text-danger';
+            }
+        }
+
+        // 프로필 수정 기능
+        document.getElementById('updateProfileBtn').addEventListener('click', function() {
+            // 에러 메시지 초기화
+            clearErrors();
+            
+            // 폼 데이터 수집 (수정 가능한 필드만)
+            const formData = {
+                nickname: document.getElementById('nickname').value.trim(),
+                email: document.getElementById('email').value.trim()
+            };
+
+            // 유효성 검증
+            if (!validateForm(formData)) {
+                return;
+            }
+
+            // API 호출
+            fetch('/api/profile/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 성공 시 조회 화면으로 이동 (성공 메시지와 함께)
+                    window.location.href = '/profile?success=true&message=' + encodeURIComponent(data.message);
+                } else {
+                    showErrorMessage(data.message);
+                    // 수정 불가 필드 정보 표시
+                    if (data.readonlyFields) {
+                        showReadonlyFieldsInfo(data.readonlyFields);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorMessage('프로필 수정 중 오류가 발생했습니다.');
+            });
+        });
+
+        // 비밀번호 변경 기능
+        document.getElementById('changePasswordBtn').addEventListener('click', function() {
+            // 에러 메시지 초기화
+            clearPasswordErrors();
+            
+            // 폼 데이터 수집
+            const formData = {
+                currentPassword: document.getElementById('currentPassword').value,
+                newPassword: document.getElementById('newPassword').value,
+                confirmPassword: document.getElementById('confirmNewPassword').value
+            };
+
+            // 유효성 검증
+            if (!validatePasswordForm(formData)) {
+                return;
+            }
+
+            // API 호출
+            fetch('/api/profile/change-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 모달 닫기
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('passwordChangeModal'));
+                    modal.hide();
+                    // 폼 초기화
+                    document.getElementById('passwordChangeForm').reset();
+                    document.getElementById('passwordMatch').textContent = '';
+                    // 조회 페이지로 이동 (성공 메시지와 함께)
+                    window.location.href = '/profile?success=true&message=' + encodeURIComponent(data.message);
+                } else {
+                    showPasswordErrorMessage(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showPasswordErrorMessage('비밀번호 변경 중 오류가 발생했습니다.');
+            });
+        });
+
+        function validateForm(formData) {
+            let isValid = true;
+
+            // 닉네임 검증
+            if (!formData.nickname) {
+                showError('nicknameError', '닉네임을 입력해주세요.');
+                isValid = false;
+            } else if (!/^.{1,10}$/.test(formData.nickname)) {
+                showError('nicknameError', '닉네임은 10글자 이하로 입력해주세요.');
+                isValid = false;
+            }
+
+            // 이메일 검증
+            if (!formData.email) {
+                showError('emailError', '이메일을 입력해주세요.');
+                isValid = false;
+            } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+                showError('emailError', '올바른 이메일 형식을 입력해주세요.');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function validatePasswordForm(formData) {
+            let isValid = true;
+
+            // 현재 비밀번호 검증
+            if (!formData.currentPassword) {
+                showPasswordError('currentPasswordError', '현재 비밀번호를 입력해주세요.');
+                isValid = false;
+            }
+
+            // 새 비밀번호 검증
+            if (!formData.newPassword) {
+                showPasswordError('newPasswordError', '새 비밀번호를 입력해주세요.');
+                isValid = false;
+            } else if (!/^(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{6,20}$/.test(formData.newPassword)) {
+                showPasswordError('newPasswordError', '비밀번호는 6자 이상, 20자 이하의 영어 소문자, 대문자, 특수문자, 숫자를 포함해야 합니다.');
+                isValid = false;
+            }
+
+            // 비밀번호 확인 검증
+            if (!formData.confirmPassword) {
+                showPasswordError('confirmPasswordError', '새 비밀번호 확인을 입력해주세요.');
+                isValid = false;
+            } else if (formData.newPassword !== formData.confirmPassword) {
+                showPasswordError('confirmPasswordError', '새 비밀번호와 확인 비밀번호가 일치하지 않습니다.');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function showPasswordError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function clearErrors() {
+            const errorElements = ['nicknameError', 'emailError'];
+            errorElements.forEach(id => {
+                const element = document.getElementById(id);
+                element.textContent = '';
+                element.style.display = 'none';
+            });
+        }
+
+        function clearPasswordErrors() {
+            const errorElements = ['currentPasswordError', 'newPasswordError', 'confirmPasswordError'];
+            errorElements.forEach(id => {
+                const element = document.getElementById(id);
+                element.textContent = '';
+                element.style.display = 'none';
+            });
+        }
+
+        function showSuccessMessage(message) {
+            // 기존 알림 제거
+            const existingAlerts = document.querySelectorAll('.alert');
+            existingAlerts.forEach(alert => alert.remove());
+
+            // 성공 알림 추가
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            const cardBody = document.querySelector('.card-body');
+            cardBody.insertBefore(alertDiv, cardBody.firstChild);
+        }
+
+        function showPasswordSuccessMessage(message) {
+            // 기존 알림 제거
+            const existingAlerts = document.querySelectorAll('.alert');
+            existingAlerts.forEach(alert => alert.remove());
+
+            // 성공 알림 추가
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            const cardBody = document.querySelector('.card-body');
+            cardBody.insertBefore(alertDiv, cardBody.firstChild);
+        }
+
+        function showErrorMessage(message) {
+            // 기존 알림 제거
+            const existingAlerts = document.querySelectorAll('.alert');
+            existingAlerts.forEach(alert => alert.remove());
+
+            // 에러 알림 추가
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            const cardBody = document.querySelector('.card-body');
+            cardBody.insertBefore(alertDiv, cardBody.firstChild);
+        }
+
+        function showPasswordErrorMessage(message) {
+            // 모달 내부에 에러 메시지 표시
+            const modalBody = document.querySelector('#passwordChangeModal .modal-body');
+            
+            // 기존 에러 알림 제거
+            const existingAlerts = modalBody.querySelectorAll('.alert');
+            existingAlerts.forEach(alert => alert.remove());
+
+            // 에러 알림 추가
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-danger alert-dismissible fade show';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            modalBody.insertBefore(alertDiv, modalBody.firstChild);
+        }
+
+        function showReadonlyFieldsInfo(readonlyFields) {
+            const fieldNames = {
+                'id': '아이디',
+                'name': '이름',
+                'joinDate': '가입일'
+            };
+            
+            const fieldList = readonlyFields.map(field => fieldNames[field] || field).join(', ');
+            
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'alert alert-info alert-dismissible fade show';
+            infoDiv.innerHTML = `
+                <strong>수정 불가 항목:</strong> ${fieldList}<br>
+                <small>이 항목들은 데이터 무결성과 법적 요구사항으로 인해 수정할 수 없습니다.</small>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            
+            const cardBody = document.querySelector('.card-body');
+            cardBody.insertBefore(infoDiv, cardBody.firstChild);
+        }
+
+        // 모달이 닫힐 때 폼 초기화
+        document.getElementById('passwordChangeModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('passwordChangeForm').reset();
+            document.getElementById('passwordMatch').textContent = '';
+            clearPasswordErrors();
+            
+            // 모달 내부의 알림 제거
+            const modalBody = document.querySelector('#passwordChangeModal .modal-body');
+            const existingAlerts = modalBody.querySelectorAll('.alert');
+            existingAlerts.forEach(alert => alert.remove());
+        });
+    </script>
+</body>
+</html> 

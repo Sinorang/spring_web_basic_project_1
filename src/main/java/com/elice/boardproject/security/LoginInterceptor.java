@@ -17,6 +17,11 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         if (modelAndView != null) {
+            // redirect가 아닌 경우에만 loginId, loginNickname 추가
+            String viewName = modelAndView.getViewName();
+            if (viewName != null && viewName.startsWith("redirect:")) {
+                return;
+            }
             User loginUser = jwtTokenUtil.getCurrentUser(request);
             if (loginUser != null) {
                 modelAndView.addObject("loginId", loginUser.getId());

@@ -1,0 +1,129 @@
+<div th:replace="~{/base}">
+    <div th:fragment="content">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card profile-card">
+                            <div class="card-header bg-primary text-white">
+                                <h3 class="mb-0">
+                                    <span class="material-symbols-outlined">person</span>
+                                    프로필 정보
+                                </h3>
+                            </div>
+                            <div class="card-body">
+                                <!-- 성공 메시지 -->
+                                <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <span th:text="${param.message}"></span>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                
+                                <!-- 기본 정보 섹션 -->
+                                <div class="info-section">
+                                    <h5 class="mb-3">
+                                        <span class="material-symbols-outlined">info</span>
+                                        기본 정보
+                                    </h5>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <div class="profile-info-label">아이디</div>
+                                            <div class="profile-info-value" th:text="${user.id}"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="profile-info-label">이름</div>
+                                            <div class="profile-info-value" th:text="${user.name}"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <div class="profile-info-label">닉네임</div>
+                                            <div class="profile-info-value" th:text="${user.nickname}"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="profile-info-label">이메일</div>
+                                            <div class="profile-info-value" th:text="${user.email}"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="profile-info-label">가입일</div>
+                                            <div class="profile-info-value" th:text="${user.joinDate != null ? #temporals.format(user.joinDate, 'yyyy년 M월 d일') : ''}"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="profile-info-label">계정 상태</div>
+                                            <div class="profile-info-value">
+                                                <span class="badge bg-success status-badge">
+                                                    <span class="material-symbols-outlined" style="font-size: 0.8rem;">check_circle</span>
+                                                    활성
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- OAuth 정보 섹션 (OAuth 사용자인 경우) -->
+                                <div class="info-section" th:if="${user.oauthProvider != null}">
+                                    <h5 class="mb-3">
+                                        <span class="material-symbols-outlined">link</span>
+                                        소셜 로그인 정보
+                                    </h5>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="profile-info-label">연결된 서비스</div>
+                                            <div class="profile-info-value">
+                                                <span class="badge bg-info status-badge" th:text="${user.oauthProvider}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="profile-info-label">연결된 이메일</div>
+                                            <div class="profile-info-value" th:text="${user.oauthEmail}"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 보안 정보 섹션 -->
+                                <div class="info-section">
+                                    <h5 class="mb-3">
+                                        <span class="material-symbols-outlined">security</span>
+                                        보안 정보
+                                    </h5>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="profile-info-label">비밀번호</div>
+                                            <div class="profile-info-value">
+                                                <span class="badge bg-warning text-dark status-badge">
+                                                    <span class="material-symbols-outlined" style="font-size: 0.8rem;">lock</span>
+                                                    설정됨
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="profile-info-label">마지막 로그인</div>
+                                            <div class="profile-info-value text-muted">방금 전</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 액션 버튼 -->
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                    <a href="/acc/index" class="btn btn-secondary me-md-2">
+                                        <span class="material-symbols-outlined">arrow_back</span>
+                                        돌아가기
+                                    </a>
+                                    <a href="/profile/edit" class="btn btn-primary">
+                                        <span class="material-symbols-outlined">edit</span>
+                                        프로필 수정
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
