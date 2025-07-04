@@ -49,6 +49,11 @@
   <div th:replace="~{/base}"> <!-- base.html을 상속 -->
     <div th:fragment="content">
     <div class="container my-5">
+      <!-- Flash 메시지 표시 -->
+      <div th:if="${message}" class="alert alert-info alert-dismissible fade show" role="alert">
+        <span th:text="${message}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
       <div class="header mb-5">
         <h1 class="text-center">게시판 목록</h1>
       </div>
@@ -171,8 +176,8 @@
       }
 
       function handleDeleteModalButton() {
-        fetch(`/board/boards/${currentBoard}/delete?boardIdx=${currentBoard}`, {
-          method: "GET",
+        fetch(`/board/boards/${currentBoard}/delete`, {
+          method: "DELETE",
         }).then(() => (window.location.href = "/board/boards"));
       }
     </script>

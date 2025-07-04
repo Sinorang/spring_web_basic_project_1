@@ -35,8 +35,8 @@ public class PostService {
         }
     }
     public Post findPost(Long postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
+        Post post = postRepository.findPostWithBoardAndUser(postId);
+        return post; // null을 반환하도록 변경
     }
 
 
@@ -53,7 +53,8 @@ public class PostService {
 
     public Post updatePost(Post post){
         Long postId = post.getId();
-        Post updatedPost = postRepository.findById(postId).orElse(null);
+        Post updatedPost = postRepository.findById(postId)
+            .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다"));
         updatedPost.setTitle(post.getTitle());
         updatedPost.setContent(post.getContent());
 
@@ -61,8 +62,13 @@ public class PostService {
     }
 
     public void deletePost(Long postId){
-        Post deletePost = postRepository.findById(postId).orElse(null);
+        Post deletePost = postRepository.findById(postId)
+            .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다"));
         postRepository.delete(deletePost);
+    }
+    
+    public Long getBoardIdxByPostId(Long postId) {
+        return postRepository.findBoardIdxByPostId(postId);
     }
 
 

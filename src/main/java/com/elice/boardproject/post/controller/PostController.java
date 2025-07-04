@@ -43,7 +43,23 @@ public class PostController {
                            HttpServletRequest request){
 
         Post post = postService.findPost(post_id);
+        
+        if (post == null) {
+            return "redirect:/board/boards";
+        }
+        
         model.addAttribute("post", post);
+
+
+
+        // Board 정보를 별도로 모델에 추가 (명확하게)
+        Long boardIdx = null;
+        if (post.getBoard() != null) {
+            boardIdx = post.getBoard().getIdx();
+        } else {
+            boardIdx = postService.getBoardIdxByPostId(post_id);
+        }
+        model.addAttribute("boardIdx", boardIdx);
         //코멘트 추가
         List<Comment> commentList = commentService.findCommentByPostId(post_id);
         model.addAttribute("comments", commentList);
@@ -75,26 +91,41 @@ public class PostController {
 
         User loginUser = jwtTokenUtil.getCurrentUser(request);
         Post post = postService.findPost(post_id);
-        if (post.getUser().getId().equals(loginUser.getId())) {
+        
+        if (post == null) {
+            return "redirect:/board/boards";
+        }
+        
+        if (post.getUser().getIdx().equals(loginUser.getIdx())) {
             model.addAttribute("post", post);
-
             return "post/editPost";
         } else {
             System.out.println("게시글을 작성한 사람만 수정할 수 있습니다!");
-            return "redirect:/post/{post_id}";
+            return "redirect:/post/" + post_id;
         }
     }
 
     @PostMapping("/post/{post_id}/edit") // 수정 요청
     public String editPost(@PathVariable Long post_id,
                            @ModelAttribute PostDTO postDTO,
-                           RedirectAttributes redirectAttributes) {
+                           RedirectAttributes redirectAttributes,
+                           HttpServletRequest request) {
+
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
+        Post existingPost = postService.findPost(post_id);
+        
+        if (existingPost == null) {
+            redirectAttributes.addFlashAttribute("message", "게시글을 찾을 수 없습니다!");
+            return "redirect:/board/boards";
+        }
+        
+        if (!existingPost.getUser().getIdx().equals(loginUser.getIdx())) {
+            redirectAttributes.addFlashAttribute("message", "게시글을 작성한 사람만 수정할 수 있습니다!");
+            return "redirect:/post/" + post_id;
+        }
 
         Post post = postMapper.postDTOToPost(postDTO);
         post.setId(post_id);
-        System.out.println(post.getTitle());
-        System.out.println(post.getContent());
-        System.out.println(post.getId());
         Post editPost = postService.updatePost(post);
 
         redirectAttributes.addAttribute("post_id", editPost.getId());
@@ -109,7 +140,18 @@ public class PostController {
 
         User loginUser = jwtTokenUtil.getCurrentUser(request);
         Post post = postService.findPost(post_id);
-        if (post.getUser().getId().equals(loginUser.getId())) {
+        
+        if (post == null) {
+            redirectAttributes.addFlashAttribute("message", "게시글을 찾을 수 없습니다!");
+            return "redirect:/board/boards";
+        }
+        
+
+        
+        // Board ID를 안전하게 가져오기
+        Long boardIdx = postService.getBoardIdxByPostId(post_id);
+        
+        if (post.getUser().getIdx().equals(loginUser.getIdx())) {
             List<Comment> commentList = commentService.findCommentByPostId(post_id);
             for (int i = 0; i < commentList.size(); i++) {
                 Comment comment = commentList.get(i);
@@ -117,11 +159,17 @@ public class PostController {
             }
             postService.deletePost(post_id);
             redirectAttributes.addFlashAttribute("message", "게시글이 삭제되었습니다!");
-            return "redirect:/board/index"; //게시판 메인화면
+            
+            if (boardIdx != null) {
+                return "redirect:/board/index/" + boardIdx; // 해당 게시판으로 리다이렉트
+            } else {
+                return "redirect:/board/boards"; // 게시판 목록으로 리다이렉트
+            }
         }
         else {
             System.out.println("게시글을 생성한 사람만 삭제할 수 있습니다!");
-            return "redirect:/post/{post_id}";
+            redirectAttributes.addFlashAttribute("message", "게시글을 생성한 사람만 삭제할 수 있습니다!");
+            return "redirect:/post/" + post_id + "?loginId=" + loginUser.getId() + "&loginNickname=" + loginUser.getNickname();
         }
     }
 }

@@ -49,17 +49,21 @@ public class CommentController {
                                 HttpServletRequest request) {
 
         Comment basecomment = commentService.findCommentByCommentId(comment_id);
+        if (basecomment == null) {
+            redirectAttributes.addAttribute("post_id", 1L); // 기본값 설정
+            return "redirect:/post/{post_id}";
+        }
         User loginUser = jwtTokenUtil.getCurrentUser(request);
 
         if (basecomment.getUser().getId().equals(loginUser.getId())) {
             Comment comment = commentMapper.commentDtoToComment(commentDTO);
             Comment updateComment = commentService.updateComment(comment_id, comment);
-            redirectAttributes.addAttribute("postId", updateComment.getPost().getId());
-            return "redirect:/post/{postId}"; // 해당 게시글 화면으로 다시 돌아감
+            redirectAttributes.addAttribute("post_id", updateComment.getPost().getId());
+            return "redirect:/post/{post_id}"; // 해당 게시글 화면으로 다시 돌아감
         } else {
             System.out.println("댓글을 작성한 사람만 수정할 수 있습니다!");
-            redirectAttributes.addAttribute("postId", basecomment.getPost().getId());
-            return "redirect:/post/{postId}";
+            redirectAttributes.addAttribute("post_id", basecomment.getPost().getId());
+            return "redirect:/post/{post_id}";
         }
     }
 
@@ -70,6 +74,10 @@ public class CommentController {
 
         User loginUser = jwtTokenUtil.getCurrentUser(request);
         Comment comment = commentService.findCommentByCommentId(comment_id);
+        if (comment == null) {
+            redirectAttributes.addAttribute("post_id", 1L); // 기본값 설정
+            return "redirect:/post/{post_id}";
+        }
         System.out.println(comment.getUser().getId());
 
         if(comment.getUser().getId().equals(loginUser.getId())){
@@ -79,8 +87,8 @@ public class CommentController {
 
         } else {
             System.out.println("댓글을 작성한 사람만 삭제할 수 있습니다!");
-            redirectAttributes.addAttribute("postId", comment.getPost().getId());
-            return "redirect:/post/{postId}";
+            redirectAttributes.addAttribute("post_id", comment.getPost().getId());
+            return "redirect:/post/{post_id}";
         }
     }
 
