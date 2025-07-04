@@ -186,6 +186,11 @@ public class UserController {
         }
     }
 
+    @GetMapping("/acc/login-required")
+    public String loginRequired() {
+        return "acc/login-required";
+    }
+
     public static class ProfileUpdateResponse {
         private boolean success;
         private String message;

@@ -50,8 +50,6 @@ public class PostController {
         
         model.addAttribute("post", post);
 
-
-
         // Board 정보를 별도로 모델에 추가 (명확하게)
         Long boardIdx = null;
         if (post.getBoard() != null) {

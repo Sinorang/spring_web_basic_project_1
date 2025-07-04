@@ -26,6 +26,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -152,23 +154,27 @@ class JwtAuthenticationIntegrationTest {
     }
 
     @Test
-    void 토큰_없이_게시판_목록_조회_실패() throws Exception {
+    void 토큰_없이_게시판_목록_조회_성공() throws Exception {
         mockMvc.perform(get("/board/boards"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isOk())
+                .andExpect(view().name("board/boards"));
     }
 
     @Test
     void 토큰_없이_게시글_조회_실패() throws Exception {
         TestData data = createTestData("user5_" + System.currentTimeMillis());
         mockMvc.perform(get("/post/" + data.post.getId()))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/acc/login-required"));
     }
 
     @Test
-    void 무효한_토큰으로_게시판_목록_조회_실패() throws Exception {
-        mockMvc.perform(get("/board/boards")
+    void 무효한_토큰으로_게시글_조회_실패() throws Exception {
+        TestData data = createTestData("user5_" + System.currentTimeMillis());
+        mockMvc.perform(get("/post/" + data.post.getId())
                 .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalid.signature"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/acc/login-required"));
     }
 
     @Test

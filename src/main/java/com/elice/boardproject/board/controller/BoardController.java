@@ -64,10 +64,17 @@ public class BoardController {
                                @RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "10") int size,
                                @RequestParam(required = false) String keyword,
-                               Model model) {
+                               Model model,
+                               HttpServletRequest request) {
         Board board = boardService.getBoardById(boardIdx);
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Post> postPage = postService.findPostsByBoardANDKeyword(board, keyword, pageRequest);
+
+        // 로그인 사용자 정보 추가
+        User loginUser = jwtTokenUtil.getCurrentUser(request);
+        if (loginUser != null) {
+            model.addAttribute("loginId", loginUser.getId());
+        }
 
         model.addAttribute("board", board);
         model.addAttribute("keyword", keyword);
