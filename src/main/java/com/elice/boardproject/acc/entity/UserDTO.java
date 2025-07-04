@@ -25,7 +25,7 @@ public class UserDTO {
     @Pattern(regexp = "^.{1,10}$", message = "10글자 이하의 모든 문자, 숫자, 특수문자를 사용하세요.")
     private String nickname;
 
-    @NotBlank(message = "이메일을 입력해주세요.")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "올바른 이메일 형식을 입력해주세요.")
     private String email;
 
     public User toEntity() {

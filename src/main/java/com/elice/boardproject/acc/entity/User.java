@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.util.Date;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,7 +44,7 @@ public class User {
 
     @Column(name = "join_date")
     @CreationTimestamp
-    private Date joinDate;
+    private LocalDateTime joinDate;
 
     // OAuth 관련 필드
     @Column(name = "oauth_provider")
