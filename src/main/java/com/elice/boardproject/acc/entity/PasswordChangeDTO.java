@@ -2,7 +2,14 @@ package com.elice.boardproject.acc.entity;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PasswordChangeDTO {
     
     @NotBlank(message = "현재 비밀번호를 입력해주세요.")
@@ -17,41 +24,6 @@ public class PasswordChangeDTO {
     
     @NotBlank(message = "새 비밀번호 확인을 입력해주세요.")
     private String confirmPassword;
-    
-    // 기본 생성자
-    public PasswordChangeDTO() {}
-    
-    // 생성자
-    public PasswordChangeDTO(String currentPassword, String newPassword, String confirmPassword) {
-        this.currentPassword = currentPassword;
-        this.newPassword = newPassword;
-        this.confirmPassword = confirmPassword;
-    }
-    
-    // Getter와 Setter
-    public String getCurrentPassword() {
-        return currentPassword;
-    }
-    
-    public void setCurrentPassword(String currentPassword) {
-        this.currentPassword = currentPassword;
-    }
-    
-    public String getNewPassword() {
-        return newPassword;
-    }
-    
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-    
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-    
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
     
     // 비밀번호 일치 확인 메서드
     public boolean isPasswordMatch() {
