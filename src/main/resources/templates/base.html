@@ -44,8 +44,14 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/acc/index">홈</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#" onclick="showUnderDevelopmentAlert('투표'); return false;">투표</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                플리
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/playlist/list">플리 목록</a></li>
+                                <li><a class="dropdown-item" href="/playlist/create">플리 만들기</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -65,6 +71,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/profile">프로필</a></li>
+                                <li><a class="dropdown-item" href="/playlist/my">내 플리</a></li>
                                 <li><a class="dropdown-item" href="#" onclick="showUnderDevelopmentAlert('북마크'); return false;">북마크</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="/acc/logout">로그아웃</a></li>
@@ -86,6 +93,16 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/acc/index">홈</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                플리
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/playlist/list">플리 목록</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-muted" href="#" onclick="showLoginRequiredAlert(); return false;">플리 만들기 (로그인 필요)</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -185,6 +202,12 @@
     <script>
         function showUnderDevelopmentAlert(serviceName) {
             alert(serviceName + ' 기능은 개발 중인 서비스입니다.');
+        }
+        
+        function showLoginRequiredAlert() {
+                    if (confirm('플리를 만들려면 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?')) {
+            window.location.href = '/acc/login?error=login_required&message=플리를 만들려면 로그인이 필요합니다.';
+            }
         }
     </script>
     <script

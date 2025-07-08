@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{/base}">
+    <div th:fragment="content">
+        <div class="playlist-form" style="max-width: 600px; margin: 50px auto; padding: 30px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
+            <h2 class="form-title" style="text-align: center; color: #333; margin-bottom: 30px;">플리 생성</h2>
+            <form id="playlistForm">
+                <div class="mb-4">
+                    <label for="youtubeUrl" class="form-label">YouTube 플리 URL</label>
+                    <input type="url" class="form-control youtube-input" id="youtubeUrl" name="youtubeUrl" placeholder="https://music.youtube.com/playlist?list=..." required style="border-radius: 25px; padding: 15px 20px; border: 2px solid #e9ecef; transition: border-color 0.3s;">
+                    <div class="form-text">YouTube Music 플리 URL을 입력해주세요.</div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn create-btn" style="background: linear-gradient(45deg, #ff0000, #ff4444); border: none; border-radius: 25px; padding: 12px 40px; color: white; font-weight: bold; transition: transform 0.3s;">
+                        <i class="fas fa-music me-2"></i>플리 생성
+                    </button>
+                </div>
+            </form>
+            <div id="result" class="mt-4"></div>
+        </div>
+        <script>
+            document.getElementById('playlistForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const youtubeUrl = document.getElementById('youtubeUrl').value;
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = '<div class="alert alert-info">플리를 생성하는 중...</div>';
+                fetch('/api/playlist/create', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({youtubeUrl: youtubeUrl})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        resultDiv.innerHTML = `<div class="alert alert-success"><h5>✅ ${data.message}</h5><a href="/playlist/${data.playlistId}" class="btn btn-primary">플리 보기</a></div>`;
+                        document.getElementById('youtubeUrl').value = '';
+                    } else {
+                        resultDiv.innerHTML = `<div class="alert alert-danger"><h5>❌ 오류</h5><p>${data.message}</p></div>`;
+                    }
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `<div class="alert alert-danger"><h5>❌ 오류</h5><p>플리 생성 중 오류가 발생했습니다.</p></div>`;
+                });
+            });
+        </script>
+    </div>
+</div>
+</html> 
