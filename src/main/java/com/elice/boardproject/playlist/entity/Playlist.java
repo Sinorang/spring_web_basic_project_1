@@ -21,6 +21,7 @@ public class Playlist {
     private String title;
     private String description;
     private String youtubePlaylistId;
+    private String originalUrl;
     private String coverImageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)

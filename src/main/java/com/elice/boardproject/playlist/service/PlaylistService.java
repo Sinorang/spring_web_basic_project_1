@@ -48,6 +48,7 @@ public class PlaylistService {
             playlist.setTitle(playlistInfo.getTitle());
             playlist.setDescription(playlistInfo.getDescription());
             playlist.setYoutubePlaylistId(playlistInfo.getPlaylistId());
+            playlist.setOriginalUrl(youtubeUrl);
             playlist.setCoverImageUrl(playlistInfo.getThumbnailUrl());
             playlist.setOwner(owner);
             playlist.setPublic(true);
