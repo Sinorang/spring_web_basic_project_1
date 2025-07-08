@@ -44,7 +44,8 @@ public class SecurityConfig {
                 // 공개 접근 가능한 페이지들
                 .requestMatchers("/acc/login", "/acc/signup", "/acc/logout", "/", "/acc/index", 
                                "/static/**", "/images/**", "/css/**", "/js/**", "/favicon.ico",
-                               "/h2-console/**", "/oauth/error", "/board/boards", "/board/index/**").permitAll()
+                               "/h2-console/**", "/oauth/error", "/oauth2/**", "/login/oauth2/**", 
+                               "/board/boards", "/board/index/**").permitAll()
                 // 인증이 필요한 페이지들
                 .requestMatchers("/post/**", "/comment/**").authenticated()
                 .anyRequest().permitAll()
