@@ -6,6 +6,7 @@ import com.elice.boardproject.post.entity.Post;
 import com.elice.boardproject.post.repository.PostRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
@@ -26,6 +27,7 @@ public class CommentService {
         return commentRepository.findById(commentId).orElse(null);
     }
 
+    @Transactional
     public Comment createComment(Long postId, Comment comment){ // 댓글 생성
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다"));
@@ -33,6 +35,7 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    @Transactional
     public Comment updateComment(Long commentId, Comment comment){ //댓글 수정
         Comment updateComment = commentRepository.findById(commentId)
             .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다"));
@@ -40,6 +43,7 @@ public class CommentService {
         return commentRepository.save(updateComment);
     }
 
+    @Transactional
     public void deleteComment(Long commentId){ // 댓글삭제
         Comment deleteComment = commentRepository.findById(commentId).orElse(null);
         commentRepository.delete(deleteComment);

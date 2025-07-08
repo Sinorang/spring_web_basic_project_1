@@ -203,6 +203,7 @@ feat: 게시글 생성 기능 구현
 - **Build Tool**: Gradle
 - **Database**: MySQL 8.0
 - **ORM**: Spring Data JPA / Hibernate
+- **AOP**: Spring AOP 기반 서비스 계층 로깅/트랜잭션 관리
 - **Security**: Spring Security, JWT, OAuth2
 - **Template Engine**: Thymeleaf
 - **Validation**: Spring Boot Validation
@@ -307,8 +308,15 @@ feat: 게시글 생성 기능 구현
 - 로깅 시스템 강화
 
 ### 2. AOP(관점 지향 프로그래밍) 기반 공통 기능 고도화
-- **로깅 AOP**: 서비스 계층의 주요 메서드 실행 시 입력 파라미터, 반환값, 실행 시간 등 자동 로깅
-- **트랜잭션 관리 AOP**: 트랜잭션 시작/종료, 롤백 등 트랜잭션 관련 처리를 AOP로 일원화
+- **로깅 AOP**: 서비스 계층(@Service)의 주요 메서드 실행 시 입력 파라미터, 반환값, 실행 시간, 예외 정보를 자동으로 로깅 (LoggingAspect)
+    - @Aspect, @Component 기반 구현
+    - @Around("execution(* com.elice.boardproject..service..*(..))")로 service 계층 한정 적용
+    - 테스트는 src/test/java/com/elice/boardproject/service/TestService로 분리하여 TDD 방식으로 검증
+- **트랜잭션 관리**: create, update, delete 등 데이터 변경 메서드에 @Transactional 어노테이션 적용
+    - 클래스 단위/메서드 단위로 명확하게 적용
+    - 데이터 무결성 및 롤백 보장
+- **AOP 적용 범위**: 인프라(필터, 컨트롤러 등)에는 적용하지 않고, 비즈니스 로직(service 계층)에만 한정
+- **확장성**: 커스텀 어노테이션 기반 AOP 확장 가능(향후 필요 시 annotation 패키지 활용)
 
 ### 3. 관리자 페이지 및 API 개발
 - 관리자 권한 시스템 구현

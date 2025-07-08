@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -64,6 +65,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    @Transactional
     public void updateUserProfile(String userId, UserDTO updateUserDTO) {
         User user = ExceptionUtils.requireNonNull(userRepository.findById(userId), ErrorCode.USER_NOT_FOUND, userId);
 
@@ -103,6 +105,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void updateUserProfile(String userId, UserProfileUpdateDTO updateDTO) {
         User user = ExceptionUtils.requireNonNull(userRepository.findById(userId), ErrorCode.USER_NOT_FOUND, userId);
 
@@ -127,6 +130,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void changePassword(String userId, PasswordChangeDTO passwordChangeDTO) {
         User user = ExceptionUtils.requireNonNull(userRepository.findById(userId), ErrorCode.USER_NOT_FOUND, userId);
 
