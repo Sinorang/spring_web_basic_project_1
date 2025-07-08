@@ -159,17 +159,8 @@ public class UserController {
     public ProfileUpdateResponse updateProfile(@Valid @RequestBody UserProfileUpdateDTO userProfileUpdateDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = authentication.getName();
-        
-        try {
-            userService.updateUserProfile(userId, userProfileUpdateDTO);
-            return new ProfileUpdateResponse(true, "프로필이 성공적으로 수정되었습니다.");
-        } catch (IllegalArgumentException e) {
-            String message = e.getMessage();
-            if (message.contains("아이디") || message.contains("이름")) {
-                return new ProfileUpdateResponse(false, message, new String[]{"id", "name", "joinDate"});
-            }
-            return new ProfileUpdateResponse(false, message);
-        }
+        userService.updateUserProfile(userId, userProfileUpdateDTO);
+        return new ProfileUpdateResponse(true, "프로필이 성공적으로 수정되었습니다.");
     }
 
     @PostMapping("/api/profile/change-password")
@@ -177,13 +168,8 @@ public class UserController {
     public PasswordChangeResponse changePassword(@Valid @RequestBody PasswordChangeDTO passwordChangeDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = authentication.getName();
-        
-        try {
-            userService.changePassword(userId, passwordChangeDTO);
-            return new PasswordChangeResponse(true, "비밀번호가 성공적으로 변경되었습니다.");
-        } catch (IllegalArgumentException e) {
-            return new PasswordChangeResponse(false, e.getMessage());
-        }
+        userService.changePassword(userId, passwordChangeDTO);
+        return new PasswordChangeResponse(true, "비밀번호가 성공적으로 변경되었습니다.");
     }
 
     @GetMapping("/acc/login-required")

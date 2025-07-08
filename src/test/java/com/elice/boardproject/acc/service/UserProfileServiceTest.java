@@ -5,6 +5,8 @@ import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.entity.UserProfileUpdateDTO;
 import com.elice.boardproject.acc.entity.PasswordChangeDTO;
 import com.elice.boardproject.acc.repository.UserRepository;
+import com.elice.boardproject.exception.PliException;
+import com.elice.boardproject.exception.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -105,8 +107,8 @@ class UserProfileServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.updateUserProfile("nonexistent", testProfileUpdateDTO))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("사용자를 찾을 수 없습니다.");
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
     }
 
     @Test
@@ -118,8 +120,8 @@ class UserProfileServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.updateUserProfile("testuser", testProfileUpdateDTO))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미 사용 중인 이메일입니다.");
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.EMAIL_ALREADY_EXISTS);
     }
 
     @Test
@@ -132,8 +134,8 @@ class UserProfileServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.updateUserProfile("testuser", testProfileUpdateDTO))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미 사용 중인 닉네임입니다.");
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.NICKNAME_ALREADY_EXISTS);
     }
 
     @Test
@@ -211,8 +213,8 @@ class UserProfileServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.changePassword("nonexistent", passwordChangeDTO))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("사용자를 찾을 수 없습니다.");
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
     }
 
     @Test
@@ -228,8 +230,8 @@ class UserProfileServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.changePassword("testuser", passwordChangeDTO))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("현재 비밀번호가 일치하지 않습니다.");
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_PASSWORD);
     }
 
     @Test
@@ -245,8 +247,8 @@ class UserProfileServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.changePassword("testuser", passwordChangeDTO))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.PASSWORD_MISMATCH);
     }
 
     @Test
@@ -262,8 +264,8 @@ class UserProfileServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.changePassword("testuser", passwordChangeDTO))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("새 비밀번호는 현재 비밀번호와 달라야 합니다.");
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_PASSWORD);
     }
 
     @Test
@@ -301,11 +303,10 @@ class UserProfileServiceTest {
         // given
         when(userRepository.findById("nonexistent")).thenReturn(null);
 
-        // when
-        List<User> result = userService.getLoginUser("nonexistent", "password123!");
-
-        // then
-        assertThat(result).isEmpty();
+        // when & then
+        assertThatThrownBy(() -> userService.getLoginUser("nonexistent", "password123!"))
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
         verify(userRepository).findById("nonexistent");
         verify(passwordEncoder, never()).matches(anyString(), anyString());
     }
@@ -316,11 +317,10 @@ class UserProfileServiceTest {
         when(userRepository.findById("testuser")).thenReturn(testUser);
         when(passwordEncoder.matches("wrongPassword", "hashedPassword")).thenReturn(false);
 
-        // when
-        List<User> result = userService.getLoginUser("testuser", "wrongPassword");
-
-        // then
-        assertThat(result).isEmpty();
+        // when & then
+        assertThatThrownBy(() -> userService.getLoginUser("testuser", "wrongPassword"))
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_CREDENTIALS);
         verify(userRepository).findById("testuser");
         verify(passwordEncoder).matches("wrongPassword", "hashedPassword");
     }
@@ -349,8 +349,8 @@ class UserProfileServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.updateUserProfile("testuser", updateDTO))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("아이디는 수정할 수 없습니다.");
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_INPUT_VALUE);
     }
 
     @Test
@@ -363,8 +363,8 @@ class UserProfileServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.updateUserProfile("testuser", updateDTO))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이름은 수정할 수 없습니다.");
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_INPUT_VALUE);
     }
 
     @Test

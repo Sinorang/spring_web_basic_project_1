@@ -8,6 +8,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import com.elice.boardproject.exception.PliException;
+import com.elice.boardproject.exception.ErrorCode;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -59,8 +61,8 @@ class YouTubeApiServiceTest {
         
         // when & then
         assertThatThrownBy(() -> youTubeApiService.extractPlaylistId(invalidUrl))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("유효한 플레이리스트 URL이 아닙니다");
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_PLAYLIST_URL);
     }
 
     @Test
@@ -70,8 +72,8 @@ class YouTubeApiServiceTest {
         
         // when & then
         assertThatThrownBy(() -> youTubeApiService.extractPlaylistId(emptyUrl))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("URL이 비어있습니다");
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_YOUTUBE_URL);
     }
 
     @Test
@@ -81,8 +83,8 @@ class YouTubeApiServiceTest {
         
         // when & then
         assertThatThrownBy(() -> youTubeApiService.extractPlaylistId(nullUrl))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("URL이 비어있습니다");
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_YOUTUBE_URL);
     }
 
     @Test

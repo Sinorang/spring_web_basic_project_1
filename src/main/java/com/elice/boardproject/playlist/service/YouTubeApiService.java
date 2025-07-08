@@ -1,5 +1,7 @@
 package com.elice.boardproject.playlist.service;
 
+import com.elice.boardproject.exception.ErrorCode;
+import com.elice.boardproject.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -18,9 +20,7 @@ public class YouTubeApiService {
      * @throws IllegalArgumentException URL이 유효하지 않은 경우
      */
     public String extractPlaylistId(String url) {
-        if (!StringUtils.hasText(url)) {
-            throw new IllegalArgumentException("URL이 비어있습니다");
-        }
+        ExceptionUtils.requireNonEmpty(url, ErrorCode.INVALID_YOUTUBE_URL, url);
 
         // YouTube 플레이리스트 URL 패턴들
         String[] patterns = {
@@ -40,7 +40,8 @@ public class YouTubeApiService {
             }
         }
 
-        throw new IllegalArgumentException("유효한 플레이리스트 URL이 아닙니다: " + url);
+        ExceptionUtils.throwException(ErrorCode.INVALID_PLAYLIST_URL, url);
+        return null; // 이 라인은 실행되지 않음
     }
 
     /**

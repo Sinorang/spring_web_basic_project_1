@@ -139,7 +139,7 @@ public class PlaylistService {
         
         Playlist playlist = ExceptionUtils.requireNonNull(
             playlistRepository.findById(playlistId).orElse(null), 
-            ErrorCode.PLAYLIST_NOT_FOUND
+            ErrorCode.PLAYLIST_NOT_FOUND, playlistId
         );
         
         // 소유자만 삭제 가능

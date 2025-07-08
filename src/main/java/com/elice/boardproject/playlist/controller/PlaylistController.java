@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.elice.boardproject.exception.PliException;
+import com.elice.boardproject.exception.ErrorCode;
 
 @Controller
 @AllArgsConstructor
@@ -67,15 +69,14 @@ public class PlaylistController {
      */
     @GetMapping("/playlist/{playlistId}")
     public String playlistDetailPage(@PathVariable Long playlistId, Model model, RedirectAttributes redirectAttributes) {
-        Playlist playlist = playlistService.getPlaylistById(playlistId);
-        
-        if (playlist == null) {
-            redirectAttributes.addFlashAttribute("message", "플레이리스트를 찾을 수 없습니다.");
+        try {
+            Playlist playlist = playlistService.getPlaylistById(playlistId);
+            model.addAttribute("playlist", playlist);
+            return "playlist/detail";
+        } catch (com.elice.boardproject.exception.PliException e) {
+            redirectAttributes.addFlashAttribute("message", "존재하지 않는 페이지입니다.");
             return "redirect:/playlist/list";
         }
-        
-        model.addAttribute("playlist", playlist);
-        return "playlist/detail";
     }
 
     /**
@@ -83,36 +84,18 @@ public class PlaylistController {
      */
     @PostMapping("/api/playlist/create")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> createPlaylist(@RequestBody PlaylistCreateRequest request, 
-                                                             HttpServletRequest httpRequest) {
-        Map<String, Object> response = new HashMap<>();
-        
-        try {
-            User currentUser = jwtTokenUtil.getCurrentUser(httpRequest);
-            if (currentUser == null) {
-                response.put("success", false);
-                response.put("message", "로그인이 필요합니다.");
-                return ResponseEntity.badRequest().body(response);
-            }
-
-            Playlist createdPlaylist = playlistService.createPlaylistFromYoutubeUrl(request.getYoutubeUrl(), currentUser);
-            
-            if (createdPlaylist != null) {
-                response.put("success", true);
-                response.put("message", "플레이리스트가 성공적으로 생성되었습니다.");
-                response.put("playlistId", createdPlaylist.getId());
-                return ResponseEntity.ok(response);
-            } else {
-                response.put("success", false);
-                response.put("message", "유효하지 않은 YouTube 플레이리스트 URL입니다.");
-                return ResponseEntity.badRequest().body(response);
-            }
-            
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "플레이리스트 생성 중 오류가 발생했습니다: " + e.getMessage());
-            return ResponseEntity.badRequest().body(response);
+    public ResponseEntity<?> createPlaylist(@RequestBody PlaylistCreateRequest request, 
+                                            HttpServletRequest httpRequest) {
+        User currentUser = jwtTokenUtil.getCurrentUser(httpRequest);
+        if (currentUser == null) {
+            throw new PliException(ErrorCode.UNAUTHORIZED);
         }
+        Playlist createdPlaylist = playlistService.createPlaylistFromYoutubeUrl(request.getYoutubeUrl(), currentUser);
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "플레이리스트가 성공적으로 생성되었습니다.");
+        response.put("playlistId", createdPlaylist.getId());
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -120,34 +103,16 @@ public class PlaylistController {
      */
     @DeleteMapping("/api/playlist/{playlistId}")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> deletePlaylist(@PathVariable Long playlistId, 
-                                                             HttpServletRequest request) {
-        Map<String, Object> response = new HashMap<>();
-        
-        try {
-            User currentUser = jwtTokenUtil.getCurrentUser(request);
-            if (currentUser == null) {
-                response.put("success", false);
-                response.put("message", "로그인이 필요합니다.");
-                return ResponseEntity.badRequest().body(response);
-            }
-
-            boolean deleted = playlistService.deletePlaylist(playlistId, currentUser);
-            
-            if (deleted) {
-                response.put("success", true);
-                response.put("message", "플레이리스트가 성공적으로 삭제되었습니다.");
-                return ResponseEntity.ok(response);
-            } else {
-                response.put("success", false);
-                response.put("message", "플레이리스트를 찾을 수 없습니다.");
-                return ResponseEntity.notFound().build();
-            }
-            
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "플레이리스트 삭제 중 오류가 발생했습니다: " + e.getMessage());
-            return ResponseEntity.badRequest().body(response);
+    public ResponseEntity<?> deletePlaylist(@PathVariable Long playlistId, 
+                                            HttpServletRequest request) {
+        User currentUser = jwtTokenUtil.getCurrentUser(request);
+        if (currentUser == null) {
+            throw new PliException(ErrorCode.UNAUTHORIZED);
         }
+        playlistService.deletePlaylist(playlistId, currentUser);
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "플레이리스트가 성공적으로 삭제되었습니다.");
+        return ResponseEntity.ok(response);
     }
 } 

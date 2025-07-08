@@ -6,6 +6,8 @@ import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.entity.UserDetailsImpl;
 import com.elice.boardproject.acc.service.UserDetailsServiceImpl;
 import com.elice.boardproject.acc.service.UserService;
+import com.elice.boardproject.exception.PliException;
+import com.elice.boardproject.exception.ErrorCode;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -33,7 +35,7 @@ public class UserApiController {
         // 1. 사용자 인증
         List<User> loginUser = userService.getLoginUser(userDTO.getId(), userDTO.getPwd());
         if (loginUser.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 일치하지 않습니다.");
+            throw new PliException(ErrorCode.INVALID_CREDENTIALS);
         }
         // 2. JWT 토큰 생성
         UserDetailsImpl userDetails = new UserDetailsImpl(loginUser.get(0));

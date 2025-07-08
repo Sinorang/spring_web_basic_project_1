@@ -37,6 +37,10 @@
             <p>아직 등록된 플리가 없습니다.</p>
             <a href="/playlist/create" class="btn create-btn"><i class="fas fa-plus me-2"></i>첫 번째 플리 만들기</a>
         </div>
+        <div th:if="${message}" class="alert alert-info alert-dismissible fade show" role="alert">
+            <span th:text="${message}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <script>
             document.querySelectorAll('.delete-btn').forEach(button => {
                 button.addEventListener('click', function() {

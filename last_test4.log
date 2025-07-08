@@ -1,0 +1,1801 @@
+Initialized native services in: /Users/shinjisup/.gradle/native
+Initialized jansi services in: /Users/shinjisup/.gradle/native
+Received JVM installation metadata from '/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home': {JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home, JAVA_VERSION=17.0.12, JAVA_VENDOR=Oracle Corporation, RUNTIME_NAME=Java(TM) SE Runtime Environment, RUNTIME_VERSION=17.0.12+8-LTS-286, VM_NAME=Java HotSpot(TM) 64-Bit Server VM, VM_VERSION=17.0.12+8-LTS-286, VM_VENDOR=Oracle Corporation, OS_ARCH=aarch64}
+The client will now receive all logging from the daemon (pid: 19492). The daemon log file: /Users/shinjisup/.gradle/daemon/8.5/daemon-19492.out.log
+Starting 16th build in daemon [uptime: 38 mins 40.603 secs, performance: 100%, GC rate: 0.00/s, heap usage: 0% of 512 MiB, non-heap usage: 18% of 384 MiB]
+Using 8 worker leases.
+Now considering [/Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1] as hierarchies to watch
+Watching the file system is configured to be enabled if available
+File system watching is active
+Starting Build
+Settings evaluated using settings file '/Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1/settings.gradle'.
+Projects loaded. Root project using build file '/Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1/build.gradle'.
+Included projects: [root project 'boardproject']
+
+> Configure project :
+Evaluating root project 'boardproject' using build file '/Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1/build.gradle'.
+Applying dependency management to configuration 'annotationProcessor' in project 'boardproject'
+Applying dependency management to configuration 'apiElements' in project 'boardproject'
+Applying dependency management to configuration 'archives' in project 'boardproject'
+Applying dependency management to configuration 'bootArchives' in project 'boardproject'
+Applying dependency management to configuration 'compileClasspath' in project 'boardproject'
+Applying dependency management to configuration 'compileOnly' in project 'boardproject'
+Applying dependency management to configuration 'default' in project 'boardproject'
+Applying dependency management to configuration 'developmentOnly' in project 'boardproject'
+Applying dependency management to configuration 'implementation' in project 'boardproject'
+Applying dependency management to configuration 'mainSourceElements' in project 'boardproject'
+Applying dependency management to configuration 'productionRuntimeClasspath' in project 'boardproject'
+Applying dependency management to configuration 'runtimeClasspath' in project 'boardproject'
+Applying dependency management to configuration 'runtimeElements' in project 'boardproject'
+Applying dependency management to configuration 'runtimeOnly' in project 'boardproject'
+Applying dependency management to configuration 'testAndDevelopmentOnly' in project 'boardproject'
+Applying dependency management to configuration 'testAnnotationProcessor' in project 'boardproject'
+Applying dependency management to configuration 'testCompileClasspath' in project 'boardproject'
+Applying dependency management to configuration 'testCompileOnly' in project 'boardproject'
+Applying dependency management to configuration 'testImplementation' in project 'boardproject'
+Applying dependency management to configuration 'testResultsElementsForTest' in project 'boardproject'
+Applying dependency management to configuration 'testRuntimeClasspath' in project 'boardproject'
+Applying dependency management to configuration 'testRuntimeOnly' in project 'boardproject'
+All projects evaluated.
+Task name matched 'test'
+Selected primary task 'test' from project :
+Tasks to be executed: [task ':compileJava', task ':processResources', task ':classes', task ':compileTestJava', task ':processTestResources', task ':testClasses', task ':test']
+Tasks that were excluded: []
+Resolve mutations for :compileJava (Thread[Execution worker,5,main]) started.
+:compileJava (Thread[Execution worker,5,main]) started.
+
+> Task :compileJava
+Resolving global dependency management for project 'boardproject'
+Excluding []
+Excluding []
+Caching disabled for task ':compileJava' because:
+  Build cache is disabled
+Task ':compileJava' is not up-to-date because:
+  Input property 'stableSources' file /Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1/src/main/java/com/elice/boardproject/playlist/controller/PlaylistController.java has changed.
+Created classpath snapshot for incremental compilation in 0.009 secs.
+Compiling with toolchain '/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home'.
+Compiling with JDK Java compiler API.
+Incremental compilation of 1 classes completed in 0.238 secs.
+Class dependency analysis for incremental compilation took 0.002 secs.
+Resolve mutations for :processResources (Thread[Execution worker,5,main]) started.
+:processResources (Thread[Execution worker,5,main]) started.
+
+> Task :processResources
+Caching disabled for task ':processResources' because:
+  Build cache is disabled
+Task ':processResources' is not up-to-date because:
+  Input property 'rootSpec$1' file /Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1/src/main/resources/templates/playlist/list.html has changed.
+Resolve mutations for :classes (Thread[Execution worker,5,main]) started.
+:classes (Thread[Execution worker,5,main]) started.
+
+> Task :classes
+Skipping task ':classes' as it has no actions.
+Resolve mutations for :compileTestJava (Thread[Execution worker,5,main]) started.
+:compileTestJava (Thread[Execution worker,5,main]) started.
+
+> Task :compileTestJava UP-TO-DATE
+Excluding []
+Excluding []
+Caching disabled for task ':compileTestJava' because:
+  Build cache is disabled
+Skipping task ':compileTestJava' as it is up-to-date.
+Resolve mutations for :processTestResources (Thread[Execution worker,5,main]) started.
+:processTestResources (Thread[Execution worker,5,main]) started.
+
+> Task :processTestResources UP-TO-DATE
+Caching disabled for task ':processTestResources' because:
+  Build cache is disabled
+Skipping task ':processTestResources' as it is up-to-date.
+Resolve mutations for :testClasses (Thread[Execution worker,5,main]) started.
+:testClasses (Thread[Execution worker,5,main]) started.
+
+> Task :testClasses UP-TO-DATE
+Skipping task ':testClasses' as it has no actions.
+Resolve mutations for :test (Thread[Execution worker,5,main]) started.
+:test (Thread[Execution worker,5,main]) started.
+Gradle Test Executor 16 started executing tests.
+
+> Task :test
+Excluding [com.google.protobuf:protobuf-java]
+Caching disabled for task ':test' because:
+  Build cache is disabled
+Task ':test' is not up-to-date because:
+  Value of input property 'filter.commandLineIncludePatterns' has changed for task ':test'
+Starting process 'Gradle Test Executor 16'. Working directory: /Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1 Command: /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java -Dorg.gradle.internal.worker.tmpdir=/Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1/build/tmp/test/work -Dorg.gradle.native=false @/Users/shinjisup/.gradle/.tmp/gradle-worker-classpath12632395600619898260txt -Xmx512m -Dfile.encoding=UTF-8 -Duser.country=KR -Duser.language=ko -Duser.variant -ea worker.org.gradle.process.internal.worker.GradleWorkerMain 'Gradle Test Executor 16'
+Successfully started process 'Gradle Test Executor 16'
+
+PlaylistControllerTest STANDARD_OUT
+    Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+    15:59:47.369 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.elice.boardproject.playlist.PlaylistControllerTest]: PlaylistControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+    15:59:47.425 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.elice.boardproject.BoardprojectApplication for test class com.elice.boardproject.playlist.PlaylistControllerTest
+    15:59:47,312 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.4.11
+    15:59:47,314 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - Here is a list of configurators discovered as a service, by rank: 
+    15:59:47,314 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f -   org.springframework.boot.logging.logback.RootLogLevelConfigurator
+    15:59:47,314 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - They will be invoked in order until ExecutionStatus.DO_NOT_INVOKE_NEXT_IF_ANY is returned.
+    15:59:47,314 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - Constructed configurator of type class org.springframework.boot.logging.logback.RootLogLevelConfigurator
+    15:59:47,317 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - org.springframework.boot.logging.logback.RootLogLevelConfigurator.configure() call lasted 0 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+    15:59:47,317 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+    15:59:47,318 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+    15:59:47,324 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+    15:59:47,324 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+    15:59:47,324 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 6 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+    15:59:47,324 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+    15:59:47,324 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+    15:59:47,324 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+    15:59:47,325 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.xml]
+    15:59:47,325 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 1 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+    15:59:47,325 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - Trying to configure with ch.qos.logback.classic.BasicConfigurator
+    15:59:47,325 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - Constructed configurator of type class ch.qos.logback.classic.BasicConfigurator
+    15:59:47,325 |-INFO in ch.qos.logback.classic.BasicConfigurator@627d8516 - Setting up default configuration.
+    15:59:47,330 |-INFO in ch.qos.logback.classic.util.ContextInitializer@7d0614f - ch.qos.logback.classic.BasicConfigurator.configure() call lasted 5 milliseconds. ExecutionStatus=NEUTRAL
+    15:59:47,571 |-INFO in ch.qos.logback.classic.model.processor.ConfigurationModelHandlerFull - Registering a new ReconfigureOnChangeTask ReconfigureOnChangeTask(born:1751957987571)
+    15:59:47,572 |-INFO in ch.qos.logback.classic.model.processor.ConfigurationModelHandlerFull - Will scan for changes in [file:/Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1/build/resources/main/logback-spring.xml] 
+    15:59:47,572 |-INFO in ch.qos.logback.classic.model.processor.ConfigurationModelHandlerFull - Setting ReconfigureOnChangeTask scanning period to 30 seconds
+    15:59:47,572 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+    15:59:47,572 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+    15:59:47,574 |-INFO in ch.qos.logback.core.model.processor.ImplicitModelHandler - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+    15:59:47,579 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [FILE]
+    15:59:47,579 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.rolling.RollingFileAppender]
+    15:59:47,582 |-INFO in c.q.l.core.rolling.TimeBasedRollingPolicy@1544562778 - No compression will be used
+    15:59:47,583 |-INFO in c.q.l.core.rolling.TimeBasedRollingPolicy@1544562778 - Will use the pattern ./logs/elcademy-%d{yyyy-MM-dd}-%i.log for the active file
+    15:59:47,584 |-INFO in ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP@6b667cb3 - The date pattern is 'yyyy-MM-dd' from file name pattern './logs/elcademy-%d{yyyy-MM-dd}-%i.log'.
+    15:59:47,584 |-INFO in ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP@6b667cb3 - Roll-over at midnight.
+    15:59:47,584 |-INFO in ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP@6b667cb3 - Setting initial period to 2025-07-08T06:59:47.584Z
+    15:59:47,584 |-WARN in ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP@6b667cb3 - SizeAndTimeBasedFNATP is deprecated. Use SizeAndTimeBasedRollingPolicy instead
+    15:59:47,584 |-WARN in ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP@6b667cb3 - For more information see http://logback.qos.ch/manual/appenders.html#SizeAndTimeBasedRollingPolicy
+    15:59:47,585 |-INFO in ch.qos.logback.core.model.processor.ImplicitModelHandler - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+    15:59:47,585 |-INFO in ch.qos.logback.core.rolling.RollingFileAppender[FILE] - Active log file name: ./logs/elcademy-2025-07-08-0.log
+    15:59:47,585 |-INFO in ch.qos.logback.core.rolling.RollingFileAppender[FILE] - File property is set to [null]
+    15:59:47,586 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to INFO
+    15:59:47,586 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@6f38a289 - Propagating INFO level on Logger[ROOT] onto the JUL framework
+    15:59:47,586 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+    15:59:47,586 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.elice.boardproject.board.controller] to DEBUG
+    15:59:47,586 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@6f38a289 - Propagating DEBUG level on Logger[com.elice.boardproject.board.controller] onto the JUL framework
+    15:59:47,586 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [FILE] to Logger[com.elice.boardproject.board.controller]
+    15:59:47,586 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@61e3cf4d - End of configuration.
+    15:59:47,586 |-INFO in org.springframework.boot.logging.logback.SpringBootJoranConfigurator@3cec79d3 - Registering current configuration as safe fallback point
+
+
+      .   ____          _            __ _ _
+     /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+    ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+     \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+      '  |____| .__|_| |_|_| |_\__, | / / / /
+     =========|_|==============|___/=/_/_/_/
+     :: Spring Boot ::                (v3.2.0)
+
+    [콘솔] 15:59:47.602 [INFO ] - HV000001: Hibernate Validator 8.0.1.Final
+    [콘솔] 15:59:47.619 [INFO ] - Starting PlaylistControllerTest using Java 17.0.12 with PID 21668 (started by shinjisup in /Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1)
+    [콘솔] 15:59:47.619 [DEBUG] - Running with Spring Boot v3.2.0, Spring v6.1.1
+    [콘솔] 15:59:47.619 [INFO ] - The following 1 profile is active: "test"
+    [콘솔] 15:59:47.934 [INFO ] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+    [콘솔] 15:59:47.963 [INFO ] - Finished Spring Data repository scanning in 25 ms. Found 6 JPA repository interfaces.
+    [콘솔] 15:59:48.704 [INFO ] - HHH000204: Processing PersistenceUnitInfo [name: default]
+    [콘솔] 15:59:48.736 [INFO ] - HHH000412: Hibernate ORM core version 6.3.1.Final
+    [콘솔] 15:59:48.756 [INFO ] - HHH000026: Second-level cache disabled
+    [콘솔] 15:59:48.812 [INFO ] - No LoadTimeWeaver setup: ignoring JPA class transformer
+    [콘솔] 15:59:48.826 [INFO ] - HikariPool-1 - Starting...
+    [콘솔] 15:59:48.925 [INFO ] - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+    [콘솔] 15:59:48.926 [INFO ] - HikariPool-1 - Start completed.
+    [콘솔] 15:59:49.355 [INFO ] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+    Hibernate: 
+        drop table if exists boards cascade 
+    Hibernate: 
+        drop table if exists comment cascade 
+    Hibernate: 
+        drop table if exists playlist cascade 
+    Hibernate: 
+        drop table if exists playlist_song cascade 
+    Hibernate: 
+        drop table if exists posts cascade 
+    Hibernate: 
+        drop table if exists users cascade 
+    Hibernate: 
+        create table boards (
+            board_date timestamp(6),
+            board_idx bigint generated by default as identity,
+            user_id bigint,
+            board_des varchar(255) not null,
+            board_name varchar(255) not null,
+            primary key (board_idx)
+        )
+    Hibernate: 
+        create table comment (
+            comment_id bigint generated by default as identity,
+            post_id bigint,
+            user_idx bigint,
+            comment_content varchar(500),
+            primary key (comment_id)
+        )
+    Hibernate: 
+        create table playlist (
+            is_public boolean not null,
+            created_at timestamp(6),
+            id bigint generated by default as identity,
+            owner_user_idx bigint,
+            updated_at timestamp(6),
+            cover_image_url varchar(255),
+            description varchar(255),
+            original_url varchar(255),
+            title varchar(255),
+            youtube_playlist_id varchar(255),
+            primary key (id)
+        )
+    Hibernate: 
+        create table playlist_song (
+            order_index integer not null,
+            id bigint generated by default as identity,
+            playlist_id bigint,
+            album varchar(255),
+            artist varchar(255),
+            thumbnail_url varchar(255),
+            title varchar(255),
+            youtube_video_id varchar(255),
+            primary key (id)
+        )
+    Hibernate: 
+        create table posts (
+            board_idx bigint,
+            post_date timestamp(6),
+            post_id bigint generated by default as identity,
+            user_idx bigint,
+            content varchar(255) not null,
+            title varchar(255) not null,
+            primary key (post_id)
+        )
+    Hibernate: 
+        create table users (
+            join_date timestamp(6),
+            user_idx bigint generated by default as identity,
+            email varchar(255) not null,
+            id varchar(255) not null unique,
+            name varchar(255) not null,
+            nickname varchar(255) not null,
+            oauth_email varchar(255),
+            oauth_id varchar(255),
+            oauth_provider varchar(255),
+            pwd varchar(255),
+            primary key (user_idx)
+        )
+    Hibernate: 
+        alter table if exists boards 
+           add constraint FK7kt8hby5livgmjj15f79e9t6v 
+           foreign key (user_id) 
+           references users
+    Hibernate: 
+        alter table if exists comment 
+           add constraint FK7jok1s6lywoh0srylq8lt7tmn 
+           foreign key (post_id) 
+           references posts
+    Hibernate: 
+        alter table if exists comment 
+           add constraint FKayd6ry9svpxpvotcd7oxg5l7j 
+           foreign key (user_idx) 
+           references users
+    Hibernate: 
+        alter table if exists playlist 
+           add constraint FKn6l0ekww7nwqw2ondswawv6ig 
+           foreign key (owner_user_idx) 
+           references users
+    Hibernate: 
+        alter table if exists playlist_song 
+           add constraint FKji5gt6i2hcwyt9x1fcfndclva 
+           foreign key (playlist_id) 
+           references playlist
+    Hibernate: 
+        alter table if exists posts 
+           add constraint FKb0bi70mgykqf4ie54f70dbch0 
+           foreign key (board_idx) 
+           references boards
+    Hibernate: 
+        alter table if exists posts 
+           add constraint FKnnpj6yrmpetvo9qo9ka1qkb97 
+           foreign key (user_idx) 
+           references users
+    [콘솔] 15:59:49.383 [INFO ] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+    [콘솔] 15:59:49.502 [INFO ] - Hibernate is in classpath; If applicable, HQL parser will be used.
+    [콘솔] 15:59:49.867 [WARN ] - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+    [콘솔] 15:59:50.107 [INFO ] - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7424b1ce, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1d21fd5a, org.springframework.security.web.context.SecurityContextHolderFilter@1e299e3f, org.springframework.security.web.header.HeaderWriterFilter@496a514f, org.springframework.web.filter.CorsFilter@728ad254, org.springframework.security.web.authentication.logout.LogoutFilter@1b6dab22, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@19f811a2, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@5c866852, com.elice.boardproject.security.JwtAuthenticationFilter@48e0e779, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@372e01e0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@54fc7fce, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3b590d21, org.springframework.security.web.session.SessionManagementFilter@4968deb9, org.springframework.security.web.access.ExceptionTranslationFilter@195267c8, org.springframework.security.web.access.intercept.AuthorizationFilter@7375e6c1]
+    [콘솔] 15:59:50.275 [INFO ] - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+    [콘솔] 15:59:50.315 [DEBUG] - Filter 'jwtAuthenticationFilter' configured for use
+    [콘솔] 15:59:50.316 [INFO ] - Initializing Spring TestDispatcherServlet ''
+    [콘솔] 15:59:50.316 [INFO ] - Initializing Servlet ''
+    [콘솔] 15:59:50.316 [INFO ] - Completed initialization in 0 ms
+    [콘솔] 15:59:50.335 [INFO ] - Started PlaylistControllerTest in 2.851 seconds (process running for 3.424)
+    Hibernate: 
+        insert 
+        into
+            users
+            (email, id, join_date, name, nickname, oauth_email, oauth_id, oauth_provider, pwd, user_idx) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            users
+            (email, id, join_date, name, nickname, oauth_email, oauth_id, oauth_provider, pwd, user_idx) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+    Hibernate: 
+        insert 
+        into
+            boards
+            (board_date, board_des, board_name, user_id, board_idx) 
+        values
+            (?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            boards
+            (board_date, board_des, board_name, user_id, board_idx) 
+        values
+            (?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            posts
+            (board_idx, content, post_date, title, user_idx, post_id) 
+        values
+            (?, ?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            posts
+            (board_idx, content, post_date, title, user_idx, post_id) 
+        values
+            (?, ?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            comment
+            (comment_content, post_id, user_idx, comment_id) 
+        values
+            (?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            comment
+            (comment_content, post_id, user_idx, comment_id) 
+        values
+            (?, ?, ?, default)
+
+PlaylistControllerTest > 플레이리스트_목록_페이지_접근_성공() STANDARD_OUT
+    Hibernate: 
+        insert 
+        into
+            users
+            (email, id, join_date, name, nickname, oauth_email, oauth_id, oauth_provider, pwd, user_idx) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    [콘솔] 15:59:50.652 [DEBUG] - Securing GET /playlist/list
+    [콘솔] 15:59:50.655 [WARN ] - Cache miss for REQUEST dispatch to '/playlist/list' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
+    [콘솔] 15:59:50.658 [DEBUG] - JWT 토큰에서 사용자명 추출 시작
+    [콘솔] 15:59:50.666 [DEBUG] - JWT 토큰에서 사용자명 추출 완료 - 사용자: testuser
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+    [콘솔] 15:59:50.668 [DEBUG] - JWT 토큰 유효성 검증 시작
+    [콘솔] 15:59:50.668 [DEBUG] - JWT 토큰 유효성 검증 성공
+    [콘솔] 15:59:50.670 [DEBUG] - Secured GET /playlist/list
+    Hibernate: 
+        select
+            p1_0.id,
+            p1_0.cover_image_url,
+            p1_0.created_at,
+            p1_0.description,
+            p1_0.is_public,
+            p1_0.original_url,
+            p1_0.owner_user_idx,
+            p1_0.title,
+            p1_0.updated_at,
+            p1_0.youtube_playlist_id 
+        from
+            playlist p1_0
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+    Hibernate: 
+        select
+            b1_0.board_idx,
+            b1_0.board_date,
+            b1_0.board_des,
+            b1_0.board_name,
+            b1_0.user_id 
+        from
+            boards b1_0
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.user_idx=?
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.user_idx=?
+
+PlaylistControllerTest > 플레이리스트_삭제_API_성공() STANDARD_OUT
+    Hibernate: 
+        insert 
+        into
+            users
+            (email, id, join_date, name, nickname, oauth_email, oauth_id, oauth_provider, pwd, user_idx) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            playlist
+            (cover_image_url, created_at, description, is_public, original_url, owner_user_idx, title, updated_at, youtube_playlist_id, id) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            playlist_song
+            (album, artist, order_index, playlist_id, thumbnail_url, title, youtube_video_id, id) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            playlist_song
+            (album, artist, order_index, playlist_id, thumbnail_url, title, youtube_video_id, id) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, default)
+    [콘솔] 15:59:50.891 [DEBUG] - Securing DELETE /api/playlist/1
+    [콘솔] 15:59:50.892 [DEBUG] - JWT 토큰에서 사용자명 추출 시작
+    [콘솔] 15:59:50.893 [DEBUG] - JWT 토큰에서 사용자명 추출 완료 - 사용자: testuser
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+    [콘솔] 15:59:50.895 [DEBUG] - JWT 토큰 유효성 검증 시작
+    [콘솔] 15:59:50.895 [DEBUG] - JWT 토큰 유효성 검증 성공
+    [콘솔] 15:59:50.896 [DEBUG] - Secured DELETE /api/playlist/1
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+
+PlaylistControllerTest > 플레이리스트_생성_페이지_접근_성공() STANDARD_OUT
+    Hibernate: 
+        insert 
+        into
+            users
+            (email, id, join_date, name, nickname, oauth_email, oauth_id, oauth_provider, pwd, user_idx) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    [콘솔] 15:59:50.922 [DEBUG] - Securing GET /playlist/create
+    [콘솔] 15:59:50.922 [DEBUG] - Set SecurityContextHolder to anonymous SecurityContext
+    [콘솔] 15:59:50.922 [DEBUG] - Secured GET /playlist/create
+    Hibernate: 
+        select
+            b1_0.board_idx,
+            b1_0.board_date,
+            b1_0.board_des,
+            b1_0.board_name,
+            b1_0.user_id 
+        from
+            boards b1_0
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.user_idx=?
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.user_idx=?
+
+    MockHttpServletRequest:
+          HTTP Method = GET
+          Request URI = /playlist/create
+           Parameters = {}
+              Headers = []
+                 Body = null
+        Session Attrs = {}
+
+    Handler:
+                 Type = com.elice.boardproject.playlist.controller.PlaylistController
+               Method = com.elice.boardproject.playlist.controller.PlaylistController#createPlaylistPage()
+
+    Async:
+        Async started = false
+         Async result = null
+
+    Resolved Exception:
+                 Type = null
+
+    ModelAndView:
+            View name = playlist/create
+                 View = null
+            Attribute = allBoards
+                value = [com.elice.boardproject.board.entity.Board@35697f9e, com.elice.boardproject.board.entity.Board@6dd6c64c]
+
+    FlashMap:
+           Attributes = null
+
+    MockHttpServletResponse:
+               Status = 200
+        Error message = null
+              Headers = [Vary:"Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers", Content-Language:"en", Content-Type:"text/html;charset=UTF-8", X-Content-Type-Options:"nosniff", X-XSS-Protection:"0", Cache-Control:"no-cache, no-store, max-age=0, must-revalidate", Pragma:"no-cache", Expires:"0", X-Frame-Options:"DENY"]
+         Content type = text/html;charset=UTF-8
+                 Body = <!DOCTYPE html>
+    <html>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>나만의 플리</title>
+        <link rel="icon" type="image/png" href="/images/music_favicon.png?v=1">
+        <link rel="shortcut icon" type="image/png" href="/images/music_favicon.png?v=1">
+        <link rel="apple-touch-icon" href="/images/music_favicon.png?v=1">
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/music_favicon.png?v=1">
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/music_favicon.png?v=1">
+        <link
+                href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+                rel="stylesheet"
+                integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+                crossorigin="anonymous"
+        />
+        <link
+                href="https://font.elice.io/css?family=Elice+DX+Neolli"
+                rel="stylesheet"
+        />
+        <link
+                rel="stylesheet"
+                href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+        />
+
+        <style>
+            html,
+            body {
+                font-family: "Elice DX Neolli", sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+    
+        <div>
+            <!-- 익명의 사용자 메뉴바 -->
+            <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(0, 0, 0);">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/acc/index">홈</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    플리
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/playlist/list">플리 목록</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-muted" href="#" onclick="showLoginRequiredAlert(); return false;">플리 만들기 (로그인 필요)</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    게시판
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/board/boards">게시판 목록</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" href="/board/index/1">자유게시판</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/board/index/2">공지사항</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    로그인
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/acc/login">로그인</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="/acc/signup">회원가입</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- 본문들어갈곳! -->
+        <div class="container mt-5 mb-5"><div>
+            <div class="playlist-form" style="max-width: 600px; margin: 50px auto; padding: 30px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
+                <h2 class="form-title" style="text-align: center; color: #333; margin-bottom: 30px;">플리 생성</h2>
+                <form id="playlistForm">
+                    <div class="mb-4">
+                        <label for="youtubeUrl" class="form-label">YouTube 플리 URL</label>
+                        <input type="url" class="form-control youtube-input" id="youtubeUrl" name="youtubeUrl" placeholder="https://music.youtube.com/playlist?list=..." required style="border-radius: 25px; padding: 15px 20px; border: 2px solid #e9ecef; transition: border-color 0.3s;">
+                        <div class="form-text">YouTube Music 플리 URL을 입력해주세요.</div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn create-btn" style="background: linear-gradient(45deg, #ff0000, #ff4444); border: none; border-radius: 25px; padding: 12px 40px; color: white; font-weight: bold; transition: transform 0.3s;">
+                            <i class="fas fa-music me-2"></i>플리 생성
+                        </button>
+                    </div>
+                </form>
+                <div id="result" class="mt-4"></div>
+            </div>
+            <script>
+                document.getElementById('playlistForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const youtubeUrl = document.getElementById('youtubeUrl').value;
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.innerHTML = '<div class="alert alert-info">플리를 생성하는 중...</div>';
+                    fetch('/api/playlist/create', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({youtubeUrl: youtubeUrl})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            resultDiv.innerHTML = `<div class="alert alert-success"><h5>✅ ${data.message}</h5><a href="/playlist/${data.playlistId}" class="btn btn-primary">플리 보기</a></div>`;
+                            document.getElementById('youtubeUrl').value = '';
+                        } else {
+                            resultDiv.innerHTML = `<div class="alert alert-danger"><h5>❌ 오류</h5><p>${data.message}</p></div>`;
+                        }
+                    })
+                    .catch(error => {
+                        resultDiv.innerHTML = `<div class="alert alert-danger"><h5>❌ 오류</h5><p>플리 생성 중 오류가 발생했습니다.</p></div>`;
+                    });
+                });
+            </script>
+        </div></div>
+
+
+
+        <style>
+            .nav-item{
+                font-size: 20px;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+            .form-control{
+                font-weight: bold;
+                font-size: 20px;
+            }
+            .form-label{
+                font-weight: bold;
+                font-size: 20px;
+            }
+            .success {
+                background-color: rgba(0, 0, 255, 0.139)
+            }
+            .warning {
+                background-color: rgba(255, 255, 0, 0.232);
+            }
+            .info {
+                background-color: rgba(128, 128, 128, 0.187);
+            }
+            .error {
+                background-color: rgba(255, 0, 0, 0.211);
+            }
+            .alert {
+                font-size: 20px;
+            }
+            /* 프로필 페이지 스타일 */
+            .profile-card {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            .readonly-field {
+                background-color: #f8f9fa;
+                color: #6c757d;
+            }
+            .info-section {
+                border: 1px solid #dee2e6;
+                border-radius: 0.375rem;
+                padding: 1rem;
+                background-color: #f8f9fa;
+                margin-bottom: 1rem;
+            }
+            .profile-info-label {
+                font-weight: 600;
+                color: #495057;
+                margin-bottom: 0.5rem;
+            }
+            .profile-info-value {
+                color: #212529;
+                font-size: 1.1rem;
+            }
+            .status-badge {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.5rem;
+            }
+        </style>
+
+        <script>
+            function showUnderDevelopmentAlert(serviceName) {
+                alert(serviceName + ' 기능은 개발 중인 서비스입니다.');
+            }
+        
+            function showLoginRequiredAlert() {
+                        if (confirm('플리를 만들려면 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?')) {
+                window.location.href = '/acc/login?error=login_required&message=플리를 만들려면 로그인이 필요합니다.';
+                }
+            }
+        </script>
+        <script
+                src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+                crossorigin="anonymous"
+        ></script>
+        </body>
+    </html>
+    </html> 
+        Forwarded URL = null
+       Redirected URL = null
+              Cookies = []
+
+PlaylistControllerTest > 플레이리스트_생성_페이지_접근_성공() FAILED
+    java.lang.AssertionError: Response content
+    Expected: a string containing "플레이리스트 생성"
+         but: was "<!DOCTYPE html>
+    <html>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>나만의 플리</title>
+        <link rel="icon" type="image/png" href="/images/music_favicon.png?v=1">
+        <link rel="shortcut icon" type="image/png" href="/images/music_favicon.png?v=1">
+        <link rel="apple-touch-icon" href="/images/music_favicon.png?v=1">
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/music_favicon.png?v=1">
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/music_favicon.png?v=1">
+        <link
+                href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+                rel="stylesheet"
+                integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+                crossorigin="anonymous"
+        />
+        <link
+                href="https://font.elice.io/css?family=Elice+DX+Neolli"
+                rel="stylesheet"
+        />
+        <link
+                rel="stylesheet"
+                href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+        />
+
+        <style>
+            html,
+            body {
+                font-family: "Elice DX Neolli", sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+    
+        <div>
+            <!-- 익명의 사용자 메뉴바 -->
+            <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(0, 0, 0);">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/acc/index">홈</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    플리
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/playlist/list">플리 목록</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-muted" href="#" onclick="showLoginRequiredAlert(); return false;">플리 만들기 (로그인 필요)</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    게시판
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/board/boards">게시판 목록</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" href="/board/index/1">자유게시판</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/board/index/2">공지사항</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    로그인
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/acc/login">로그인</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="/acc/signup">회원가입</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- 본문들어갈곳! -->
+        <div class="container mt-5 mb-5"><div>
+            <div class="playlist-form" style="max-width: 600px; margin: 50px auto; padding: 30px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
+                <h2 class="form-title" style="text-align: center; color: #333; margin-bottom: 30px;">플리 생성</h2>
+                <form id="playlistForm">
+                    <div class="mb-4">
+                        <label for="youtubeUrl" class="form-label">YouTube 플리 URL</label>
+                        <input type="url" class="form-control youtube-input" id="youtubeUrl" name="youtubeUrl" placeholder="https://music.youtube.com/playlist?list=..." required style="border-radius: 25px; padding: 15px 20px; border: 2px solid #e9ecef; transition: border-color 0.3s;">
+                        <div class="form-text">YouTube Music 플리 URL을 입력해주세요.</div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn create-btn" style="background: linear-gradient(45deg, #ff0000, #ff4444); border: none; border-radius: 25px; padding: 12px 40px; color: white; font-weight: bold; transition: transform 0.3s;">
+                            <i class="fas fa-music me-2"></i>플리 생성
+                        </button>
+                    </div>
+                </form>
+                <div id="result" class="mt-4"></div>
+            </div>
+            <script>
+                document.getElementById('playlistForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const youtubeUrl = document.getElementById('youtubeUrl').value;
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.innerHTML = '<div class="alert alert-info">플리를 생성하는 중...</div>';
+                    fetch('/api/playlist/create', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({youtubeUrl: youtubeUrl})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            resultDiv.innerHTML = `<div class="alert alert-success"><h5>✅ ${data.message}</h5><a href="/playlist/${data.playlistId}" class="btn btn-primary">플리 보기</a></div>`;
+                            document.getElementById('youtubeUrl').value = '';
+                        } else {
+                            resultDiv.innerHTML = `<div class="alert alert-danger"><h5>❌ 오류</h5><p>${data.message}</p></div>`;
+                        }
+                    })
+                    .catch(error => {
+                        resultDiv.innerHTML = `<div class="alert alert-danger"><h5>❌ 오류</h5><p>플리 생성 중 오류가 발생했습니다.</p></div>`;
+                    });
+                });
+            </script>
+        </div></div>
+
+
+
+        <style>
+            .nav-item{
+                font-size: 20px;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+            .form-control{
+                font-weight: bold;
+                font-size: 20px;
+            }
+            .form-label{
+                font-weight: bold;
+                font-size: 20px;
+            }
+            .success {
+                background-color: rgba(0, 0, 255, 0.139)
+            }
+            .warning {
+                background-color: rgba(255, 255, 0, 0.232);
+            }
+            .info {
+                background-color: rgba(128, 128, 128, 0.187);
+            }
+            .error {
+                background-color: rgba(255, 0, 0, 0.211);
+            }
+            .alert {
+                font-size: 20px;
+            }
+            /* 프로필 페이지 스타일 */
+            .profile-card {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            .readonly-field {
+                background-color: #f8f9fa;
+                color: #6c757d;
+            }
+            .info-section {
+                border: 1px solid #dee2e6;
+                border-radius: 0.375rem;
+                padding: 1rem;
+                background-color: #f8f9fa;
+                margin-bottom: 1rem;
+            }
+            .profile-info-label {
+                font-weight: 600;
+                color: #495057;
+                margin-bottom: 0.5rem;
+            }
+            .profile-info-value {
+                color: #212529;
+                font-size: 1.1rem;
+            }
+            .status-badge {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.5rem;
+            }
+        </style>
+
+        <script>
+            function showUnderDevelopmentAlert(serviceName) {
+                alert(serviceName + ' 기능은 개발 중인 서비스입니다.');
+            }
+        
+            function showLoginRequiredAlert() {
+                        if (confirm('플리를 만들려면 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?')) {
+                window.location.href = '/acc/login?error=login_required&message=플리를 만들려면 로그인이 필요합니다.';
+                }
+            }
+        </script>
+        <script
+                src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+                crossorigin="anonymous"
+        ></script>
+        </body>
+    </html>
+    </html> "
+        at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
+        at org.springframework.test.web.servlet.result.ContentResultMatchers.lambda$string$3(ContentResultMatchers.java:141)
+        at org.springframework.test.web.servlet.MockMvc$1.andExpect(MockMvc.java:214)
+        at com.elice.boardproject.playlist.PlaylistControllerTest.플레이리스트_생성_페이지_접근_성공(PlaylistControllerTest.java:113)
+
+PlaylistControllerTest > 플레이리스트_생성_API_성공() STANDARD_OUT
+    Hibernate: 
+        insert 
+        into
+            users
+            (email, id, join_date, name, nickname, oauth_email, oauth_id, oauth_provider, pwd, user_idx) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    [콘솔] 15:59:50.948 [DEBUG] - Securing POST /api/playlist/create
+    [콘솔] 15:59:50.948 [DEBUG] - JWT 토큰에서 사용자명 추출 시작
+    [콘솔] 15:59:50.949 [DEBUG] - JWT 토큰에서 사용자명 추출 완료 - 사용자: testuser
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+    [콘솔] 15:59:50.950 [DEBUG] - JWT 토큰 유효성 검증 시작
+    [콘솔] 15:59:50.951 [DEBUG] - JWT 토큰 유효성 검증 성공
+    [콘솔] 15:59:50.951 [DEBUG] - Secured POST /api/playlist/create
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+    Hibernate: 
+        insert 
+        into
+            playlist
+            (cover_image_url, created_at, description, is_public, original_url, owner_user_idx, title, updated_at, youtube_playlist_id, id) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            playlist_song
+            (album, artist, order_index, playlist_id, thumbnail_url, title, youtube_video_id, id) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            playlist_song
+            (album, artist, order_index, playlist_id, thumbnail_url, title, youtube_video_id, id) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, default)
+
+PlaylistControllerTest > 잘못된_URL로_플레이리스트_생성_API_실패() STANDARD_OUT
+    Hibernate: 
+        insert 
+        into
+            users
+            (email, id, join_date, name, nickname, oauth_email, oauth_id, oauth_provider, pwd, user_idx) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    [콘솔] 15:59:50.971 [DEBUG] - Securing POST /api/playlist/create
+    [콘솔] 15:59:50.972 [DEBUG] - JWT 토큰에서 사용자명 추출 시작
+    [콘솔] 15:59:50.973 [DEBUG] - JWT 토큰에서 사용자명 추출 완료 - 사용자: testuser
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+    [콘솔] 15:59:50.974 [DEBUG] - JWT 토큰 유효성 검증 시작
+    [콘솔] 15:59:50.975 [DEBUG] - JWT 토큰 유효성 검증 성공
+    [콘솔] 15:59:50.975 [DEBUG] - Secured POST /api/playlist/create
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+    [콘솔] 15:59:50.978 [ERROR] - PliException: 유효하지 않은 플레이리스트 URL입니다: {0}
+    com.elice.boardproject.exception.PliException: 유효하지 않은 플레이리스트 URL입니다: {0}
+    	at com.elice.boardproject.playlist.service.YouTubeApiService.extractPlaylistId(YouTubeApiService.java:23)
+    	at com.elice.boardproject.playlist.service.PlaylistService.createPlaylistFromYoutubeUrl(PlaylistService.java:46)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+    	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+    	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:352)
+    	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+    	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+    	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+    	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+    	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:385)
+    	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+    	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+    	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+    	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+    	at com.elice.boardproject.playlist.service.PlaylistService$$SpringCGLIB$$0.createPlaylistFromYoutubeUrl(<generated>)
+    	at com.elice.boardproject.playlist.controller.PlaylistController.createPlaylist(PlaylistController.java:93)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+    	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+    	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:254)
+    	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:182)
+    	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+    	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:917)
+    	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:829)
+    	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+    	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+    	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+    	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+    	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+    	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+    	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+    	at org.springframework.test.web.servlet.TestDispatcherServlet.service(TestDispatcherServlet.java:72)
+    	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+    	at org.springframework.mock.web.MockFilterChain$ServletFilterProxy.doFilter(MockFilterChain.java:165)
+    	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+    	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+    	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+    	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+    	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+    	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+    	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at com.elice.boardproject.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:78)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+    	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:181)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+    	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+    	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+    	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+    	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+    	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+    	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+    	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+    	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+    	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+    	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+    	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+    	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+    	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+    	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+    	at org.springframework.test.web.servlet.MockMvc.perform(MockMvc.java:201)
+    	at com.elice.boardproject.playlist.PlaylistControllerTest.잘못된_URL로_플레이리스트_생성_API_실패(PlaylistControllerTest.java:168)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+    	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+    	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
+    	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+    	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+    	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+    	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)
+    	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+    	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+    	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+    	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+    	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:218)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:214)
+    	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:139)
+    	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+    	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+    	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+    	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+    	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+    	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+    	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+    	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+    	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+    	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+    	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:107)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
+    	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+    	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86)
+    	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86)
+    	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:119)
+    	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:94)
+    	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:89)
+    	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:62)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+    	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+    	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+    	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+    	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+    	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
+    	at jdk.proxy1/jdk.proxy1.$Proxy2.stop(Unknown Source)
+    	at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:193)
+    	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:129)
+    	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:100)
+    	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:60)
+    	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+    	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:113)
+    	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
+    	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+    	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+
+PlaylistControllerTest > 플레이리스트_상세_페이지_접근_성공() STANDARD_OUT
+    Hibernate: 
+        insert 
+        into
+            users
+            (email, id, join_date, name, nickname, oauth_email, oauth_id, oauth_provider, pwd, user_idx) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            playlist
+            (cover_image_url, created_at, description, is_public, original_url, owner_user_idx, title, updated_at, youtube_playlist_id, id) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            playlist_song
+            (album, artist, order_index, playlist_id, thumbnail_url, title, youtube_video_id, id) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, default)
+    Hibernate: 
+        insert 
+        into
+            playlist_song
+            (album, artist, order_index, playlist_id, thumbnail_url, title, youtube_video_id, id) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, default)
+    [콘솔] 15:59:50.994 [DEBUG] - Securing GET /playlist/3
+    [콘솔] 15:59:50.995 [DEBUG] - Set SecurityContextHolder to anonymous SecurityContext
+    [콘솔] 15:59:50.995 [DEBUG] - Secured GET /playlist/3
+    Hibernate: 
+        select
+            b1_0.board_idx,
+            b1_0.board_date,
+            b1_0.board_des,
+            b1_0.board_name,
+            b1_0.user_id 
+        from
+            boards b1_0
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.user_idx=?
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.user_idx=?
+
+PlaylistControllerTest > 존재하지_않는_플레이리스트_삭제_API_실패() STANDARD_OUT
+    Hibernate: 
+        insert 
+        into
+            users
+            (email, id, join_date, name, nickname, oauth_email, oauth_id, oauth_provider, pwd, user_idx) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    [콘솔] 15:59:51.022 [DEBUG] - Securing DELETE /api/playlist/999
+    [콘솔] 15:59:51.023 [DEBUG] - JWT 토큰에서 사용자명 추출 시작
+    [콘솔] 15:59:51.023 [DEBUG] - JWT 토큰에서 사용자명 추출 완료 - 사용자: testuser
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+    [콘솔] 15:59:51.024 [DEBUG] - JWT 토큰 유효성 검증 시작
+    [콘솔] 15:59:51.025 [DEBUG] - JWT 토큰 유효성 검증 성공
+    [콘솔] 15:59:51.025 [DEBUG] - Secured DELETE /api/playlist/999
+    Hibernate: 
+        select
+            u1_0.user_idx,
+            u1_0.email,
+            u1_0.id,
+            u1_0.join_date,
+            u1_0.name,
+            u1_0.nickname,
+            u1_0.oauth_email,
+            u1_0.oauth_id,
+            u1_0.oauth_provider,
+            u1_0.pwd 
+        from
+            users u1_0 
+        where
+            u1_0.id=?
+    Hibernate: 
+        select
+            p1_0.id,
+            p1_0.cover_image_url,
+            p1_0.created_at,
+            p1_0.description,
+            p1_0.is_public,
+            p1_0.original_url,
+            p1_0.owner_user_idx,
+            p1_0.title,
+            p1_0.updated_at,
+            p1_0.youtube_playlist_id 
+        from
+            playlist p1_0 
+        where
+            p1_0.id=?
+    [콘솔] 15:59:51.028 [ERROR] - PliException: 플레이리스트 ID: 999을(를) 찾을 수 없습니다.
+    com.elice.boardproject.exception.PliException: 플레이리스트 ID: 999을(를) 찾을 수 없습니다.
+    	at com.elice.boardproject.exception.ExceptionUtils.requireNonNull(ExceptionUtils.java:36)
+    	at com.elice.boardproject.playlist.service.PlaylistService.deletePlaylist(PlaylistService.java:140)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+    	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+    	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:352)
+    	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+    	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+    	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+    	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+    	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:385)
+    	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+    	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+    	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:765)
+    	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:717)
+    	at com.elice.boardproject.playlist.service.PlaylistService$$SpringCGLIB$$0.deletePlaylist(<generated>)
+    	at com.elice.boardproject.playlist.controller.PlaylistController.deletePlaylist(PlaylistController.java:112)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+    	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+    	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:254)
+    	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:182)
+    	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+    	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:917)
+    	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:829)
+    	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+    	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+    	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+    	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+    	at org.springframework.web.servlet.FrameworkServlet.doDelete(FrameworkServlet.java:936)
+    	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:596)
+    	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+    	at org.springframework.test.web.servlet.TestDispatcherServlet.service(TestDispatcherServlet.java:72)
+    	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+    	at org.springframework.mock.web.MockFilterChain$ServletFilterProxy.doFilter(MockFilterChain.java:165)
+    	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+    	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+    	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+    	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+    	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+    	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+    	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at com.elice.boardproject.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:78)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:227)
+    	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:221)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.doFilterInternal(OAuth2AuthorizationRequestRedirectFilter.java:181)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+    	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+    	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+    	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+    	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+    	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+    	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352)
+    	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268)
+    	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+    	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+    	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+    	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+    	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+    	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+    	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+    	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+    	at org.springframework.test.web.servlet.setup.MockMvcFilterDecorator.doFilter(MockMvcFilterDecorator.java:151)
+    	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+    	at org.springframework.test.web.servlet.MockMvc.perform(MockMvc.java:201)
+    	at com.elice.boardproject.playlist.PlaylistControllerTest.존재하지_않는_플레이리스트_삭제_API_실패(PlaylistControllerTest.java:192)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+    	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+    	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
+    	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+    	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+    	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+    	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)
+    	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+    	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+    	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+    	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+    	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+    	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:218)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:214)
+    	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:139)
+    	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+    	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+    	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+    	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+    	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+    	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+    	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+    	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+    	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+    	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+    	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+    	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+    	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:107)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67)
+    	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52)
+    	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+    	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86)
+    	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86)
+    	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:119)
+    	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:94)
+    	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:89)
+    	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:62)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+    	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+    	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+    	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+    	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+    	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+    	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33)
+    	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
+    	at jdk.proxy1/jdk.proxy1.$Proxy2.stop(Unknown Source)
+    	at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:193)
+    	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:129)
+    	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:100)
+    	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:60)
+    	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56)
+    	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:113)
+    	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65)
+    	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69)
+    	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74)
+
+PlaylistControllerTest > 존재하지_않는_플레이리스트_상세_페이지_접근_실패() STANDARD_OUT
+    Hibernate: 
+        insert 
+        into
+            users
+            (email, id, join_date, name, nickname, oauth_email, oauth_id, oauth_provider, pwd, user_idx) 
+        values
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, default)
+    [콘솔] 15:59:51.037 [DEBUG] - Securing GET /playlist/999
+    [콘솔] 15:59:51.037 [DEBUG] - Set SecurityContextHolder to anonymous SecurityContext
+    [콘솔] 15:59:51.037 [DEBUG] - Secured GET /playlist/999
+    Hibernate: 
+        select
+            p1_0.id,
+            p1_0.cover_image_url,
+            p1_0.created_at,
+            p1_0.description,
+            p1_0.is_public,
+            p1_0.original_url,
+            p1_0.owner_user_idx,
+            p1_0.title,
+            p1_0.updated_at,
+            p1_0.youtube_playlist_id 
+        from
+            playlist p1_0 
+        where
+            p1_0.id=?
+
+Gradle Test Executor 16 finished executing tests.
+[콘솔] 15:59:51.050 [INFO ] - Closing JPA EntityManagerFactory for persistence unit 'default'
+Hibernate: 
+    drop table if exists boards cascade 
+Hibernate: 
+    drop table if exists comment cascade 
+Hibernate: 
+    drop table if exists playlist cascade 
+Hibernate: 
+    drop table if exists playlist_song cascade 
+Hibernate: 
+    drop table if exists posts cascade 
+Hibernate: 
+    drop table if exists users cascade 
+[콘솔] 15:59:51.054 [INFO ] - HikariPool-1 - Shutdown initiated...
+[콘솔] 15:59:51.055 [INFO ] - HikariPool-1 - Shutdown completed.
+
+> Task :test FAILED
+Finished generating test XML results (0.001 secs) into: /Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1/build/test-results/test
+Generating HTML test report...
+Finished generating test html results (0.002 secs) into: /Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1/build/reports/tests/test
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.5/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+5 actionable tasks: 3 executed, 2 up-to-date
+Watched directory hierarchies: [/Users/shinjisup/Desktop/Develop/elice/spring_web_basic_project_1]
