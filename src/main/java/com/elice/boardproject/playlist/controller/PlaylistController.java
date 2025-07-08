@@ -37,9 +37,14 @@ public class PlaylistController {
      * 전체 플레이리스트 목록 페이지
      */
     @GetMapping("/playlist/list")
-    public String playlistListPage(Model model) {
+    public String playlistListPage(Model model, HttpServletRequest request) {
         List<Playlist> allPlaylists = playlistService.getAllPlaylists();
         model.addAttribute("playlists", allPlaylists);
+        
+        // 현재 사용자 정보 추가
+        User currentUser = jwtTokenUtil.getCurrentUser(request);
+        model.addAttribute("currentUser", currentUser);
+        
         return "playlist/list";
     }
 
@@ -52,6 +57,7 @@ public class PlaylistController {
         if (currentUser != null) {
             List<Playlist> userPlaylists = playlistService.getPlaylistsByUser(currentUser);
             model.addAttribute("playlists", userPlaylists);
+            model.addAttribute("currentUser", currentUser);
         }
         return "playlist/my";
     }

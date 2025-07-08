@@ -2,6 +2,7 @@ package com.elice.boardproject.playlist;
 
 import com.elice.boardproject.playlist.dto.YouTubePlaylistInfo;
 import com.elice.boardproject.playlist.dto.YouTubeVideoInfo;
+import com.elice.boardproject.playlist.service.YouTubeApiService;
 import com.elice.boardproject.playlist.service.YouTubeDataApiService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ class YouTubeDataApiTest {
 
     @Autowired
     private YouTubeDataApiService youTubeDataApiService;
+    
+    @Autowired
+    private YouTubeApiService youTubeApiService;
 
     @Test
     void 플레이리스트_정보_가져오기_성공() {
@@ -88,5 +92,61 @@ class YouTubeDataApiTest {
         assertThatThrownBy(() -> youTubeDataApiService.getPlaylistInfo(nullPlaylistId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("플레이리스트 ID가 비어있습니다");
+    }
+
+    @Test
+    void 실제_유튜브_플레이리스트_정보_및_곡목록_가져오기_성공() {
+        // given
+        String playlistId = "PLdWdCc1yLsnElt1Lm9qISelCN8LzWKbrb"; // 실제 유저의 플레이리스트 ID
+
+        // when
+        YouTubePlaylistInfo playlistInfo = youTubeDataApiService.getPlaylistInfo(playlistId);
+        List<YouTubeVideoInfo> videos = youTubeDataApiService.getPlaylistVideos(playlistId);
+
+        // then
+        assertThat(playlistInfo).isNotNull();
+        assertThat(playlistInfo.getPlaylistId()).isEqualTo(playlistId);
+        assertThat(playlistInfo.getTitle()).isNotEmpty();
+        assertThat(playlistInfo.getThumbnailUrl()).isNotEmpty();
+        assertThat(videos).isNotNull();
+        assertThat(videos.size()).isGreaterThan(0);
+        System.out.println("플리 제목: " + playlistInfo.getTitle());
+        System.out.println("곡 개수: " + videos.size());
+        System.out.println("첫 곡 제목: " + videos.get(0).getTitle());
+    }
+
+    @Test
+    void 전체_URL로_플레이리스트_정보_및_곡목록_가져오기_성공() {
+        // given - 사용자가 복사한 전체 URL
+        String fullUrl = "https://music.youtube.com/playlist?list=PLdWdCc1yLsnElt1Lm9qISelCN8LzWKbrb&si=aZdk8sgvAc2DFLds";
+        try {
+            // when - URL에서 playlistId 추출 후 API 호출
+            String playlistId = youTubeApiService.extractPlaylistId(fullUrl);
+            YouTubePlaylistInfo playlistInfo = youTubeDataApiService.getPlaylistInfo(playlistId);
+            List<YouTubeVideoInfo> videos = youTubeDataApiService.getPlaylistVideos(playlistId);
+
+            // then
+            assertThat(playlistId).isEqualTo("PLdWdCc1yLsnElt1Lm9qISelCN8LzWKbrb");
+            assertThat(playlistInfo).isNotNull();
+            assertThat(playlistInfo.getPlaylistId()).isEqualTo(playlistId);
+            assertThat(playlistInfo.getTitle()).isNotEmpty();
+            assertThat(playlistInfo.getThumbnailUrl()).isNotEmpty();
+            assertThat(videos).isNotNull();
+            assertThat(videos.size()).isGreaterThan(0);
+            
+            System.out.println("=== 실제 YouTube 플레이리스트 테스트 결과 ===");
+            System.out.println("플리 제목: " + playlistInfo.getTitle());
+            System.out.println("플리 설명: " + playlistInfo.getDescription());
+            System.out.println("채널명: " + playlistInfo.getChannelTitle());
+            System.out.println("곡 개수: " + videos.size());
+            System.out.println("첫 곡 제목: " + videos.get(0).getTitle());
+            System.out.println("첫 곡 아티스트: " + videos.get(0).getChannelTitle());
+            System.out.println("첫 곡 썸네일: " + videos.get(0).getThumbnailUrl());
+            System.out.println("================================");
+        } catch (Exception e) {
+            System.err.println("테스트 중 예외 발생: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 } 
