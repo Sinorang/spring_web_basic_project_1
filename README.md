@@ -230,7 +230,49 @@ feat: 게시글 생성 기능 구현
 ## 🚀 고도화된 기능
 **고도화 시작일:** 2025.06.30
 
-### 1. JWT 기반 인증
+### 1. 전역 예외 처리 시스템
+- **GlobalExceptionHandler**: 모든 예외를 일관되게 처리하는 전역 예외 핸들러
+- **PliException**: 애플리케이션 전용 커스텀 예외 클래스
+- **ErrorCode**: 체계적으로 분류된 에러 코드 enum (1000번대: 공통, 2000번대: 인증/인가, 3000번대: 사용자, 4000번대: 게시판, 5000번대: 게시글, 6000번대: 댓글, 7000번대: 플레이리스트, 8000번대: OAuth, 9000번대: 파일)
+- **ErrorResponse**: 일관된 에러 응답 형식 제공
+- **ExceptionUtils**: 비즈니스 로직에서 쉽게 예외를 발생시킬 수 있는 유틸리티 클래스
+- **사용자 친화적 에러 메시지**: 개발자와 사용자 모두에게 유용한 에러 정보 제공
+- **로깅 시스템 강화**: 모든 예외 발생 시 상세한 로그 기록
+
+#### ErrorCode 체계
+**실무 표준을 참고한 비즈니스 도메인별 에러 코드 분류**
+
+| 번대 | 도메인 | 주요 에러 코드 | 설명 |
+|------|--------|---------------|------|
+| 1000번대 | 공통 | INVALID_INPUT_VALUE, METHOD_NOT_ALLOWED, INTERNAL_SERVER_ERROR | 애플리케이션 전반에서 발생하는 공통 에러 |
+| 2000번대 | 인증/인가 | UNAUTHORIZED, FORBIDDEN, INVALID_TOKEN, EXPIRED_TOKEN | 로그인, 권한, 토큰 관련 에러 |
+| 3000번대 | 사용자 | USER_NOT_FOUND, USER_ALREADY_EXISTS, EMAIL_ALREADY_EXISTS | 회원가입, 로그인, 프로필 관리 관련 에러 |
+| 4000번대 | 게시판 | BOARD_NOT_FOUND, BOARD_ACCESS_DENIED, BOARD_ALREADY_EXISTS | 게시판 CRUD 관련 에러 |
+| 5000번대 | 게시글 | POST_NOT_FOUND, POST_ACCESS_DENIED, POST_UPDATE_DENIED | 게시글 CRUD 관련 에러 |
+| 6000번대 | 댓글 | COMMENT_NOT_FOUND, COMMENT_ACCESS_DENIED, COMMENT_UPDATE_DENIED | 댓글 CRUD 관련 에러 |
+| 7000번대 | 플레이리스트 | PLAYLIST_NOT_FOUND, INVALID_YOUTUBE_URL, YOUTUBE_API_ERROR | 플레이리스트 및 YouTube API 관련 에러 |
+| 8000번대 | OAuth | OAUTH_AUTHENTICATION_FAILED, OAUTH_USER_INFO_ERROR | 소셜 로그인 관련 에러 |
+| 9000번대 | 파일 | FILE_UPLOAD_ERROR, INVALID_FILE_TYPE, FILE_SIZE_EXCEEDED | 파일 업로드 관련 에러 |
+
+**에러 코드 설계 원칙**
+- **도메인별 명확한 구분**: 각 기능별로 에러 코드를 쉽게 찾을 수 있음
+- **확장성**: 새로운 도메인 추가 시 번대만 추가하면 됨
+- **가독성**: 개발자가 에러 코드만 봐도 어느 도메인인지 알 수 있음
+- **디버깅 용이성**: 로그에서 에러 코드로 문제 영역을 빠르게 파악 가능
+
+**실무 표준과의 차이점**
+- **HTTP 상태 코드**: 400, 401, 403, 404, 500 등 (표준)
+- **비즈니스 에러 코드**: 1000, 2000, 3000 등 (프로젝트 특화)
+- **응답 예시**:
+  ```json
+  {
+    "status": 404,           // HTTP 상태 코드
+    "errorCode": 3000,       // 비즈니스 에러 코드
+    "message": "ID: testuser123인 사용자를 찾을 수 없습니다."
+  }
+  ```
+
+### 2. JWT 기반 인증
 - JWT 토큰을 활용한 인증 및 사용자 정보 추출
 - 쿠키 또는 Authorization 헤더에서 토큰을 자동으로 감지
 - 기존 세션/쿠키 기반 로그인 로직을 JWT 기반으로 고도화
@@ -239,3 +281,62 @@ feat: 게시글 생성 기능 구현
 - 각 컨트롤러에서 중복적으로 처리하던 로그인 사용자 정보(`loginId`, `loginNickname`) 주입 로직을 제거
 - `LoginInterceptor`와 `WebConfig`를 통해 모든 뷰에서 로그인 정보를 자동으로 사용할 수 있도록 개선
 - 코드 일관성 및 유지보수성 향상
+
+### 3. 플레이리스트 공유 기능 (플리)
+- **YouTube 플레이리스트 연동**: YouTube Data API v3를 활용한 플레이리스트 정보 자동 파싱
+- **플레이리스트 CRUD**: 생성, 조회, 삭제 기능 구현
+- **개별 곡 재생**: YouTube Embedded Player API를 활용한 모달 기반 개별 곡 재생
+- **전체 재생**: 플레이리스트 전체 연속 재생 기능
+- **YouTube 이동**: 원본 YouTube 플레이리스트 페이지로 이동 버튼
+- **사용자별 플리 관리**: 전체 플리 목록과 내 플리 분리 관리
+
+### 4. OAuth2 소셜 로그인 및 보안 강화
+- **Google OAuth2 연동**: Spring Security OAuth2를 활용한 Google 로그인 구현
+- **JWT 토큰 보안 강화**: 토큰 만료시간 단축(30분), HTTPS 자동 감지
+- **OAuth 사용자 프로필 제한**: 비밀번호 변경 UI 숨김, 이메일 수정 불가
+- **OAuth 스코프 최적화**: openid, profile, email 권한으로 필요한 정보만 수집
+- **보안 경로 설정**: OAuth 인증 과정에 필요한 경로 자동 허용
+
+---
+
+## 🚀 향후 고도화 계획
+
+### 1. 전역 예외 처리 시스템 완료 ✅
+- GlobalExceptionHandler를 통한 일관된 에러 응답 처리
+- 사용자 친화적인 에러 메시지 제공
+- 로깅 시스템 강화
+
+### 2. 관리자 페이지 및 API 개발
+- 관리자 권한 시스템 구현
+- 사용자 관리, 게시판 관리, 플레이리스트 관리 기능
+- 통계 대시보드 및 모니터링 기능
+
+### 3. 플레이리스트 좋아요 기능 추가
+- 플레이리스트 좋아요/취소 기능
+- 인기 플레이리스트 추천 시스템
+- 사용자별 좋아요 목록 관리
+
+### 4. 플레이리스트 댓글 기능 추가
+- 플레이리스트별 댓글 시스템
+- 댓글 CRUD 기능
+- 댓글 알림 시스템
+
+### 5. 프로젝트 전반적 리팩토링
+- 코드 구조 개선 및 최적화
+- 성능 향상을 위한 쿼리 최적화
+- 테스트 코드 보강
+
+### 6. Thymeleaf → React 전환 (서버 사이드 → 클라이언트 사이드)
+- **프론트엔드 구성 변경**: UI/UX 개선으로 사용자 친화적이고 심미성 있는 인터페이스 구현
+- RESTful API 기반 SPA(Single Page Application) 구축
+- 상태 관리 및 컴포넌트 기반 아키텍처 적용
+
+### 7. Docker를 활용한 이미지 배포 추가
+- 컨테이너화를 통한 배포 환경 표준화
+- CI/CD 파이프라인 구축
+- 멀티 스테이지 빌드 최적화
+
+### 8. 백엔드 API 활용한 안드로이드 앱 개발 (Kotlin 사용)
+- RESTful API 기반 모바일 앱 개발
+- 플레이리스트 공유 및 재생 기능
+- 푸시 알림 시스템

@@ -1,6 +1,9 @@
 package com.elice.boardproject.playlist.service;
 
 import com.elice.boardproject.acc.entity.User;
+import com.elice.boardproject.exception.ErrorCode;
+import com.elice.boardproject.exception.ExceptionUtils;
+import com.elice.boardproject.exception.PliException;
 import com.elice.boardproject.playlist.dto.YouTubePlaylistInfo;
 import com.elice.boardproject.playlist.dto.YouTubeVideoInfo;
 import com.elice.boardproject.playlist.entity.Playlist;
@@ -35,13 +38,20 @@ public class PlaylistService {
      * @return 생성된 Playlist
      */
     public Playlist createPlaylistFromYoutubeUrl(String youtubeUrl, User owner) {
+        ExceptionUtils.requireNonEmpty(youtubeUrl, ErrorCode.INVALID_YOUTUBE_URL, youtubeUrl);
+        ExceptionUtils.requireNonNull(owner, ErrorCode.USER_NOT_FOUND, owner.getId());
+        
         try {
             // 1. URL에서 플레이리스트 ID 추출
             String playlistId = youTubeApiService.extractPlaylistId(youtubeUrl);
+            ExceptionUtils.requireNonEmpty(playlistId, ErrorCode.INVALID_PLAYLIST_URL, youtubeUrl);
             
             // 2. YouTube API에서 플레이리스트 정보 가져오기
             YouTubePlaylistInfo playlistInfo = youTubeDataApiService.getPlaylistInfo(playlistId);
+            ExceptionUtils.requireNonNull(playlistInfo, ErrorCode.PLAYLIST_FETCH_ERROR);
+            
             List<YouTubeVideoInfo> videos = youTubeDataApiService.getPlaylistVideos(playlistId);
+            ExceptionUtils.requireNonNull(videos, ErrorCode.PLAYLIST_FETCH_ERROR);
             
             // 3. Playlist 엔티티 생성
             Playlist playlist = new Playlist();
@@ -71,9 +81,11 @@ public class PlaylistService {
             // 5. DB에 저장
             return playlistRepository.save(playlist);
             
+        } catch (PliException e) {
+            throw e;
         } catch (Exception e) {
-            // URL이 유효하지 않거나 API 호출 실패 시 null 반환
-            return null;
+            ExceptionUtils.throwException(ErrorCode.YOUTUBE_API_ERROR, e);
+            return null; // 이 라인은 실행되지 않음
         }
     }
 
@@ -110,8 +122,9 @@ public class PlaylistService {
      * @return 플레이리스트 정보
      */
     public Playlist getPlaylistById(Long playlistId) {
+        ExceptionUtils.requireNonNull(playlistId, ErrorCode.INVALID_INPUT_VALUE);
         Optional<Playlist> playlist = playlistRepository.findById(playlistId);
-        return playlist.orElse(null);
+        return ExceptionUtils.requireNonNull(playlist.orElse(null), ErrorCode.PLAYLIST_NOT_FOUND, playlistId);
     }
 
     /**
@@ -121,18 +134,21 @@ public class PlaylistService {
      * @return 삭제 성공 여부
      */
     public boolean deletePlaylist(Long playlistId, User user) {
-        Optional<Playlist> playlistOpt = playlistRepository.findById(playlistId);
+        ExceptionUtils.requireNonNull(playlistId, ErrorCode.INVALID_INPUT_VALUE);
+        ExceptionUtils.requireNonNull(user, ErrorCode.USER_NOT_FOUND);
         
-        if (playlistOpt.isPresent()) {
-            Playlist playlist = playlistOpt.get();
-            
-            // 소유자만 삭제 가능
-            if (playlist.getOwner().equals(user)) {
-                playlistRepository.delete(playlist);
-                return true;
-            }
-        }
+        Playlist playlist = ExceptionUtils.requireNonNull(
+            playlistRepository.findById(playlistId).orElse(null), 
+            ErrorCode.PLAYLIST_NOT_FOUND
+        );
         
-        return false;
+        // 소유자만 삭제 가능
+        ExceptionUtils.requireTrue(
+            playlist.getOwner().equals(user), 
+            ErrorCode.PLAYLIST_DELETE_DENIED
+        );
+        
+        playlistRepository.delete(playlist);
+        return true;
     }
 } 
