@@ -152,7 +152,8 @@ class CommentJwtAuthenticationTest {
         mockMvc.perform(post("/comment")
                 .param("postId", data.post.getId().toString())
                 .param("commentContent", "인증되지 않은 댓글입니다."))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/acc/login-required"));
     }
 
     @Test

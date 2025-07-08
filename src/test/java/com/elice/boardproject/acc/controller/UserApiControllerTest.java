@@ -82,7 +82,7 @@ class UserApiControllerTest {
         mockMvc.perform(post("/api/acc/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginDTO)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized()); // 401
     }
 
     @Test
@@ -117,6 +117,18 @@ class UserApiControllerTest {
         mockMvc.perform(post("/api/acc/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginDTO)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isNotFound()); // 404
+    }
+
+    @Test
+    void 비밀번호_불일치_로그인_실패() throws Exception {
+        UserDTO loginDTO = new UserDTO();
+        loginDTO.setId("testuser");
+        loginDTO.setPwd("wrongpass");
+
+        mockMvc.perform(post("/api/acc/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loginDTO)))
+                .andExpect(status().isUnauthorized()); // 401
     }
 } 

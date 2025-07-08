@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.elice.boardproject.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.elice.boardproject.oauth.handler.OAuth2AuthenticationFailureHandler;
 import com.elice.boardproject.oauth.service.OAuthService;
+import java.net.URLEncoder;
 
 @Configuration
 public class SecurityConfig {
@@ -36,16 +37,17 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling(exception -> exception
                 .authenticationEntryPoint((request, response, authException) -> {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                    response.sendRedirect("/acc/login-required");
                 })
             )
             .authorizeHttpRequests(auth -> auth
                 // 공개 접근 가능한 페이지들
                 .requestMatchers("/acc/login", "/acc/signup", "/acc/logout", "/", "/acc/index", 
                                "/static/**", "/images/**", "/css/**", "/js/**", "/favicon.ico",
-                               "/h2-console/**", "/oauth/error").permitAll()
+                               "/h2-console/**", "/oauth/error", "/oauth2/**", "/login/oauth2/**", 
+                               "/board/boards", "/board/index/**").permitAll()
                 // 인증이 필요한 페이지들
-                .requestMatchers("/board/**", "/post/**", "/comment/**").authenticated()
+                .requestMatchers("/post/**", "/comment/**").authenticated()
                 .anyRequest().permitAll()
             )
             .oauth2Login(oauth2 -> oauth2

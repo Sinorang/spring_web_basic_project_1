@@ -31,9 +31,9 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 
         Cookie jwtCookie = new Cookie("jwt_token", token);
         jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(false); // 운영 환경에서는 true
+        jwtCookie.setSecure(request.isSecure()); // HTTPS 사용 시 true
         jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(3600);
+        jwtCookie.setMaxAge(1800); // 30분으로 단축
         response.addCookie(jwtCookie);
 
         response.sendRedirect("/");

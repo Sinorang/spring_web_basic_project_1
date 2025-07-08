@@ -5,6 +5,9 @@ import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.entity.UserProfileUpdateDTO;
 import com.elice.boardproject.acc.entity.PasswordChangeDTO;
 import com.elice.boardproject.acc.repository.UserRepository;
+import com.elice.boardproject.exception.ErrorCode;
+import com.elice.boardproject.exception.ExceptionUtils;
+import com.elice.boardproject.exception.PliException;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,11 +43,7 @@ public class UserService {
     public List<User> getLoginUser(String id, String rawPwd) {
         logger.debug("로그인 검증 시작 - ID: {}", id);
         
-        User user = userRepository.findById(id);
-        if (user == null) {
-            logger.warn("사용자를 찾을 수 없음 - ID: {}", id);
-            return List.of();
-        }
+        User user = ExceptionUtils.requireNonNull(userRepository.findById(id), ErrorCode.USER_NOT_FOUND, id);
         
         logger.debug("사용자 발견 - ID: {}, 저장된 해시: {}", id, user.getPwd());
         
@@ -56,7 +55,8 @@ public class UserService {
             return List.of(user);
         } else {
             logger.warn("비밀번호 불일치 - ID: {}", id);
-            return List.of();
+            ExceptionUtils.throwException(ErrorCode.INVALID_CREDENTIALS);
+            return List.of(); // 이 라인은 실행되지 않음
         }
     }
 
@@ -65,25 +65,22 @@ public class UserService {
     }
 
     public void updateUserProfile(String userId, UserDTO updateUserDTO) {
-        User user = userRepository.findById(userId);
-        if (user == null) {
-            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
-        }
+        User user = ExceptionUtils.requireNonNull(userRepository.findById(userId), ErrorCode.USER_NOT_FOUND, userId);
 
         // 수정 불가 필드 검증
         if (updateUserDTO.getId() != null && !updateUserDTO.getId().trim().isEmpty()) {
-            throw new IllegalArgumentException("아이디는 수정할 수 없습니다.");
+            ExceptionUtils.throwException(ErrorCode.INVALID_INPUT_VALUE, "아이디는 수정할 수 없습니다.");
         }
         
         if (updateUserDTO.getName() != null && !updateUserDTO.getName().trim().isEmpty()) {
-            throw new IllegalArgumentException("이름은 수정할 수 없습니다.");
+            ExceptionUtils.throwException(ErrorCode.INVALID_INPUT_VALUE, "이름은 수정할 수 없습니다.");
         }
 
         // 이메일 중복 검증 (자신의 이메일이 아닌 경우)
         if (updateUserDTO.getEmail() != null && !updateUserDTO.getEmail().trim().isEmpty()) {
             User existingUserByEmail = userRepository.findByEmail(updateUserDTO.getEmail());
             if (existingUserByEmail != null && !existingUserByEmail.getId().equals(userId)) {
-                throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+                ExceptionUtils.throwException(ErrorCode.EMAIL_ALREADY_EXISTS, updateUserDTO.getEmail());
             }
             user.setEmail(updateUserDTO.getEmail());
         }
@@ -92,7 +89,7 @@ public class UserService {
         if (updateUserDTO.getNickname() != null && !updateUserDTO.getNickname().trim().isEmpty()) {
             User existingUserByNickname = userRepository.findByNickname(updateUserDTO.getNickname());
             if (existingUserByNickname != null && !existingUserByNickname.getId().equals(userId)) {
-                throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+                ExceptionUtils.throwException(ErrorCode.NICKNAME_ALREADY_EXISTS, updateUserDTO.getNickname());
             }
             user.setNickname(updateUserDTO.getNickname());
         }
@@ -107,16 +104,13 @@ public class UserService {
     }
 
     public void updateUserProfile(String userId, UserProfileUpdateDTO updateDTO) {
-        User user = userRepository.findById(userId);
-        if (user == null) {
-            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
-        }
+        User user = ExceptionUtils.requireNonNull(userRepository.findById(userId), ErrorCode.USER_NOT_FOUND, userId);
 
         // 이메일 중복 검증 (자신의 이메일이 아닌 경우)
         if (updateDTO.getEmail() != null && !updateDTO.getEmail().trim().isEmpty()) {
             User existingUserByEmail = userRepository.findByEmail(updateDTO.getEmail());
             if (existingUserByEmail != null && !existingUserByEmail.getId().equals(userId)) {
-                throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+                ExceptionUtils.throwException(ErrorCode.EMAIL_ALREADY_EXISTS, updateDTO.getEmail());
             }
             user.setEmail(updateDTO.getEmail());
         }
@@ -125,7 +119,7 @@ public class UserService {
         if (updateDTO.getNickname() != null && !updateDTO.getNickname().trim().isEmpty()) {
             User existingUserByNickname = userRepository.findByNickname(updateDTO.getNickname());
             if (existingUserByNickname != null && !existingUserByNickname.getId().equals(userId)) {
-                throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+                ExceptionUtils.throwException(ErrorCode.NICKNAME_ALREADY_EXISTS, updateDTO.getNickname());
             }
             user.setNickname(updateDTO.getNickname());
         }
@@ -134,24 +128,21 @@ public class UserService {
     }
 
     public void changePassword(String userId, PasswordChangeDTO passwordChangeDTO) {
-        User user = userRepository.findById(userId);
-        if (user == null) {
-            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
-        }
+        User user = ExceptionUtils.requireNonNull(userRepository.findById(userId), ErrorCode.USER_NOT_FOUND, userId);
 
         // 현재 비밀번호 확인
         if (!passwordEncoder.matches(passwordChangeDTO.getCurrentPassword(), user.getPwd())) {
-            throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+            ExceptionUtils.throwException(ErrorCode.INVALID_PASSWORD, "현재 비밀번호가 일치하지 않습니다.");
         }
 
         // 새 비밀번호와 확인 비밀번호 일치 확인
         if (!passwordChangeDTO.isPasswordMatch()) {
-            throw new IllegalArgumentException("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+            ExceptionUtils.throwException(ErrorCode.PASSWORD_MISMATCH);
         }
 
         // 새 비밀번호가 현재 비밀번호와 다른지 확인
         if (passwordEncoder.matches(passwordChangeDTO.getNewPassword(), user.getPwd())) {
-            throw new IllegalArgumentException("새 비밀번호는 현재 비밀번호와 달라야 합니다.");
+            ExceptionUtils.throwException(ErrorCode.INVALID_PASSWORD, "새 비밀번호는 현재 비밀번호와 달라야 합니다.");
         }
 
         // 새 비밀번호로 업데이트

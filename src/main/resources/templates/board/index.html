@@ -44,6 +44,7 @@
           th:unless="${postPage.isEmpty()}"
           th:each="post : ${postPage}"
           th:href="@{/post/{postId}(postId=${post.id})}"
+          th:onclick="return checkLoginAndNavigate(event, '[[${loginId}]]')"
         >
           <h4 class="fw-bold mb-1" th:text="${post.title}">게시글 제목</h4>
           <small class="text-secondary" th:text="${post.postDate != null ? #strings.substring(post.postDate.toString(), 0, 10) : ''}">
@@ -73,4 +74,17 @@
         </ul>
       </div>
     </div>
+    
+    <script>
+      function checkLoginAndNavigate(event, loginId) {
+        if (!loginId || loginId === '') {
+          event.preventDefault();
+          if (confirm('게시글을 보려면 로그인이 필요합니다.\n로그인 페이지로 이동하시겠습니까?')) {
+            window.location.href = '/acc/login?error=login_required&message=게시글을 보려면 로그인이 필요합니다.';
+          }
+          return false;
+        }
+        return true;
+      }
+    </script>
 </div>

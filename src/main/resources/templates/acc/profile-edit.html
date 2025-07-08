@@ -95,12 +95,16 @@
                                     <div class="mb-3">
                                         <label for="email" class="form-label">이메일 <span class="text-danger">*</span></label>
                                         <input type="email" class="form-control" id="email" 
-                                               th:value="${user.email}" required>
+                                               th:value="${user.email}" 
+                                               th:readonly="${user.oauthProvider != null}"
+                                               th:class="${user.oauthProvider != null ? 'form-control readonly-field' : 'form-control'}"
+                                               required>
                                         <div id="emailError" class="text-danger"></div>
+                                        <div class="form-text" th:if="${user.oauthProvider != null}">OAuth 계정의 이메일은 수정할 수 없습니다.</div>
                                     </div>
 
-                                    <!-- 비밀번호 변경 섹션 -->
-                                    <div class="mb-3 password-section">
+                                    <!-- 비밀번호 변경 섹션 (OAuth 사용자가 아닌 경우에만 표시) -->
+                                    <div class="mb-3 password-section" th:if="${user.oauthProvider == null}">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <label class="form-label mb-0">비밀번호</label>
                                             <button type="button" class="btn btn-outline-primary btn-sm" 
@@ -110,6 +114,18 @@
                                             </button>
                                         </div>
                                         <div class="form-text">보안을 위해 비밀번호는 별도 팝업에서 변경할 수 있습니다.</div>
+                                    </div>
+                                    
+                                    <!-- OAuth 사용자 안내 -->
+                                    <div class="mb-3 alert alert-info" th:if="${user.oauthProvider != null}">
+                                        <div class="d-flex align-items-center">
+                                            <span class="material-symbols-outlined me-2">info</span>
+                                            <div>
+                                                <strong>OAuth 계정</strong><br>
+                                                <span th:text="${user.oauthProvider} + ' 계정으로 로그인한 사용자입니다.'"></span>
+                                                <br>비밀번호와 이메일은 OAuth 제공자에서 관리됩니다.
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -129,8 +145,8 @@
                 </div>
             </div>
 
-            <!-- 비밀번호 변경 모달 -->
-            <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
+            <!-- 비밀번호 변경 모달 (OAuth 사용자가 아닌 경우에만 표시) -->
+            <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true" th:if="${user.oauthProvider == null}">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
