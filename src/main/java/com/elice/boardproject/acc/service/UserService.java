@@ -169,6 +169,8 @@ public class UserService {
         // 탈퇴 처리: status 변경 시 isActive 자동 동기화
         user.setStatus(UserStatus.WITHDRAWN);
         user.setIsActive(false);
+        // 탈퇴 사유 저장
+        user.setReason(withdrawRequest.getReason());
         
         // 탈퇴 사유 로깅 (개인정보 보호를 위해 DB에는 저장하지 않음)
         if (withdrawRequest.getReason() != null && !withdrawRequest.getReason().trim().isEmpty()) {

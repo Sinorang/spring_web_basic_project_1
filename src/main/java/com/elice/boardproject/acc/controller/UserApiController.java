@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.elice.boardproject.acc.dto.UserWithdrawRequestDTO;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 @RestController
 @RequestMapping("/api/acc")
@@ -64,5 +69,14 @@ public class UserApiController {
         response.addCookie(jwtCookie);
         
         return ResponseEntity.ok().body("로그아웃되었습니다.");
+    }
+
+    // 사용자 탈퇴 API
+    @PatchMapping("/withdraw")
+    public ResponseEntity<?> withdrawUser(@RequestBody UserWithdrawRequestDTO withdrawRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+        userService.withdrawUser(userId, withdrawRequest);
+        return ResponseEntity.ok().body("탈퇴가 완료되었습니다.");
     }
 } 

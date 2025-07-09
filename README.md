@@ -378,16 +378,17 @@ feat: 게시글 생성 기능 구현
 
 ### 1. 사용자 탈퇴 API ✅
 - **구현 상태**: 완료
-- **API 경로**: `DELETE /api/users/withdraw`
+- **API 경로**: `PATCH /api/acc/withdraw`
 - **권한**: 인증된 사용자만 (본인 탈퇴)
 - **구현 방식**: 
-  - DELETE가 아닌 상태 변경 (활성 → 탈퇴)
-  - `isActive=false`, `status=WITHDRAWN`으로 설정
+  - PATCH(부분 수정)로 상태 변경 (활성 → 탈퇴)
+  - `isActive=false`, `status=WITHDRAWN`, `reason`(탈퇴 사유) 저장
   - 관리자 강제 삭제는 제외 (데이터 보존)
 - **관련 파일**:
   - `UserService.withdrawUser()` - 탈퇴 로직
   - `UserWithdrawRequestDTO` - 탈퇴 요청 DTO
   - `UserApiController.withdrawUser()` - API 엔드포인트
+  - `User` 엔티티의 `reason` 필드 - 탈퇴 사유 저장
 
 ### 2. 관리자 전용 사용자 관리 API ✅
 - **구현 상태**: 완료

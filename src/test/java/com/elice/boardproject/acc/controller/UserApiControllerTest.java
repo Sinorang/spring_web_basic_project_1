@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.elice.boardproject.board.repository.BoardRepository;
 import com.elice.boardproject.post.repository.PostRepository;
 import com.elice.boardproject.comment.repository.CommentRepository;
+import com.elice.boardproject.acc.dto.UserWithdrawRequestDTO;
+import com.elice.boardproject.acc.entity.User;
+import com.elice.boardproject.acc.entity.UserStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -130,5 +135,34 @@ class UserApiControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().isUnauthorized()); // 401
+    }
+
+    @Test
+    @WithMockUser(username = "testuser")
+    void 사용자_탈퇴_정상_처리_및_사유_저장() throws Exception {
+        UserWithdrawRequestDTO dto = new UserWithdrawRequestDTO("테스트 탈퇴 사유");
+        mockMvc.perform(patch("/api/acc/withdraw")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("탈퇴가 완료되었습니다."));
+        // DB에서 상태/사유 확인
+        User user = userRepository.findByIdForAdmin("testuser");
+        assertThat(user.getStatus()).isEqualTo(UserStatus.WITHDRAWN);
+        assertThat(user.getReason()).isEqualTo("테스트 탈퇴 사유");
+    }
+
+    @Test
+    @WithMockUser(username = "testuser")
+    void 사용자_탈퇴_사유_미입력시_null_저장() throws Exception {
+        UserWithdrawRequestDTO dto = new UserWithdrawRequestDTO(null);
+        mockMvc.perform(patch("/api/acc/withdraw")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("탈퇴가 완료되었습니다."));
+        User user = userRepository.findByIdForAdmin("testuser");
+        assertThat(user.getStatus()).isEqualTo(UserStatus.WITHDRAWN);
+        assertThat(user.getReason()).isNull();
     }
 } 
