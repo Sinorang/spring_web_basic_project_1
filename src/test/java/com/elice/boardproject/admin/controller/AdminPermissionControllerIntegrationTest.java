@@ -1,7 +1,13 @@
 package com.elice.boardproject.admin.controller;
 
 import com.elice.boardproject.admin.dto.PermissionDTO;
+import com.elice.boardproject.admin.entity.AdminRole;
+import com.elice.boardproject.admin.entity.Permission;
+import com.elice.boardproject.admin.repository.AdminRoleRepository;
+import com.elice.boardproject.admin.repository.PermissionRepository;
 import com.elice.boardproject.admin.service.PermissionService;
+import com.elice.boardproject.acc.entity.User;
+import com.elice.boardproject.acc.repository.UserRepository;
 import com.elice.boardproject.exception.ErrorCode;
 import com.elice.boardproject.exception.PliException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,9 +21,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -27,6 +36,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class AdminPermissionControllerIntegrationTest {
 
     @Autowired
@@ -38,10 +49,55 @@ class AdminPermissionControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private AdminRoleRepository adminRoleRepository;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
+
     private PermissionDTO permissionDTO;
+    private User testUser;
+    private AdminRole adminRole;
+    private Permission permission;
 
     @BeforeEach
     void setUp() {
+        // 기존 데이터 정리 (관계 역순)
+        userRepository.deleteAll();
+        adminRoleRepository.deleteAll();
+        permissionRepository.deleteAll();
+
+        String unique = UUID.randomUUID().toString().substring(0, 8);
+
+        // 권한 생성
+        permission = Permission.builder()
+                .permissionName("SUPER_ADMIN_" + unique)
+                .description("슈퍼 관리자 권한")
+                .build();
+        permission = permissionRepository.save(permission);
+
+        // 관리자 역할 생성
+        adminRole = AdminRole.builder()
+                .roleName("SUPER_ADMIN_" + unique)
+                .description("슈퍼 관리자")
+                .permissions(java.util.Set.of(permission))
+                .build();
+        adminRole = adminRoleRepository.save(adminRole);
+
+        // 테스트 사용자 생성
+        testUser = User.builder()
+                .id("admin_" + unique)
+                .pwd("password")
+                .name("관리자")
+                .nickname("관리자닉네임")
+                .email("admin_" + unique + "@test.com")
+                .adminRole(adminRole)
+                .build();
+        testUser = userRepository.save(testUser);
+
         permissionDTO = PermissionDTO.builder()
                 .id(1L)
                 .permissionName("USER_MANAGE")

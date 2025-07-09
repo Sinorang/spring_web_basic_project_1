@@ -29,6 +29,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.containsString;
@@ -223,8 +225,13 @@ class JwtAuthenticationIntegrationTest {
     @Test
     void JWT_토큰으로_게시판_생성_페이지_접근() throws Exception {
         TestData data = createTestData("user7_" + System.currentTimeMillis());
-        // 테스트 유저에게 BOARD_MANAGE 권한 부여
-        adminUserService.grantAdminRole(data.user.getIdx(), "ADMIN", "test");
+        // 테스트 유저에게 BOARD_MANAGE 권한 부여 (테스트용으로 직접 설정)
+        data.user.setAdmin(true);
+        AdminRole adminRole = adminRoleRepository.findByRoleName("ADMIN").orElseThrow();
+        data.user.setAdminRole(adminRole);
+        data.user.setAdminGrantedAt(LocalDateTime.now());
+        data.user.setAdminGrantedBy("test");
+        userRepository.save(data.user);
         mockMvc.perform(get("/board/create")
                 .header("Authorization", "Bearer " + data.jwtToken))
                 .andExpect(status().isOk())
@@ -249,8 +256,13 @@ class JwtAuthenticationIntegrationTest {
     @Test
     void JWT_토큰으로_게시판_생성() throws Exception {
         TestData data = createTestData("user9_" + System.currentTimeMillis());
-        // 테스트 유저에게 BOARD_MANAGE 권한 부여
-        adminUserService.grantAdminRole(data.user.getIdx(), "ADMIN", "test");
+        // 테스트 유저에게 BOARD_MANAGE 권한 부여 (테스트용으로 직접 설정)
+        data.user.setAdmin(true);
+        AdminRole adminRole = adminRoleRepository.findByRoleName("ADMIN").orElseThrow();
+        data.user.setAdminRole(adminRole);
+        data.user.setAdminGrantedAt(LocalDateTime.now());
+        data.user.setAdminGrantedBy("test");
+        userRepository.save(data.user);
         mockMvc.perform(post("/board/create")
                 .param("name", "새 게시판")
                 .param("description", "새 게시판 설명")

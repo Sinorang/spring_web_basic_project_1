@@ -3,6 +3,7 @@ package com.elice.boardproject.admin.service;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.admin.dto.AdminUserDTO;
 import com.elice.boardproject.admin.entity.AdminRole;
+import com.elice.boardproject.admin.entity.Permission;
 import com.elice.boardproject.admin.mapper.AdminMapper;
 import com.elice.boardproject.acc.repository.UserRepository;
 import com.elice.boardproject.admin.repository.AdminRoleRepository;
@@ -22,8 +23,10 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -130,16 +133,35 @@ class AdminUserServiceTest {
     }
 
     @Test
-    @DisplayName("사용자에게 관리자 권한을 부여할 수 있다")
+    @DisplayName("슈퍼 관리자는 사용자에게 관리자 권한을 부여할 수 있다")
     void grantAdminRole() {
         // given
+        Permission superAdminPermission = Permission.builder()
+                .permissionName("SUPER_ADMIN")
+                .description("슈퍼 관리자 권한")
+                .build();
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(superAdminPermission);
+        AdminRole superAdminRole = AdminRole.builder()
+                .roleName("SUPER_ADMIN")
+                .description("슈퍼 관리자")
+                .permissions(permissions)
+                .build();
+        User superAdmin = User.builder()
+                .idx(999L)
+                .id("superadmin")
+                .isAdmin(true)
+                .adminRole(superAdminRole)
+                .build();
+        
+        when(userRepository.findById(999L)).thenReturn(Optional.of(superAdmin));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(adminRoleRepository.findByRoleName("ADMIN")).thenReturn(Optional.of(adminRole));
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(adminMapper.toAdminUserDTO(user)).thenReturn(adminUserDTO);
 
         // when
-        AdminUserDTO result = adminUserService.grantAdminRole(1L, "ADMIN", "admin");
+        AdminUserDTO result = adminUserService.grantAdminRole(1L, "ADMIN", "admin", 999L);
 
         // then
         assertThat(result.isAdmin()).isTrue();
@@ -150,10 +172,29 @@ class AdminUserServiceTest {
     @DisplayName("존재하지 않는 사용자에게 권한 부여 시 예외가 발생한다")
     void grantAdminRole_UserNotFound() {
         // given
-        when(userRepository.findById(999L)).thenReturn(Optional.empty());
+        Permission superAdminPermission = Permission.builder()
+                .permissionName("SUPER_ADMIN")
+                .description("슈퍼 관리자 권한")
+                .build();
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(superAdminPermission);
+        AdminRole superAdminRole = AdminRole.builder()
+                .roleName("SUPER_ADMIN")
+                .description("슈퍼 관리자")
+                .permissions(permissions)
+                .build();
+        User superAdmin = User.builder()
+                .idx(999L)
+                .id("superadmin")
+                .isAdmin(true)
+                .adminRole(superAdminRole)
+                .build();
+        
+        when(userRepository.findById(999L)).thenReturn(Optional.of(superAdmin));
+        when(userRepository.findById(888L)).thenReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> adminUserService.grantAdminRole(999L, "ADMIN", "admin"))
+        assertThatThrownBy(() -> adminUserService.grantAdminRole(888L, "ADMIN", "admin", 999L))
                 .isInstanceOf(PliException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
     }
@@ -162,25 +203,63 @@ class AdminUserServiceTest {
     @DisplayName("존재하지 않는 역할로 권한 부여 시 예외가 발생한다")
     void grantAdminRole_RoleNotFound() {
         // given
+        Permission superAdminPermission = Permission.builder()
+                .permissionName("SUPER_ADMIN")
+                .description("슈퍼 관리자 권한")
+                .build();
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(superAdminPermission);
+        AdminRole superAdminRole = AdminRole.builder()
+                .roleName("SUPER_ADMIN")
+                .description("슈퍼 관리자")
+                .permissions(permissions)
+                .build();
+        User superAdmin = User.builder()
+                .idx(999L)
+                .id("superadmin")
+                .isAdmin(true)
+                .adminRole(superAdminRole)
+                .build();
+        
+        when(userRepository.findById(999L)).thenReturn(Optional.of(superAdmin));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(adminRoleRepository.findByRoleName("INVALID_ROLE")).thenReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> adminUserService.grantAdminRole(1L, "INVALID_ROLE", "admin"))
+        assertThatThrownBy(() -> adminUserService.grantAdminRole(1L, "INVALID_ROLE", "admin", 999L))
                 .isInstanceOf(PliException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.ADMIN_ROLE_NOT_FOUND);
     }
 
     @Test
-    @DisplayName("사용자의 관리자 권한을 해제할 수 있다")
+    @DisplayName("슈퍼 관리자는 사용자의 관리자 권한을 해제할 수 있다")
     void revokeAdminRole() {
         // given
+        Permission superAdminPermission = Permission.builder()
+                .permissionName("SUPER_ADMIN")
+                .description("슈퍼 관리자 권한")
+                .build();
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(superAdminPermission);
+        AdminRole superAdminRole = AdminRole.builder()
+                .roleName("SUPER_ADMIN")
+                .description("슈퍼 관리자")
+                .permissions(permissions)
+                .build();
+        User superAdmin = User.builder()
+                .idx(999L)
+                .id("superadmin")
+                .isAdmin(true)
+                .adminRole(superAdminRole)
+                .build();
+        
+        when(userRepository.findById(999L)).thenReturn(Optional.of(superAdmin));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(adminMapper.toAdminUserDTO(user)).thenReturn(adminUserDTO);
 
         // when
-        AdminUserDTO result = adminUserService.revokeAdminRole(1L);
+        AdminUserDTO result = adminUserService.revokeAdminRole(1L, 999L);
 
         // then
         verify(userRepository).save(any(User.class));
@@ -198,5 +277,153 @@ class AdminUserServiceTest {
 
         // then
         verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    @DisplayName("슈퍼 관리자가 아닌 사용자는 권한 부여할 수 없다")
+    void grantAdminRole_NotSuperAdmin() {
+        // given
+        Permission adminPermission = Permission.builder()
+                .permissionName("ADMIN")
+                .description("일반 관리자 권한")
+                .build();
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(adminPermission);
+        AdminRole normalAdminRole = AdminRole.builder()
+                .roleName("ADMIN")
+                .description("일반 관리자")
+                .permissions(permissions)
+                .build();
+        User normalAdmin = User.builder()
+                .idx(999L)
+                .id("normaladmin")
+                .isAdmin(true)
+                .adminRole(normalAdminRole)
+                .build();
+        
+        when(userRepository.findById(999L)).thenReturn(Optional.of(normalAdmin));
+
+        // when & then
+        assertThatThrownBy(() -> adminUserService.grantAdminRole(1L, "ADMIN", "admin", 999L))
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INSUFFICIENT_PERMISSION);
+    }
+
+    @Test
+    @DisplayName("슈퍼 관리자가 아닌 사용자는 권한 회수할 수 없다")
+    void revokeAdminRole_NotSuperAdmin() {
+        // given
+        Permission adminPermission = Permission.builder()
+                .permissionName("ADMIN")
+                .description("일반 관리자 권한")
+                .build();
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(adminPermission);
+        AdminRole normalAdminRole = AdminRole.builder()
+                .roleName("ADMIN")
+                .description("일반 관리자")
+                .permissions(permissions)
+                .build();
+        User normalAdmin = User.builder()
+                .idx(999L)
+                .id("normaladmin")
+                .isAdmin(true)
+                .adminRole(normalAdminRole)
+                .build();
+        
+        when(userRepository.findById(999L)).thenReturn(Optional.of(normalAdmin));
+
+        // when & then
+        assertThatThrownBy(() -> adminUserService.revokeAdminRole(1L, 999L))
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INSUFFICIENT_PERMISSION);
+    }
+
+    @Test
+    @DisplayName("슈퍼 관리자는 자기 자신의 권한을 회수할 수 없다")
+    void revokeAdminRole_SelfRevoke() {
+        // given
+        Permission superAdminPermission = Permission.builder()
+                .permissionName("SUPER_ADMIN")
+                .description("슈퍼 관리자 권한")
+                .build();
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(superAdminPermission);
+        AdminRole superAdminRole = AdminRole.builder()
+                .roleName("SUPER_ADMIN")
+                .description("슈퍼 관리자")
+                .permissions(permissions)
+                .build();
+        User superAdmin = User.builder()
+                .idx(999L)
+                .id("superadmin")
+                .isAdmin(true)
+                .adminRole(superAdminRole)
+                .build();
+        
+        when(userRepository.findById(999L)).thenReturn(Optional.of(superAdmin));
+
+        // when & then
+        assertThatThrownBy(() -> adminUserService.revokeAdminRole(999L, 999L))
+                .isInstanceOf(PliException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_OPERATION);
+    }
+
+    @Test
+    @DisplayName("슈퍼 관리자 권한 확인이 정상적으로 작동한다")
+    void isSuperAdmin() {
+        // given
+        Permission superAdminPermission = Permission.builder()
+                .permissionName("SUPER_ADMIN")
+                .description("슈퍼 관리자 권한")
+                .build();
+        Set<Permission> permissions = new HashSet<>();
+        permissions.add(superAdminPermission);
+        AdminRole superAdminRole = AdminRole.builder()
+                .roleName("SUPER_ADMIN")
+                .description("슈퍼 관리자")
+                .permissions(permissions)
+                .build();
+        User superAdmin = User.builder()
+                .idx(999L)
+                .id("superadmin")
+                .isAdmin(true)
+                .adminRole(superAdminRole)
+                .build();
+        AdminRole normalAdminRole = AdminRole.builder()
+                .roleName("ADMIN")
+                .description("일반 관리자")
+                .permissions(new HashSet<>())
+                .build();
+        User normalAdmin = User.builder()
+                .idx(888L)
+                .id("normaladmin")
+                .isAdmin(true)
+                .adminRole(normalAdminRole)
+                .build();
+        
+        when(userRepository.findById(999L)).thenReturn(Optional.of(superAdmin));
+        when(userRepository.findById(888L)).thenReturn(Optional.of(normalAdmin));
+
+        // when & then
+        assertThat(adminUserService.isSuperAdmin(999L)).isTrue();
+        assertThat(adminUserService.isSuperAdmin(888L)).isFalse();
+    }
+
+    @Test
+    @DisplayName("관리자가 아닌 사용자는 슈퍼 관리자가 아니다")
+    void isSuperAdmin_NotAdmin() {
+        // given
+        User normalUser = User.builder()
+                .idx(999L)
+                .id("normaluser")
+                .isAdmin(false)
+                .adminRole(null)
+                .build();
+        
+        when(userRepository.findById(999L)).thenReturn(Optional.of(normalUser));
+
+        // when & then
+        assertThat(adminUserService.isSuperAdmin(999L)).isFalse();
     }
 } 
