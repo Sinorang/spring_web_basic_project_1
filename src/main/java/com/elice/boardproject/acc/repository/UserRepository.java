@@ -14,17 +14,23 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Logger logger = LoggerFactory.getLogger(UserRepository.class);
     
     List<User> findAll();
+    List<User> findAllByIsActiveTrue();
     // 아이디로 사용자 조회 (JWT 인증용)
-    @Query("SELECT u FROM User u WHERE u.id = :id")
+    @Query("SELECT u FROM User u WHERE u.id = :id AND u.isActive = true")
     User findById(@Param("id") String id);
     
     // OAuth 관련 메서드들
-    @Query("SELECT u FROM User u WHERE u.oauthProvider = :provider AND u.oauthId = :oauthId")
+    @Query("SELECT u FROM User u WHERE u.oauthProvider = :provider AND u.oauthId = :oauthId AND u.isActive = true")
     User findByOauthProviderAndOauthId(@Param("provider") String provider, @Param("oauthId") String oauthId);
     
-    @Query("SELECT u FROM User u WHERE u.email = :email")
+    @Query("SELECT u FROM User u WHERE u.email = :email AND u.isActive = true")
     User findByEmail(@Param("email") String email);
     
-    @Query("SELECT u FROM User u WHERE u.nickname = :nickname")
+    @Query("SELECT u FROM User u WHERE u.nickname = :nickname AND u.isActive = true")
     User findByNickname(@Param("nickname") String nickname);
+    
+    // 관리자 통계용 메서드들
+    long countByIsAdminTrue();
+    
+    long countByOauthProviderIsNotNull();
 }

@@ -1,5 +1,6 @@
 package com.elice.boardproject.board.controller;
 
+import com.elice.boardproject.aop.annotation.RequirePermission;
 import com.elice.boardproject.security.JwtTokenUtil;
 import com.elice.boardproject.security.JwtUtil;
 import com.elice.boardproject.acc.entity.User;
@@ -83,11 +84,13 @@ public class BoardController {
     }
 
     @GetMapping("/board/create")
+    @RequirePermission("BOARD_MANAGE")
     public String createBoardPage(HttpServletRequest request) {
         return "board/createBoard";
     }
 
     @PostMapping("/board/create")
+    @RequirePermission("BOARD_MANAGE")
     public String createBoard(BoardDTO boardDTO, HttpServletRequest request) {
         User loginUser = jwtTokenUtil.getCurrentUser(request);
         boardDTO.setUser(loginUser);
@@ -96,6 +99,7 @@ public class BoardController {
     }
 
     @GetMapping("/board/boards/{boardIdx}/edit")
+    @RequirePermission("BOARD_MANAGE")
     public String editBoardPage(@PathVariable("boardIdx") Long boardIdx, Model model
                                 , HttpServletRequest request) {
         User loginUser = jwtTokenUtil.getCurrentUser(request);
@@ -105,17 +109,12 @@ public class BoardController {
             return "redirect:/board/boards";
         }
 
-        if(board.getUser().getIdx().equals(loginUser.getIdx())) {
-            model.addAttribute("board", board);
-            return "board/editBoard";
-        }
-        else {
-            System.out.println("게시판을 생성한 사람만 수정할 수 있습니다!");
-            return "redirect:/board/boards";
-        }
+        model.addAttribute("board", board);
+        return "board/editBoard";
     }
 
     @PostMapping("/board/boards/{boardIdx}/edit")
+    @RequirePermission("BOARD_MANAGE")
     public String updateBoard(@PathVariable Long boardIdx, @ModelAttribute Board board, HttpServletRequest request) {
         User loginUser = jwtTokenUtil.getCurrentUser(request);
         Board editBoard = boardService.getBoardById(boardIdx);
@@ -124,18 +123,14 @@ public class BoardController {
             return "redirect:/board/boards";
         }
         
-        if (editBoard.getUser().getIdx().equals(loginUser.getIdx())) {
-            editBoard.setName(board.getName());
-            editBoard.setDescription(board.getDescription());
-            boardService.updateBoard(editBoard);
-            return "redirect:/board/boards";
-        } else {
-            System.out.println("게시판을 생성한 사람만 수정할 수 있습니다!");
-            return "redirect:/board/boards";
-        }
+        editBoard.setName(board.getName());
+        editBoard.setDescription(board.getDescription());
+        boardService.updateBoard(editBoard);
+        return "redirect:/board/boards";
     }
 
     @DeleteMapping("/board/boards/{boardIdx}/delete")
+    @RequirePermission("BOARD_MANAGE")
     public String deleteBoard(@PathVariable Long boardIdx, HttpServletRequest request) {
         User loginUser = jwtTokenUtil.getCurrentUser(request);
         Board board = boardService.getBoardById(boardIdx);
@@ -144,25 +139,19 @@ public class BoardController {
             return "redirect:/board/boards";
         }
 
-        if(board.getUser().getIdx().equals(loginUser.getIdx())) {
-            List<Post> postList = postService.findPostsByBoardId(boardIdx);
-            for(int i = 0; i<postList.size(); i++) {
-                Post post = postList.get(i);
+        List<Post> postList = postService.findPostsByBoardId(boardIdx);
+        for(int i = 0; i<postList.size(); i++) {
+            Post post = postList.get(i);
 
-                List<Comment> commentList = commentService.findCommentByPostId(post.getId());
-                for(int j = 0; j<commentList.size(); j++) {
-                    Comment comment = commentList.get(j);
-                    commentService.deleteComment(comment.getCommentId());
-                }
-                postService.deletePost(post.getId());
+            List<Comment> commentList = commentService.findCommentByPostId(post.getId());
+            for(int j = 0; j<commentList.size(); j++) {
+                Comment comment = commentList.get(j);
+                commentService.deleteComment(comment.getCommentId());
             }
+            postService.deletePost(post.getId());
+        }
 
-            boardService.deleteBoardById(boardIdx);
-            return "redirect:/board/boards";
-        }
-        else{
-            System.out.println("게시판을 생성한 사람만 삭제할 수 있습니다!");
-            return "redirect:/board/boards";
-        }
+        boardService.deleteBoardById(boardIdx);
+        return "redirect:/board/boards";
     }
 }

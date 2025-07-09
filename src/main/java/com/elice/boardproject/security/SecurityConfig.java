@@ -46,6 +46,8 @@ public class SecurityConfig {
                                "/static/**", "/images/**", "/css/**", "/js/**", "/favicon.ico",
                                "/h2-console/**", "/oauth/error", "/oauth2/**", "/login/oauth2/**", 
                                "/board/boards", "/board/index/**").permitAll()
+                // 관리자 API - ADMIN 역할 필요
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 // 인증이 필요한 페이지들
                 .requestMatchers("/post/**", "/comment/**").authenticated()
                 .anyRequest().permitAll()

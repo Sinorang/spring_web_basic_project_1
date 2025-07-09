@@ -1,11 +1,7 @@
 package com.elice.boardproject.acc.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.elice.boardproject.admin.entity.AdminRole;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,11 +52,33 @@ public class User {
     @Column(name = "oauth_email")
     private String oauthEmail;
 
+    // 관리자 관련 필드
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_role_id")
+    private AdminRole adminRole;
+
+    @Column(name = "is_admin")
+    private boolean isAdmin = false;
+
+    @Column(name = "admin_granted_at")
+    private LocalDateTime adminGrantedAt;
+
+    @Column(name = "admin_granted_by")
+    private String adminGrantedBy;
+
+    @Column(name = "is_active")
+    private boolean isActive = true;
+
     public User(String id, String pwd, String name, String nickname, String email) {
         this.id = id;
         this.pwd = pwd;
         this.name = name;
         this.nickname = nickname;
         this.email = email;
+        this.isActive = true;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 }
