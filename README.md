@@ -300,7 +300,38 @@ feat: 게시글 생성 기능 구현
 
 ---
 
+## 🔐 인증 및 토큰 관리 (JWT + RefreshToken)
 
+### 1. 도입 배경 및 목적
+- 기존에는 화면(Web) 기반의 단순 JWT 쿠키 삭제 방식 로그아웃만 제공
+- 추후 SPA(React, Vue 등), 모바일 앱, 외부 서비스 연동, refreshToken 기반 보안 고도화, API 일관성 확보 등을 위해 REST 인증/토큰 관리 API를 미리 구현
+- refreshToken은 DB에 저장되어 서버에서 폐기/블랙리스트 관리 가능
+- accessToken/refreshToken 모두 쿠키로 관리하며, API 기반 인증 체계로 점진적 전환 가능
+
+### 2. 주요 API
+- `/api/auth/refresh` : refreshToken으로 accessToken 재발급
+- `/api/auth/logout`  : refreshToken 및 accessToken 폐기(쿠키/DB)
+  - 현재 화면(Web)에서는 직접 사용하지 않지만, SPA/앱/외부 연동, 보안 고도화, API 일관성 확보 등을 위해 미리 구현
+
+### 3. 기존 로그아웃과의 차이
+- UserController의 `/acc/logout` : 화면(Web) 중심, JWT 쿠키만 삭제
+- AuthController의 `/api/auth/logout` : REST API, refreshToken까지 서버에서 폐기, API 기반 인증/보안 고도화에 적합
+
+### 4. 예시 (curl)
+```bash
+# accessToken 재발급
+curl -X POST http://localhost:8080/api/auth/refresh --cookie "refresh_token={refreshToken}"
+
+# 로그아웃
+curl -X POST http://localhost:8080/api/auth/logout --cookie "jwt_token={accessToken}; refresh_token={refreshToken}"
+```
+
+### 5. 향후 활용
+- SPA 프론트엔드, 모바일 앱, 외부 서비스 연동 시 REST 인증 체계로 확장 가능
+- refreshToken 기반 강제 로그아웃, 블랙리스트, 세션 관리 등 보안 고도화에 활용
+- RefreshToken을 Redis 등 인메모리 저장소로 관리하면 대규모 트래픽, 빠른 만료/블랙리스트 처리, 분산 서버 환경에서의 확장성 등에서 장점이 큼
+
+---
 
 ## 🚀 향후 고도화 계획
 
@@ -354,6 +385,11 @@ feat: 게시글 생성 기능 구현
 - RESTful API 기반 모바일 앱 개발
 - 플레이리스트 공유 및 재생 기능
 - 푸시 알림 시스템
+
+### 10. RefreshToken Redis 도입
+- RefreshToken을 Redis 등 인메모리 저장소로 관리
+- 대규모 트래픽 대응 및 빠른 만료/블랙리스트 처리
+- 분산 서버 환경에서의 확장성 확보
 
 ---
 

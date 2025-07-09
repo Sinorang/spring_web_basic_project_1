@@ -27,17 +27,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import com.elice.boardproject.security.service.RefreshTokenService;
 
 @Controller
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     private final JwtTokenUtil jwtTokenUtil;
+    private final RefreshTokenService refreshTokenService;
 
     @Autowired
-    public UserController(UserService userService, JwtTokenUtil jwtTokenUtil) {
+    public UserController(UserService userService, JwtTokenUtil jwtTokenUtil, RefreshTokenService refreshTokenService) {
         this.userService = userService;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @GetMapping("/")
@@ -99,24 +102,57 @@ public class UserController {
         
         logger.info("로그인 성공 - ID: {}, 사용자명: {}", loginDTO.getId(), loginUser.get(0).getName());
         
-        // JWT 토큰 생성 및 쿠키 설정
-        String token = com.elice.boardproject.security.JwtUtil.generateToken(loginDTO.getId());
-        logger.debug("JWT 토큰 생성 완료 - ID: {}", loginDTO.getId());
+        // JWT AccessToken 생성 및 쿠키 설정
+        String accessToken = com.elice.boardproject.security.JwtUtil.generateAccessToken(loginDTO.getId());
+        logger.debug("AccessToken 생성 완료 - ID: {}", loginDTO.getId());
         
-        Cookie jwtCookie = new Cookie("jwt_token", token);
+        Cookie jwtCookie = new Cookie("jwt_token", accessToken);
         jwtCookie.setHttpOnly(true);
         jwtCookie.setSecure(false);
         jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(3600);
+        jwtCookie.setMaxAge(1800); // 30분
         response.addCookie(jwtCookie);
+        
+        // RefreshToken 생성 및 저장
+        refreshTokenService.createRefreshToken(loginDTO.getId(), 7); // 7일
+        logger.debug("RefreshToken 생성 완료 - ID: {}", loginDTO.getId());
+        
+        // RefreshToken 쿠키 설정
+        Cookie refreshTokenCookie = new Cookie("refresh_token", refreshTokenService.findByUserId(loginDTO.getId()).get().getToken());
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(false);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(604800); // 7일
+        response.addCookie(refreshTokenCookie);
         
         logger.info("JWT 쿠키 설정 완료 - ID: {}", loginDTO.getId());
         return "redirect:/acc/index";
     }
 
     @GetMapping("/acc/logout")
-    public String logout(HttpServletResponse response) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
         logger.info("로그아웃 요청");
+        
+        // 현재 사용자 ID 추출하여 RefreshToken 삭제
+        String userId = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt_token".equals(cookie.getName())) {
+                    String token = cookie.getValue();
+                    if (com.elice.boardproject.security.JwtUtil.validateToken(token)) {
+                        userId = com.elice.boardproject.security.JwtUtil.getUsernameFromToken(token);
+                    }
+                    break;
+                }
+            }
+        }
+        
+        // RefreshToken 삭제
+        if (userId != null) {
+            refreshTokenService.deleteByUserId(userId);
+            logger.info("RefreshToken 삭제 완료 - 사용자: {}", userId);
+        }
         
         // JWT 쿠키 삭제
         Cookie jwtCookie = new Cookie("jwt_token", null);
@@ -125,6 +161,14 @@ public class UserController {
         jwtCookie.setPath("/");
         jwtCookie.setMaxAge(0); // 쿠키 즉시 삭제
         response.addCookie(jwtCookie);
+        
+        // RefreshToken 쿠키 삭제
+        Cookie refreshTokenCookie = new Cookie("refresh_token", null);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(false);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(0); // 쿠키 즉시 삭제
+        response.addCookie(refreshTokenCookie);
         
         logger.info("JWT 쿠키 삭제 완료");
         return "redirect:/acc/index";

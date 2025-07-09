@@ -32,6 +32,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             if (loginUser != null) {
                 modelAndView.addObject("loginId", loginUser.getId());
                 modelAndView.addObject("loginNickname", loginUser.getNickname());
+                // 관리자 권한 여부 추가
+                modelAndView.addObject("isAdmin", loginUser.isAdmin());
             }
             
             // 모든 페이지에서 게시판 목록을 모델에 추가

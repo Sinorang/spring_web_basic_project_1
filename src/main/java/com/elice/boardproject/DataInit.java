@@ -67,6 +67,42 @@ public class DataInit implements CommandLineRunner {
         User user1 = userRepository.findById("testid");
         User user2 = userRepository.findById("admin");
 
+        // SUPER_ADMIN 권한 및 ADMIN 역할 생성/부여
+        // 1. SUPER_ADMIN Permission 생성
+        Permission superAdminPermission = permissionRepository.findByPermissionName("SUPER_ADMIN").orElse(null);
+        if (superAdminPermission == null) {
+            superAdminPermission = new Permission();
+            superAdminPermission.setPermissionName("SUPER_ADMIN");
+            superAdminPermission.setDescription("슈퍼 관리자 권한");
+            permissionRepository.save(superAdminPermission);
+        }
+
+        // 2. ADMIN 역할 생성 및 SUPER_ADMIN 권한 포함
+        AdminRole adminRole = adminRoleRepository.findByRoleName("ADMIN").orElse(null);
+        if (adminRole == null) {
+            adminRole = AdminRole.builder()
+                    .roleName("ADMIN")
+                    .description("관리자 역할")
+                    .permissions(new java.util.HashSet<>()) // 명시적으로 초기화
+                    .build();
+        }
+        if (adminRole.getPermissions() == null) {
+            adminRole.setPermissions(new java.util.HashSet<>());
+        }
+        if (!adminRole.getPermissions().contains(superAdminPermission)) {
+            adminRole.getPermissions().add(superAdminPermission);
+        }
+        adminRoleRepository.save(adminRole);
+
+        // 3. admin 사용자에게 ADMIN 역할 부여 및 isAdmin=true
+        if (user2 != null) {
+            user2.setAdmin(true);
+            user2.setAdminRole(adminRole);
+            user2.setAdminGrantedAt(java.time.LocalDateTime.now());
+            user2.setAdminGrantedBy("system");
+            userRepository.save(user2);
+        }
+
         // Board 생성
         var board1 = com.elice.boardproject.board.entity.Board.builder()
                 .user(user1)

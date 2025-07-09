@@ -3,6 +3,7 @@ package com.elice.boardproject.oauth.handler;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.oauth.service.OAuthService;
 import com.elice.boardproject.security.JwtUtil;
+import com.elice.boardproject.security.service.RefreshTokenService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,9 +18,11 @@ import java.io.IOException;
 @Component
 public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final OAuthService oAuthService;
+    private final RefreshTokenService refreshTokenService;
 
-    public OAuth2AuthenticationSuccessHandler(OAuthService oAuthService) {
+    public OAuth2AuthenticationSuccessHandler(OAuthService oAuthService, RefreshTokenService refreshTokenService) {
         this.oAuthService = oAuthService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @Override
@@ -27,14 +30,27 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
         String provider = getProviderFromRequest(request);
         User user = oAuthService.processOAuthUser(oauth2User, provider);
-        String token = JwtUtil.generateToken(user.getId());
+        
+        // JwtUtil을 사용하여 AccessToken 생성
+        String accessToken = JwtUtil.generateAccessToken(user.getId());
 
-        Cookie jwtCookie = new Cookie("jwt_token", token);
+        Cookie jwtCookie = new Cookie("jwt_token", accessToken);
         jwtCookie.setHttpOnly(true);
         jwtCookie.setSecure(request.isSecure()); // HTTPS 사용 시 true
         jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(1800); // 30분으로 단축
+        jwtCookie.setMaxAge(1800); // 30분
         response.addCookie(jwtCookie);
+        
+        // RefreshToken 생성 및 저장
+        refreshTokenService.createRefreshToken(user.getId(), 7); // 7일
+        
+        // RefreshToken 쿠키 설정
+        Cookie refreshTokenCookie = new Cookie("refresh_token", refreshTokenService.findByUserId(user.getId()).get().getToken());
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(request.isSecure());
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(604800); // 7일
+        response.addCookie(refreshTokenCookie);
 
         response.sendRedirect("/");
     }

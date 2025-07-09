@@ -12,19 +12,40 @@ import org.slf4j.LoggerFactory;
 public class JwtUtil {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
     private static final String SECRET_KEY = "mysecretkeymysecretkeymysecretkeymysecretkey"; // 256bit 이상 권장
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1시간
+    private static final long ACCESS_TOKEN_EXPIRATION_TIME = 1000 * 60 * 30; // 30분
+    private static final long REFRESH_TOKEN_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7; // 7일
     private static final Key KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
-    // 토큰 생성
+    // AccessToken 생성 (기존 메서드와 호환성을 위해 유지)
     public static String generateToken(String username) {
-        logger.debug("JWT 토큰 생성 시작 - 사용자: {}", username);
+        return generateAccessToken(username);
+    }
+
+    // AccessToken 생성
+    public static String generateAccessToken(String username) {
+        logger.debug("AccessToken 생성 시작 - 사용자: {}", username);
         String token = Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION_TIME))
+                .claim("type", "access")
                 .signWith(KEY, SignatureAlgorithm.HS256)
                 .compact();
-        logger.debug("JWT 토큰 생성 완료 - 사용자: {}", username);
+        logger.debug("AccessToken 생성 완료 - 사용자: {}", username);
+        return token;
+    }
+
+    // RefreshToken 생성
+    public static String generateRefreshToken(String username) {
+        logger.debug("RefreshToken 생성 시작 - 사용자: {}", username);
+        String token = Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION_TIME))
+                .claim("type", "refresh")
+                .signWith(KEY, SignatureAlgorithm.HS256)
+                .compact();
+        logger.debug("RefreshToken 생성 완료 - 사용자: {}", username);
         return token;
     }
 
@@ -57,5 +78,30 @@ public class JwtUtil {
             logger.warn("JWT 토큰 유효성 검증 실패: {}", e.getMessage());
             return false;
         }
+    }
+
+    // 토큰 타입 확인
+    public static String getTokenType(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(KEY)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.get("type", String.class);
+        } catch (Exception e) {
+            logger.error("토큰 타입 확인 실패: {}", e.getMessage());
+            return null;
+        }
+    }
+
+    // AccessToken인지 확인
+    public static boolean isAccessToken(String token) {
+        return "access".equals(getTokenType(token));
+    }
+
+    // RefreshToken인지 확인
+    public static boolean isRefreshToken(String token) {
+        return "refresh".equals(getTokenType(token));
     }
 } 
