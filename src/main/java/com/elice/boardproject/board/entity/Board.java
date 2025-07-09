@@ -53,6 +53,11 @@ public class Board {
     @CreationTimestamp
     private Timestamp date;
 
+    // posts getter에 null 체크 추가
+    public List<Post> getPosts() {
+        return posts != null ? posts : new ArrayList<>();
+    }
+
     public Board(Long idx, User user, String name, String description){
         this.idx = idx;
         this.user = user;

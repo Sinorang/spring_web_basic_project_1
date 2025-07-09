@@ -1,6 +1,6 @@
 package com.elice.boardproject.post.controller;
 
-import com.elice.boardproject.admin.annotation.RequirePermission;
+import com.elice.boardproject.aop.annotation.RequirePermission;
 import com.elice.boardproject.security.JwtTokenUtil;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.service.UserService;
