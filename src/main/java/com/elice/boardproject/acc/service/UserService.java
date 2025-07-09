@@ -4,6 +4,8 @@ import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.entity.UserProfileUpdateDTO;
 import com.elice.boardproject.acc.entity.PasswordChangeDTO;
+import com.elice.boardproject.acc.entity.UserStatus;
+import com.elice.boardproject.acc.dto.UserWithdrawRequestDTO;
 import com.elice.boardproject.acc.repository.UserRepository;
 import com.elice.boardproject.exception.ErrorCode;
 import com.elice.boardproject.exception.ExceptionUtils;
@@ -155,5 +157,26 @@ public class UserService {
         userRepository.save(user);
         
         logger.info("비밀번호 변경 성공 - 사용자 ID: {}", userId);
+    }
+
+    /**
+     * 사용자 탈퇴
+     */
+    @Transactional
+    public void withdrawUser(String userId, UserWithdrawRequestDTO withdrawRequest) {
+        User user = ExceptionUtils.requireNonNull(userRepository.findById(userId), ErrorCode.USER_NOT_FOUND, userId);
+        
+        // 탈퇴 처리: status 변경 시 isActive 자동 동기화
+        user.setStatus(UserStatus.WITHDRAWN);
+        user.setIsActive(false);
+        
+        // 탈퇴 사유 로깅 (개인정보 보호를 위해 DB에는 저장하지 않음)
+        if (withdrawRequest.getReason() != null && !withdrawRequest.getReason().trim().isEmpty()) {
+            logger.info("사용자 탈퇴 - ID: {}, 사유: {}", userId, withdrawRequest.getReason());
+        } else {
+            logger.info("사용자 탈퇴 - ID: {}, 사유: 미입력", userId);
+        }
+        
+        userRepository.save(user);
     }
 }

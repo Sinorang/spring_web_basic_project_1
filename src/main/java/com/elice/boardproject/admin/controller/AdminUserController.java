@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -41,22 +43,26 @@ public class AdminUserController {
     }
 
     /**
-     * 사용자에게 관리자 권한 부여
+     * 사용자에게 관리자 권한 부여 (슈퍼 관리자만 가능)
      */
     @PutMapping("/{userId}/role")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     public ResponseEntity<AdminUserDTO> grantAdminRole(
             @PathVariable Long userId,
             @Valid @RequestBody GrantAdminRoleRequest request) {
-        AdminUserDTO user = adminUserService.grantAdminRole(userId, request.getRoleName(), request.getGrantedBy());
+        Long currentUserId = getCurrentUserId();
+        AdminUserDTO user = adminUserService.grantAdminRole(userId, request.getRoleName(), request.getGrantedBy(), currentUserId);
         return ResponseEntity.ok(user);
     }
 
     /**
-     * 사용자의 관리자 권한 해제
+     * 사용자의 관리자 권한 해제 (슈퍼 관리자만 가능)
      */
     @DeleteMapping("/{userId}/role")
+    @PreAuthorize("hasAuthority('SUPER_ADMIN')")
     public ResponseEntity<AdminUserDTO> revokeAdminRole(@PathVariable Long userId) {
-        AdminUserDTO user = adminUserService.revokeAdminRole(userId);
+        Long currentUserId = getCurrentUserId();
+        AdminUserDTO user = adminUserService.revokeAdminRole(userId, currentUserId);
         return ResponseEntity.ok(user);
     }
 
@@ -76,6 +82,19 @@ public class AdminUserController {
     public ResponseEntity<AdminUserStatisticsDTO> getUserStatistics() {
         AdminUserStatisticsDTO statistics = adminUserService.getUserStatistics();
         return ResponseEntity.ok(statistics);
+    }
+
+    /**
+     * 현재 로그인한 사용자의 ID를 가져옵니다.
+     */
+    private Long getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof com.elice.boardproject.acc.entity.UserDetailsImpl) {
+            com.elice.boardproject.acc.entity.UserDetailsImpl userDetails = 
+                (com.elice.boardproject.acc.entity.UserDetailsImpl) authentication.getPrincipal();
+            return userDetails.getUser().getIdx();
+        }
+        return null;
     }
 
     // Request DTO

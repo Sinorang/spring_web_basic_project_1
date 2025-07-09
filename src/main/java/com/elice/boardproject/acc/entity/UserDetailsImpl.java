@@ -1,9 +1,15 @@
 package com.elice.boardproject.acc.entity;
 
+import com.elice.boardproject.acc.entity.User;
+import com.elice.boardproject.acc.entity.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
     private final User user;
@@ -18,7 +24,11 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 권한이 필요하다면 user.getRole() 등에서 반환
+        if (user.getAdminRole() != null && user.getAdminRole().getPermissions() != null) {
+            return user.getAdminRole().getPermissions().stream()
+                .map(p -> new SimpleGrantedAuthority(p.getPermissionName()))
+                .collect(Collectors.toList());
+        }
         return Collections.emptyList();
     }
 
@@ -49,6 +59,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        // 활성 사용자만 로그인 가능 (isActive=true)
+        return user.isActive();
     }
 } 

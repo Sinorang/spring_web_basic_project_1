@@ -69,6 +69,10 @@ public class User {
     @Column(name = "is_active")
     private boolean isActive = true;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private UserStatus status = UserStatus.ACTIVE;
+
     public User(String id, String pwd, String name, String nickname, String email) {
         this.id = id;
         this.pwd = pwd;
@@ -76,9 +80,14 @@ public class User {
         this.nickname = nickname;
         this.email = email;
         this.isActive = true;
+        this.status = UserStatus.ACTIVE;
     }
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 }
