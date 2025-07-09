@@ -4,6 +4,10 @@ import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.entity.UserDTO;
 import com.elice.boardproject.acc.repository.UserRepository;
 import com.elice.boardproject.acc.service.UserService;
+import com.elice.boardproject.admin.entity.AdminRole;
+import com.elice.boardproject.admin.entity.Permission;
+import com.elice.boardproject.admin.repository.AdminRoleRepository;
+import com.elice.boardproject.admin.repository.PermissionRepository;
 import com.elice.boardproject.board.repository.BoardRepository;
 import com.elice.boardproject.comment.repository.CommentRepository;
 import com.elice.boardproject.post.repository.PostRepository;
@@ -11,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Profile;
 
+@Profile("!test")
 @Component
 public class DataInit implements CommandLineRunner {
 
@@ -19,19 +25,26 @@ public class DataInit implements CommandLineRunner {
     private final BoardRepository boardRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final AdminRoleRepository adminRoleRepository;
+    private final PermissionRepository permissionRepository;
 
     @Autowired
     private UserService userService;
 
-    public DataInit(UserRepository userRepository, BoardRepository boardRepository, PostRepository postRepository, CommentRepository commentRepository) {
+    public DataInit(UserRepository userRepository, BoardRepository boardRepository, PostRepository postRepository, CommentRepository commentRepository, AdminRoleRepository adminRoleRepository, PermissionRepository permissionRepository) {
         this.userRepository = userRepository;
         this.boardRepository = boardRepository;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
+        this.adminRoleRepository = adminRoleRepository;
+        this.permissionRepository = permissionRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
+        // 게시판 관련 권한 초기화
+        initializeBoardPermissions();
+        
         // 초기 데이터 삽입 - 비밀번호 "1234"를 해싱하여 저장
         UserDTO userDTO = new UserDTO();
         userDTO.setId("testid");
@@ -89,5 +102,49 @@ public class DataInit implements CommandLineRunner {
         var comment2 = new com.elice.boardproject.comment.entity.Comment(post2, user1, "유저가 남긴 댓글입니다.");
         commentRepository.save(comment1);
         commentRepository.save(comment2);
+    }
+
+    /**
+     * 게시판 관련 권한들을 초기화합니다.
+     */
+    private void initializeBoardPermissions() {
+        // 게시판 관련 권한들 생성
+        String[] boardPermissions = {
+            "BOARD_READ", "BOARD_CREATE", "BOARD_UPDATE", "BOARD_DELETE"
+        };
+
+        for (String permissionName : boardPermissions) {
+            if (permissionRepository.findByPermissionName(permissionName).isEmpty()) {
+                Permission permission = new Permission();
+                permission.setPermissionName(permissionName);
+                permission.setDescription(getPermissionDescription(permissionName));
+                permissionRepository.save(permission);
+            }
+        }
+
+        // ADMIN 역할에 모든 게시판 권한 부여
+        AdminRole adminRole = adminRoleRepository.findByRoleName("ADMIN").orElse(null);
+        if (adminRole != null) {
+            for (String permissionName : boardPermissions) {
+                Permission permission = permissionRepository.findByPermissionName(permissionName).orElse(null);
+                if (permission != null && !adminRole.getPermissions().contains(permission)) {
+                    adminRole.getPermissions().add(permission);
+                }
+            }
+            adminRoleRepository.save(adminRole);
+        }
+    }
+
+    /**
+     * 권한명에 따른 설명을 반환합니다.
+     */
+    private String getPermissionDescription(String permissionName) {
+        return switch (permissionName) {
+            case "BOARD_READ" -> "게시판 조회 권한";
+            case "BOARD_CREATE" -> "게시판 생성 권한";
+            case "BOARD_UPDATE" -> "게시판 수정 권한";
+            case "BOARD_DELETE" -> "게시판 삭제 권한";
+            default -> "게시판 관련 권한";
+        };
     }
 }
