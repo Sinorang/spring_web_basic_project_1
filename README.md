@@ -300,6 +300,8 @@ feat: 게시글 생성 기능 구현
 
 ---
 
+
+
 ## 🚀 향후 고도화 계획
 
 ### 1. 전역 예외 처리 시스템 구현 ✅
@@ -352,3 +354,76 @@ feat: 게시글 생성 기능 구현
 - RESTful API 기반 모바일 앱 개발
 - 플레이리스트 공유 및 재생 기능
 - 푸시 알림 시스템
+
+---
+
+## 🚩 구현 현황 (2024.07 기준)
+
+### ✅ 완료된 주요 기능
+- **사용자 관리 및 상태 관리**: 회원 가입/로그인, 사용자 탈퇴(PATCH, 사유 저장), 상태 관리(활성/정지/탈퇴), 관리자에 의한 사용자 관리/정지/활성화/통계
+- **관리자 권한 시스템**: 역할/권한/사용자 관리, 권한 기반 AOP, 보안 설정
+- **관리자 REST API**: 역할/권한/사용자 관리 API, 통합 테스트 및 자동화
+- **게시판 CUD 관리자 전용**: 게시판 생성/수정/삭제는 관리자만 가능, 게시글/댓글은 작성자만 가능
+- **관리자 전용 컨텐츠 삭제 API**: 게시글/댓글/플레이리스트 삭제는 관리자만 가능한 별도 API 구현
+- **관리자 전용 플레이리스트 통계 API**: 전체 플레이리스트 개수 등 통계 제공
+- **테스트 자동화**: SpringBootTest 기반 통합 테스트, 권한/보안 정책 변경 시 테스트 연동
+
+### ⏳ 향후 구현 예정
+- **권한 검증 강화**: AOP 기반 권한 체크의 예외/실패 케이스 보강, 일관된 에러코드/메시지 반환, 상세 로깅
+- **관리자 대시보드/통계 API**: 관리자용 통계, 활동 로그, 시스템 현황 등 대시보드 데이터 제공
+- **(선택) 관리자 UI 연동**: 실제 운영 환경에서의 권한/역할/사용자 관리 프론트엔드 연동
+
+### 🔄 리팩토링 필요한 부분
+- 게시판 관리자 기능 API(컨트롤러)를 admin 모듈로 리팩토링
+
+---
+
+## 👥 사용자 권한별 API 구현 현황
+
+### 1. 사용자 탈퇴 API ✅
+- **구현 상태**: 완료
+- **API 경로**: `PATCH /api/acc/withdraw`
+- **권한**: 인증된 사용자만 (본인 탈퇴)
+- **구현 방식**: 
+  - PATCH(부분 수정)로 상태 변경 (활성 → 탈퇴)
+  - `isActive=false`, `status=WITHDRAWN`, `reason`(탈퇴 사유) 저장
+  - 관리자 강제 삭제는 제외 (데이터 보존)
+- **관련 파일**:
+  - `UserService.withdrawUser()` - 탈퇴 로직
+  - `UserWithdrawRequestDTO` - 탈퇴 요청 DTO
+  - `UserApiController.withdrawUser()` - API 엔드포인트
+  - `User` 엔티티의 `reason` 필드 - 탈퇴 사유 저장
+
+### 2. 관리자 전용 사용자 관리 API ✅
+- **구현 상태**: 완료
+- **API 경로**: `GET /api/admin/user-management`
+- **권한**: ADMIN 역할 필요
+- **기능**:
+  - 전체 사용자 목록 조회
+  - 특정 사용자 상세 조회
+  - 사용자 계정 정지/활성화
+  - 사용자 통계 조회
+- **구현 방식**:
+  - `isActive`와 `status` 동기화 관리
+  - 정지 시: `status=SUSPENDED`, `isActive=false`
+  - 활성화 시: `status=ACTIVE`, `isActive=true`
+- **관련 파일**:
+  - `AdminUserManagementService` - 비즈니스 로직
+  - `AdminUserManagementController` - API 엔드포인트
+  - `AdminUserListDTO`, `AdminUserDetailDTO`, `AdminUserStatisticsDTO` - 응답 DTO
+  - `AdminUserManagementControllerIntegrationTest` - 통합 테스트
+
+### 3. 사용자 상태 관리 체계 ✅
+- **구현 상태**: 완료
+- **관리 방식**:
+  - `isActive`: 로그인 가능 여부 (boolean)
+  - `status`: 세부 상태 구분 (UserStatus enum)
+  - 동기화: status 변경 시 isActive 자동 동기화
+- **상태 종류**:
+  - `ACTIVE`: 활성 사용자 (isActive=true)
+  - `SUSPENDED`: 정지된 사용자 (isActive=false)
+  - `WITHDRAWN`: 탈퇴한 사용자 (isActive=false)
+- **실무적 장점**:
+  - 쿼리 단순화: isActive만으로 활성 사용자 조회
+  - 상태 추적: status로 세부 상태 관리
+  - 확장성: 새로운 상태 추가 용이

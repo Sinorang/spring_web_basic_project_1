@@ -4,6 +4,7 @@ import com.elice.boardproject.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +20,7 @@ import com.elice.boardproject.oauth.service.OAuthService;
 import java.net.URLEncoder;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired
@@ -46,6 +48,8 @@ public class SecurityConfig {
                                "/static/**", "/images/**", "/css/**", "/js/**", "/favicon.ico",
                                "/h2-console/**", "/oauth/error", "/oauth2/**", "/login/oauth2/**", 
                                "/board/boards", "/board/index/**").permitAll()
+                // 관리자 API - ADMIN 역할 필요
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 // 인증이 필요한 페이지들
                 .requestMatchers("/post/**", "/comment/**").authenticated()
                 .anyRequest().permitAll()

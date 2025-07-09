@@ -151,4 +151,21 @@ public class PlaylistService {
         playlistRepository.delete(playlist);
         return true;
     }
+
+    /**
+     * 관리자 권한으로 플레이리스트를 삭제합니다.
+     */
+    public void deletePlaylistAsAdmin(Long playlistId) {
+        ExceptionUtils.requireNonNull(playlistId, ErrorCode.INVALID_INPUT_VALUE);
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new PliException(ErrorCode.PLAYLIST_NOT_FOUND, playlistId));
+        playlistRepository.delete(playlist);
+    }
+
+    /**
+     * 전체 플레이리스트 개수 반환
+     */
+    public long countAllPlaylists() {
+        return playlistRepository.count();
+    }
 } 
