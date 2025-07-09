@@ -302,12 +302,12 @@ feat: 게시글 생성 기능 구현
 
 ## 🚀 향후 고도화 계획
 
-### 1. 전역 예외 처리 시스템 완료 ✅
+### 1. 전역 예외 처리 시스템 구현 ✅
 - GlobalExceptionHandler를 통한 일관된 에러 응답 처리
 - 사용자 친화적인 에러 메시지 제공
 - 로깅 시스템 강화
 
-### 2. AOP(관점 지향 프로그래밍) 기반 공통 기능 고도화
+### 2. AOP(관점 지향 프로그래밍) 기반 공통 기능 고도화 ✅
 - **로깅 AOP**: 서비스 계층(@Service)의 주요 메서드 실행 시 입력 파라미터, 반환값, 실행 시간, 예외 정보를 자동으로 로깅 (LoggingAspect)
     - @Aspect, @Component 기반 구현
     - @Around("execution(* com.elice.boardproject..service..*(..))")로 service 계층 한정 적용

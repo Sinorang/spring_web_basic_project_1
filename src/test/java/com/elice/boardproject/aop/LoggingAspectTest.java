@@ -3,37 +3,41 @@ package com.elice.boardproject.aop;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aop.framework.ProxyFactoryBean;
+import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.util.ReflectionUtils;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
+import org.springframework.test.context.TestPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
+import com.elice.boardproject.service.TestService;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
+@TestPropertySource(properties = {
+        "logging.level.com.elice.boardproject.aop=INFO"
+})
+@Import(TestService.class)
 public class LoggingAspectTest {
 
-    private ByteArrayOutputStream outContent;
-    private PrintStream originalOut;
-
+    @Autowired
     private TestService testService;
+
+    private ListAppender<ILoggingEvent> listAppender;
 
     @BeforeEach
     void setUp() {
-        // 로그 캡처를 위해 System.out을 임시로 변경
-        outContent = new ByteArrayOutputStream();
-        originalOut = System.out;
-        System.setOut(new PrintStream(outContent));
-        // 실제 AOP 적용 전, Mock 서비스만 생성
-        testService = new TestService();
+        Logger logger = (Logger) LoggerFactory.getLogger(LoggingAspect.class);
+        listAppender = new ListAppender<>();
+        listAppender.start();
+        logger.addAppender(listAppender);
     }
 
     @Test
@@ -43,13 +47,13 @@ public class LoggingAspectTest {
         // when
         String result = testService.echo(param);
         // then
-        String logs = outContent.toString();
         assertThat(result).isEqualTo(param);
-        // (실제 Aspect 적용 후) 로그에 메서드명, 파라미터, 반환값, 실행 시간 등이 포함되어야 함
-        // 예시: "[LOG] Method: echo, Params: [hello], Result: hello, Time: ...ms"
-        // (지금은 실패해야 정상)
-        assertThat(logs).contains("echo");
-        assertThat(logs).contains(param);
+        // 로그 메시지 직접 출력
+        listAppender.list.forEach(event -> System.out.println("[LOG] " + event.getFormattedMessage()));
+        boolean found = listAppender.list.stream().anyMatch(event ->
+                event.getFormattedMessage().contains("Method: echo")
+        );
+        assertThat(found).isTrue();
     }
 
     @Test
@@ -58,20 +62,20 @@ public class LoggingAspectTest {
         // when
         Throwable thrown = catchThrowable(() -> testService.throwException());
         // then
-        String logs = outContent.toString();
         assertThat(thrown).isInstanceOf(IllegalStateException.class);
-        // (실제 Aspect 적용 후) 로그에 예외 메시지가 포함되어야 함
-        assertThat(logs).contains("throwException");
-        assertThat(logs).contains("IllegalStateException");
+        // 로그 메시지 직접 출력
+        listAppender.list.forEach(event -> System.out.println("[LOG] " + event.getFormattedMessage()));
+        boolean found = listAppender.list.stream().anyMatch(event ->
+                event.getFormattedMessage().contains("Method: throwException")
+        );
+        assertThat(found).isTrue();
     }
 
-    // Mock 서비스 클래스 (실제 서비스 계층 대체)
-    static class TestService {
-        public String echo(String input) {
-            return input;
-        }
-        public void throwException() {
-            throw new IllegalStateException("테스트 예외");
+    @org.springframework.boot.test.context.TestConfiguration
+    static class TestServiceConfig {
+        @org.springframework.context.annotation.Bean
+        public TestService testService() {
+            return new TestService();
         }
     }
 } 

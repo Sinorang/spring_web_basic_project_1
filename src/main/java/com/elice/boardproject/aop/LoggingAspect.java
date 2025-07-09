@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class LoggingAspect {
     private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
-    // 서비스 계층 전체에 적용
+    // 서비스 계층(@Service)만 AOP 적용
     @Around("execution(* com.elice.boardproject..service..*(..))")
     public Object logServiceMethods(ProceedingJoinPoint joinPoint) throws Throwable {
         String methodName = joinPoint.getSignature().getName();
