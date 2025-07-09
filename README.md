@@ -363,10 +363,62 @@ feat: 게시글 생성 기능 구현
 - **관리자 권한 시스템**: 역할/권한/사용자 관리, 권한 기반 AOP, 보안 설정
 - **관리자 REST API**: 역할/권한/사용자 관리 API, 통합 테스트 및 자동화
 - **게시판 CUD 관리자 전용**: 게시판 생성/수정/삭제는 관리자만 가능, 게시글/댓글은 작성자만 가능
+- **관리자 전용 컨텐츠 삭제 API**: 게시글/댓글 삭제는 관리자만 가능한 별도 API 구현
 - **테스트 자동화**: SpringBootTest 기반 통합 테스트, 권한/보안 정책 변경 시 테스트 연동
 
 ### ⏳ 향후 구현 예정
-- **권한별 도메인 조작 API**: 게시판/게시글/댓글/플레이리스트 등 도메인별로 세분화된 권한 검증 및 API 적용
+- **권한별 도메인 조작 API**: 플레이리스트 등 도메인별로 세분화된 권한 검증 및 API 적용
 - **권한 검증 강화**: AOP 기반 권한 체크의 예외/실패 케이스 보강, 일관된 에러코드/메시지 반환, 상세 로깅
 - **관리자 대시보드/통계 API**: 관리자용 통계, 활동 로그, 시스템 현황 등 대시보드 데이터 제공
 - **(선택) 관리자 UI 연동**: 실제 운영 환경에서의 권한/역할/사용자 관리 프론트엔드 연동
+
+---
+
+## 👥 사용자 권한별 API 구현 현황
+
+### 1. 사용자 탈퇴 API ✅
+- **구현 상태**: 완료
+- **API 경로**: `DELETE /api/users/withdraw`
+- **권한**: 인증된 사용자만 (본인 탈퇴)
+- **구현 방식**: 
+  - DELETE가 아닌 상태 변경 (활성 → 탈퇴)
+  - `isActive=false`, `status=WITHDRAWN`으로 설정
+  - 관리자 강제 삭제는 제외 (데이터 보존)
+- **관련 파일**:
+  - `UserService.withdrawUser()` - 탈퇴 로직
+  - `UserWithdrawRequestDTO` - 탈퇴 요청 DTO
+  - `UserApiController.withdrawUser()` - API 엔드포인트
+
+### 2. 관리자 전용 사용자 관리 API ✅
+- **구현 상태**: 완료
+- **API 경로**: `GET /api/admin/user-management`
+- **권한**: ADMIN 역할 필요
+- **기능**:
+  - 전체 사용자 목록 조회
+  - 특정 사용자 상세 조회
+  - 사용자 계정 정지/활성화
+  - 사용자 통계 조회
+- **구현 방식**:
+  - `isActive`와 `status` 동기화 관리
+  - 정지 시: `status=SUSPENDED`, `isActive=false`
+  - 활성화 시: `status=ACTIVE`, `isActive=true`
+- **관련 파일**:
+  - `AdminUserManagementService` - 비즈니스 로직
+  - `AdminUserManagementController` - API 엔드포인트
+  - `AdminUserListDTO`, `AdminUserDetailDTO`, `AdminUserStatisticsDTO` - 응답 DTO
+  - `AdminUserManagementControllerIntegrationTest` - 통합 테스트
+
+### 3. 사용자 상태 관리 체계 ✅
+- **구현 상태**: 완료
+- **관리 방식**:
+  - `isActive`: 로그인 가능 여부 (boolean)
+  - `status`: 세부 상태 구분 (UserStatus enum)
+  - 동기화: status 변경 시 isActive 자동 동기화
+- **상태 종류**:
+  - `ACTIVE`: 활성 사용자 (isActive=true)
+  - `SUSPENDED`: 정지된 사용자 (isActive=false)
+  - `WITHDRAWN`: 탈퇴한 사용자 (isActive=false)
+- **실무적 장점**:
+  - 쿼리 단순화: isActive만으로 활성 사용자 조회
+  - 상태 추적: status로 세부 상태 관리
+  - 확장성: 새로운 상태 추가 용이
