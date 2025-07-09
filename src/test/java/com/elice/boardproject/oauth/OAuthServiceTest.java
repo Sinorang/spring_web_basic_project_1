@@ -6,6 +6,8 @@ import com.elice.boardproject.board.repository.BoardRepository;
 import com.elice.boardproject.post.repository.PostRepository;
 import com.elice.boardproject.comment.repository.CommentRepository;
 import com.elice.boardproject.oauth.service.OAuthService;
+import com.elice.boardproject.admin.repository.AdminRoleRepository;
+import com.elice.boardproject.admin.repository.PermissionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +41,22 @@ class OAuthServiceTest {
     @Autowired
     private OAuthService oAuthService;
 
+    @Autowired
+    private AdminRoleRepository adminRoleRepository;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
+
     @BeforeEach
     void setUp() {
-        // 외래키 제약조건을 고려한 삭제 순서
+        // 외래키 제약조건을 고려한 삭제 순서 (자식 테이블부터)
         commentRepository.deleteAll();
         postRepository.deleteAll();
         boardRepository.deleteAll();
         userRepository.deleteAll();
+        // admin 관련 테이블도 정리 (admin_role_permissions는 JPA가 자동으로 처리)
+        adminRoleRepository.deleteAll();
+        permissionRepository.deleteAll();
     }
 
     @Test
@@ -81,8 +92,9 @@ class OAuthServiceTest {
     @Test
     void OAuth_사용자_조회_테스트() {
         // Given
+        String uniqueId = "oauth_google_" + System.currentTimeMillis();
         User oauthUser = User.builder()
-                .id("oauth_google_987654321")
+                .id(uniqueId)
                 .pwd("")
                 .name("OAuth 테스트 사용자2")
                 .nickname("OAuth테스트2")
@@ -90,6 +102,7 @@ class OAuthServiceTest {
                 .oauthProvider("google")
                 .oauthId("987654321")
                 .oauthEmail("oauth987654321@test.com")
+                .isActive(true)
                 .build();
         userRepository.save(oauthUser);
 
@@ -98,15 +111,16 @@ class OAuthServiceTest {
 
         // Then
         assertThat(foundUser).isNotNull();
-        assertThat(foundUser.getId()).isEqualTo("oauth_google_987654321");
+        assertThat(foundUser.getId()).isEqualTo(uniqueId);
         assertThat(foundUser.getOauthProvider()).isEqualTo("google");
     }
 
     @Test
     void 이메일로_사용자_조회_테스트() {
         // Given
+        String uniqueId = "oauth_google_" + System.currentTimeMillis();
         User oauthUser = User.builder()
-                .id("oauth_google_555555555")
+                .id(uniqueId)
                 .pwd("")
                 .name("OAuth 테스트 사용자3")
                 .nickname("OAuth테스트3")
@@ -114,6 +128,7 @@ class OAuthServiceTest {
                 .oauthProvider("google")
                 .oauthId("555555555")
                 .oauthEmail("oauth555555555@test.com")
+                .isActive(true)
                 .build();
         userRepository.save(oauthUser);
 
@@ -145,8 +160,9 @@ class OAuthServiceTest {
     @Test
     void 기존_Google_OAuth_사용자_재로그인_성공() {
         // Given
+        String uniqueId = "oauth_google_" + System.currentTimeMillis();
         User existingUser = User.builder()
-                .id("oauth_google_123456789")
+                .id(uniqueId)
                 .pwd("")
                 .name("테스트 사용자")
                 .nickname("테스트닉")

@@ -14,6 +14,11 @@ import com.elice.boardproject.post.service.PostService;
 import com.elice.boardproject.board.repository.BoardRepository;
 import com.elice.boardproject.post.repository.PostRepository;
 import com.elice.boardproject.comment.repository.CommentRepository;
+import com.elice.boardproject.admin.service.AdminUserService;
+import com.elice.boardproject.admin.repository.AdminRoleRepository;
+import com.elice.boardproject.admin.entity.AdminRole;
+import com.elice.boardproject.admin.repository.PermissionRepository;
+import com.elice.boardproject.admin.entity.Permission;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,8 +66,36 @@ class JwtAuthenticationIntegrationTest {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private AdminUserService adminUserService;
+
+    @Autowired
+    private AdminRoleRepository adminRoleRepository;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
+
     @BeforeEach
     void setUp() {
+        // 'ADMIN' 역할이 없으면 생성
+        AdminRole adminRole = adminRoleRepository.findByRoleName("ADMIN").orElseGet(() -> {
+            AdminRole role = new AdminRole();
+            role.setRoleName("ADMIN");
+            role.setDescription("관리자");
+            return adminRoleRepository.save(role);
+        });
+        // 'BOARD_MANAGE' 권한이 없으면 생성
+        Permission boardManage = permissionRepository.findByPermissionName("BOARD_MANAGE").orElseGet(() -> {
+            Permission p = new Permission();
+            p.setPermissionName("BOARD_MANAGE");
+            p.setDescription("게시판 관리");
+            return permissionRepository.save(p);
+        });
+        // ADMIN 역할에 BOARD_MANAGE 권한이 없으면 추가
+        if (adminRole.getPermissions() == null || adminRole.getPermissions().stream().noneMatch(p -> p.getPermissionName().equals("BOARD_MANAGE"))) {
+            adminRole.getPermissions().add(boardManage);
+            adminRoleRepository.save(adminRole);
+        }
         commentRepository.deleteAll();
         postRepository.deleteAll();
         boardRepository.deleteAll();
@@ -190,6 +223,8 @@ class JwtAuthenticationIntegrationTest {
     @Test
     void JWT_토큰으로_게시판_생성_페이지_접근() throws Exception {
         TestData data = createTestData("user7_" + System.currentTimeMillis());
+        // 테스트 유저에게 BOARD_MANAGE 권한 부여
+        adminUserService.grantAdminRole(data.user.getIdx(), "ADMIN", "test");
         mockMvc.perform(get("/board/create")
                 .header("Authorization", "Bearer " + data.jwtToken))
                 .andExpect(status().isOk())
@@ -214,6 +249,8 @@ class JwtAuthenticationIntegrationTest {
     @Test
     void JWT_토큰으로_게시판_생성() throws Exception {
         TestData data = createTestData("user9_" + System.currentTimeMillis());
+        // 테스트 유저에게 BOARD_MANAGE 권한 부여
+        adminUserService.grantAdminRole(data.user.getIdx(), "ADMIN", "test");
         mockMvc.perform(post("/board/create")
                 .param("name", "새 게시판")
                 .param("description", "새 게시판 설명")
