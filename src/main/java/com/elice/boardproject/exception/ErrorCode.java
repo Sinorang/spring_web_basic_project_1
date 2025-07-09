@@ -39,6 +39,10 @@ public enum ErrorCode {
     BOARD_NOT_FOUND(4000, HttpStatus.NOT_FOUND, "게시판 ID: {0}을(를) 찾을 수 없습니다."),
     BOARD_ACCESS_DENIED(4001, HttpStatus.FORBIDDEN, "게시판에 접근할 권한이 없습니다."),
     BOARD_ALREADY_EXISTS(4002, HttpStatus.CONFLICT, "게시판명 {0}은(는) 이미 존재합니다."),
+    BOARD_CREATE_DENIED(4003, HttpStatus.FORBIDDEN, "게시판을 생성할 권한이 없습니다."),
+    BOARD_UPDATE_DENIED(4004, HttpStatus.FORBIDDEN, "게시판을 수정할 권한이 없습니다."),
+    BOARD_DELETE_DENIED(4005, HttpStatus.FORBIDDEN, "게시판을 삭제할 권한이 없습니다."),
+    BOARD_READ_DENIED(4006, HttpStatus.FORBIDDEN, "게시판을 조회할 권한이 없습니다."),
     
     // 게시글 관련 에러 (5000번대)
     POST_NOT_FOUND(5000, HttpStatus.NOT_FOUND, "게시글 ID: {0}을(를) 찾을 수 없습니다."),
@@ -80,7 +84,9 @@ public enum ErrorCode {
     PERMISSION_NOT_FOUND(10002, HttpStatus.NOT_FOUND, "권한 {0}을(를) 찾을 수 없습니다."),
     PERMISSION_ALREADY_EXISTS(10003, HttpStatus.CONFLICT, "권한 {0}은(는) 이미 존재합니다."),
     ADMIN_ACCESS_DENIED(10004, HttpStatus.FORBIDDEN, "관리자 권한이 필요합니다."),
-    USER_NOT_ADMIN(10005, HttpStatus.FORBIDDEN, "사용자 {0}은(는) 관리자가 아닙니다.");
+    USER_NOT_ADMIN(10005, HttpStatus.FORBIDDEN, "사용자 {0}은(는) 관리자가 아닙니다."),
+    INSUFFICIENT_PERMISSION(10006, HttpStatus.FORBIDDEN, "{0}"),
+    INVALID_OPERATION(10007, HttpStatus.BAD_REQUEST, "{0}");
     
     private final int code;
     private final HttpStatus httpStatus;
