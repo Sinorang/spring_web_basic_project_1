@@ -6,6 +6,7 @@ import com.elice.boardproject.board.repository.BoardRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BoardService {
@@ -16,6 +17,7 @@ public class BoardService {
         this.boardRepository = boardRepository;
     }
 
+    @Transactional
     public Board createBoard(BoardDTO boardDTO) {
         return boardRepository.save(boardDTO.toEntity());
     }
@@ -28,6 +30,7 @@ public class BoardService {
         return boardRepository.findById(boardIdx).orElse(null);
     }
 
+    @Transactional
     public void deleteBoardById(Long boardIdx) {
         // 게시판 존재 여부 확인 후 삭제
         if (boardRepository.existsById(boardIdx)) {
@@ -38,6 +41,7 @@ public class BoardService {
         }
     }
 
+    @Transactional
     public Board updateBoard(Board board) {
         // BoardRepository의 save() 메서드 호출하여 수정된 게시글 저장
         return boardRepository.save(board);
