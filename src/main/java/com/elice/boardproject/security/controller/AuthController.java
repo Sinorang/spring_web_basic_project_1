@@ -84,7 +84,7 @@ public class AuthController {
 
             // 새로운 AccessToken을 쿠키에 설정
             Cookie accessTokenCookie = new Cookie("jwt_token", newAccessToken);
-            accessTokenCookie.setHttpOnly(true);
+            accessTokenCookie.setHttpOnly(false); // JavaScript에서 읽을 수 있도록 false로 설정
             accessTokenCookie.setSecure(request.isSecure());
             accessTokenCookie.setPath("/");
             accessTokenCookie.setMaxAge(1800); // 30분
@@ -138,11 +138,13 @@ public class AuthController {
 
             // 쿠키 삭제
             Cookie accessTokenCookie = new Cookie("jwt_token", null);
+            accessTokenCookie.setHttpOnly(false);
             accessTokenCookie.setMaxAge(0);
             accessTokenCookie.setPath("/");
             response.addCookie(accessTokenCookie);
 
             Cookie refreshTokenCookie = new Cookie("refresh_token", null);
+            refreshTokenCookie.setHttpOnly(false);
             refreshTokenCookie.setMaxAge(0);
             refreshTokenCookie.setPath("/");
             response.addCookie(refreshTokenCookie);

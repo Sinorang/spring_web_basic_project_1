@@ -1,0 +1,190 @@
+<div th:replace="~{/base}">
+    <div th:fragment="content">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>게시글 관리</h1>
+                    <a href="/admin" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>대시보드로 돌아가기
+                    </a>
+                </div>
+
+                <!-- 통계 정보 -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">전체 게시글</h5>
+                                <p class="card-text display-6" th:text="${#lists.size(posts)}">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 게시판별 탭 -->
+                <ul class="nav nav-tabs mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${selectedBoardId} == null ? 'active'" th:href="@{/admin/posts}">전체</a>
+                    </li>
+                    <li class="nav-item" th:each="board : ${boards}">
+                        <a class="nav-link" th:classappend="${selectedBoardId} == ${board.idx} ? 'active'" th:href="@{/admin/posts(boardId=${board.idx})}" th:text="${board.name}">게시판명</a>
+                    </li>
+                </ul>
+
+                <!-- 게시글 목록 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">전체 게시글 목록</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>번호</th>
+                                        <th>제목</th>
+                                        <th>작성자</th>
+                                        <th>게시판</th>
+                                        <th>작성일</th>
+                                        <th>작업</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="post, stat : ${posts}">
+                                        <td th:text="${stat.count}">1</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span th:text="${post.title}" class="text-truncate" style="max-width: 200px;">게시글 제목</span>
+                                            </div>
+                                        </td>
+                                        <td th:text="${post.user.nickname}">작성자</td>
+                                        <td th:text="${post.board.name}">게시판</td>
+                                        <td th:text="${#temporals.format(post.postDate, 'yyyy-MM-dd HH:mm')}">2024-01-01</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a th:href="@{/post/{id}(id=${post.id})}" 
+                                                   class="btn btn-sm btn-outline-primary" 
+                                                   target="_blank">
+                                                    <i class="fas fa-eye"></i> 보기
+                                                </a>
+                                                <button type="button" 
+                                                        class="btn btn-sm btn-outline-danger"
+                                                        th:onclick="'deletePost(' + ${post.id} + ')'">
+                                                    <i class="fas fa-trash"></i> 삭제
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(posts)}">
+                                        <td colspan="6" class="text-center text-muted">
+                                            등록된 게시글이 없습니다.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 삭제 확인 모달 -->
+            <div class="modal fade" id="deleteModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">게시글 삭제 확인</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>정말로 이 게시글을 삭제하시겠습니까?</p>
+                            <p class="text-danger">이 작업은 되돌릴 수 없습니다.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            <button type="button" class="btn btn-danger" id="confirmDelete">삭제</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script th:inline="javascript">
+                let postIdToDelete = null;
+
+                // 쿠키에서 JWT 토큰 가져오기
+                function getCookie(name) {
+                    const value = `; ${document.cookie}`;
+                    const parts = value.split(`; ${name}=`);
+                    if (parts.length === 2) return parts.pop().split(';').shift();
+                    return null;
+                }
+
+                // JWT 토큰 갱신
+                async function refreshJwtToken() {
+                    try {
+                        const response = await fetch('/api/auth/refresh', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.success) {
+                                return getCookie('jwt_token');
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Token 갱신 실패:', error);
+                    }
+                    return null;
+                }
+
+                function deletePost(postId) {
+                    postIdToDelete = postId;
+                    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                    modal.show();
+                }
+
+                document.getElementById('confirmDelete').addEventListener('click', async function() {
+                    if (postIdToDelete) {
+                        // JWT 토큰 가져오기 및 갱신
+                        let token = getCookie('jwt_token');
+                        
+                        if (!token) {
+                            // 토큰이 없으면 갱신 시도
+                            token = await refreshJwtToken();
+                            if (!token) {
+                                alert('로그인이 필요합니다. 다시 로그인해주세요.');
+                                window.location.href = '/acc/login';
+                                return;
+                            }
+                        }
+                        
+                        try {
+                            const response = await fetch(`/api/admin/posts/${postIdToDelete}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`
+                                }
+                            });
+                            
+                            if (response.ok) {
+                                alert('게시글이 성공적으로 삭제되었습니다.');
+                                location.reload();
+                            } else {
+                                alert('게시글 삭제에 실패했습니다.');
+                            }
+                        } catch (error) {
+                            console.error('Error:', error);
+                            alert('게시글 삭제 중 오류가 발생했습니다.');
+                        }
+                    }
+                    
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+                    modal.hide();
+                });
+            </script>
+        </div>
+    </div>
+</div> 

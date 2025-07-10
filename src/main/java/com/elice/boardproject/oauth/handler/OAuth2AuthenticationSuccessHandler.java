@@ -35,7 +35,7 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         String accessToken = JwtUtil.generateAccessToken(user.getId());
 
         Cookie jwtCookie = new Cookie("jwt_token", accessToken);
-        jwtCookie.setHttpOnly(true);
+        jwtCookie.setHttpOnly(false); // JavaScript에서 읽을 수 있도록 false로 설정
         jwtCookie.setSecure(request.isSecure()); // HTTPS 사용 시 true
         jwtCookie.setPath("/");
         jwtCookie.setMaxAge(1800); // 30분
@@ -46,7 +46,7 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
         
         // RefreshToken 쿠키 설정
         Cookie refreshTokenCookie = new Cookie("refresh_token", refreshTokenService.findByUserId(user.getId()).get().getToken());
-        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setHttpOnly(false); // JavaScript에서 읽을 수 있도록 false로 설정
         refreshTokenCookie.setSecure(request.isSecure());
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setMaxAge(604800); // 7일

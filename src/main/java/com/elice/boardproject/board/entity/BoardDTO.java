@@ -2,7 +2,7 @@ package com.elice.boardproject.board.entity;
 
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.post.entity.Post;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class BoardDTO {
     private User user;
     private String name;
     private String description;
-    private Timestamp date;
+    private LocalDateTime date;
 
     public Board toEntity() {
         return Board.builder()

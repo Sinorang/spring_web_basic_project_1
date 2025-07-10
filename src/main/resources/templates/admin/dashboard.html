@@ -1,0 +1,113 @@
+<div th:replace="~{/base}">
+    <div th:fragment="content">
+            <div class="container">
+                <h1 class="mb-4">관리자 대시보드</h1>
+                
+                <!-- 통계 카드 -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card text-white bg-primary">
+                            <div class="card-body">
+                                <h5 class="card-title">전체 사용자</h5>
+                                <p class="card-text display-4" th:text="${totalUsers}">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-white bg-success">
+                            <div class="card-body">
+                                <h5 class="card-title">전체 플레이리스트</h5>
+                                <p class="card-text display-4" th:text="${totalPlaylists}">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-white bg-info">
+                            <div class="card-body">
+                                <h5 class="card-title">전체 게시글</h5>
+                                <p class="card-text display-4" th:text="${totalPosts}">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-white bg-warning">
+                            <div class="card-body">
+                                <h5 class="card-title">전체 댓글</h5>
+                                <p class="card-text display-4" th:text="${totalComments}">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 관리 메뉴 -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">컨텐츠 관리</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <a href="/admin/playlists" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-music me-2"></i>
+                                        플레이리스트 관리
+                                        <span class="badge bg-success float-end" th:text="${totalPlaylists}">0</span>
+                                    </a>
+                                    <a href="/admin/posts" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-file-alt me-2"></i>
+                                        게시글 관리
+                                        <span class="badge bg-info float-end" th:text="${totalPosts}">0</span>
+                                    </a>
+                                    <a href="/admin/comments" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-comments me-2"></i>
+                                        댓글 관리
+                                        <span class="badge bg-warning float-end" th:text="${totalComments}">0</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">시스템 관리</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <a href="/admin/users" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-users me-2"></i>
+                                        사용자 관리
+                                        <span class="badge bg-primary float-end" th:text="${totalUsers}">0</span>
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action disabled">
+                                        <i class="fas fa-chart-bar me-2"></i>
+                                        시스템 통계 (준비중)
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action disabled">
+                                        <i class="fas fa-cog me-2"></i>
+                                        시스템 설정 (준비중)
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 최근 활동 -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">최근 활동</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">최근 활동 내역이 여기에 표시됩니다.</p>
+                                <!-- 향후 최근 활동 로그 추가 예정 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

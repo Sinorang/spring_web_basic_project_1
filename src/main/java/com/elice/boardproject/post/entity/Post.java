@@ -2,16 +2,11 @@ package com.elice.boardproject.post.entity;
 
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.board.entity.Board;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.sql.Timestamp;
+import com.elice.boardproject.comment.entity.Comment;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,7 +43,11 @@ public class Post {
 
     @Column(name = "post_date")
     @CreationTimestamp
-    private Timestamp postDate;
+    private LocalDateTime postDate;
+
+    // 게시글 삭제 시 댓글도 함께 삭제
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     // 일관성 유지
     public void setBoard(Board board) {

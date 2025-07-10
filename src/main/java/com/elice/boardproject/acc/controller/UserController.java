@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.elice.boardproject.security.service.RefreshTokenService;
+import com.elice.boardproject.exception.PliException;
+import com.elice.boardproject.exception.ErrorCode;
 
 @Controller
 public class UserController {
@@ -49,7 +51,17 @@ public class UserController {
     }
 
     @GetMapping("/acc/index")
-    public String indexPage() {
+    public String indexPage(HttpServletRequest request, Model model) {
+        // 회원가입 성공 메시지 확인
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("signupSuccess".equals(cookie.getName()) && "true".equals(cookie.getValue())) {
+                    model.addAttribute("signupSuccess", true);
+                    break;
+                }
+            }
+        }
         return "acc/index";
     }
 
@@ -69,13 +81,20 @@ public class UserController {
     }
 
     @PostMapping("/acc/signup")
-    public String signUp(@Valid UserDTO userDTO, Errors errors, Model model) {
+    public String signUp(@Valid UserDTO userDTO, Errors errors, Model model, HttpServletResponse response) {
         if (errors.hasErrors()) {
             System.out.println(errors.getAllErrors());
             model.addAttribute("userDTO", userDTO);
             return "acc/signup";
         }
         userService.join(userDTO);
+        
+        // 회원가입 성공 메시지를 쿠키에 저장
+        Cookie successCookie = new Cookie("signupSuccess", "true");
+        successCookie.setPath("/");
+        successCookie.setMaxAge(5); // 5초 후 자동 삭제
+        response.addCookie(successCookie);
+        
         return "redirect:/acc/index";
     }
 
@@ -91,42 +110,70 @@ public class UserController {
             return "acc/login";
         }
         
-        logger.debug("로그인 검증 시작 - ID: {}", loginDTO.getId());
-        List<User> loginUser = userService.getLoginUser(loginDTO.getId(), loginDTO.getPwd());
-        
-        if (loginUser.isEmpty()) {
-            logger.warn("로그인 실패 - ID: {}, 비밀번호 불일치 또는 사용자 없음", loginDTO.getId());
+        try {
+            logger.debug("로그인 검증 시작 - ID: {}", loginDTO.getId());
+            List<User> loginUser = userService.getLoginUser(loginDTO.getId(), loginDTO.getPwd());
+            
+            if (loginUser.isEmpty()) {
+                logger.warn("로그인 실패 - ID: {}, 비밀번호 불일치 또는 사용자 없음", loginDTO.getId());
+                model.addAttribute("loginError", "로그인 정보가 일치하지 않습니다.");
+                return "acc/login";
+            }
+            
+            logger.info("로그인 성공 - ID: {}, 사용자명: {}", loginDTO.getId(), loginUser.get(0).getName());
+            
+            // JWT AccessToken 생성 및 쿠키 설정
+            String accessToken = com.elice.boardproject.security.JwtUtil.generateAccessToken(loginDTO.getId());
+            logger.debug("AccessToken 생성 완료 - ID: {}", loginDTO.getId());
+            
+            Cookie jwtCookie = new Cookie("jwt_token", accessToken);
+            jwtCookie.setHttpOnly(false); // JavaScript에서 읽을 수 있도록 false로 설정
+            jwtCookie.setSecure(false);
+            jwtCookie.setPath("/");
+            jwtCookie.setMaxAge(1800); // 30분
+            response.addCookie(jwtCookie);
+            
+            // RefreshToken 생성 및 저장
+            refreshTokenService.createRefreshToken(loginDTO.getId(), 7); // 7일
+            logger.debug("RefreshToken 생성 완료 - ID: {}", loginDTO.getId());
+            
+            // RefreshToken 쿠키 설정
+            Cookie refreshTokenCookie = new Cookie("refresh_token", refreshTokenService.findByUserId(loginDTO.getId()).get().getToken());
+            refreshTokenCookie.setHttpOnly(false); // JavaScript에서 읽을 수 있도록 false로 설정
+            refreshTokenCookie.setSecure(false);
+            refreshTokenCookie.setPath("/");
+            refreshTokenCookie.setMaxAge(604800); // 7일
+            response.addCookie(refreshTokenCookie);
+            
+            logger.info("JWT 쿠키 설정 완료 - ID: {}", loginDTO.getId());
+            return "redirect:/acc/index";
+            
+        } catch (PliException e) {
+            logger.warn("로그인 실패 - ID: {}, 오류 코드: {}", loginDTO.getId(), e.getErrorCode());
+            String errorMessage;
+            switch (e.getErrorCode()) {
+                case ACCOUNT_SUSPENDED:
+                    errorMessage = "정지된 계정입니다. 관리자에게 문의하세요.";
+                    break;
+                case ACCOUNT_WITHDRAWN:
+                    errorMessage = "탈퇴된 계정입니다.";
+                    break;
+                case ACCOUNT_INACTIVE:
+                    errorMessage = "비활성화된 계정입니다.";
+                    break;
+                case USER_NOT_FOUND:
+                case INVALID_CREDENTIALS:
+                default:
+                    errorMessage = "로그인 정보가 일치하지 않습니다.";
+                    break;
+            }
+            model.addAttribute("loginError", errorMessage);
+            return "acc/login";
+        } catch (Exception e) {
+            logger.warn("로그인 실패 - ID: {}, 오류: {}", loginDTO.getId(), e.getMessage());
             model.addAttribute("loginError", "로그인 정보가 일치하지 않습니다.");
             return "acc/login";
         }
-        
-        logger.info("로그인 성공 - ID: {}, 사용자명: {}", loginDTO.getId(), loginUser.get(0).getName());
-        
-        // JWT AccessToken 생성 및 쿠키 설정
-        String accessToken = com.elice.boardproject.security.JwtUtil.generateAccessToken(loginDTO.getId());
-        logger.debug("AccessToken 생성 완료 - ID: {}", loginDTO.getId());
-        
-        Cookie jwtCookie = new Cookie("jwt_token", accessToken);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(false);
-        jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(1800); // 30분
-        response.addCookie(jwtCookie);
-        
-        // RefreshToken 생성 및 저장
-        refreshTokenService.createRefreshToken(loginDTO.getId(), 7); // 7일
-        logger.debug("RefreshToken 생성 완료 - ID: {}", loginDTO.getId());
-        
-        // RefreshToken 쿠키 설정
-        Cookie refreshTokenCookie = new Cookie("refresh_token", refreshTokenService.findByUserId(loginDTO.getId()).get().getToken());
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(false);
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(604800); // 7일
-        response.addCookie(refreshTokenCookie);
-        
-        logger.info("JWT 쿠키 설정 완료 - ID: {}", loginDTO.getId());
-        return "redirect:/acc/index";
     }
 
     @GetMapping("/acc/logout")
@@ -156,7 +203,7 @@ public class UserController {
         
         // JWT 쿠키 삭제
         Cookie jwtCookie = new Cookie("jwt_token", null);
-        jwtCookie.setHttpOnly(true);
+        jwtCookie.setHttpOnly(false);
         jwtCookie.setSecure(false);
         jwtCookie.setPath("/");
         jwtCookie.setMaxAge(0); // 쿠키 즉시 삭제
@@ -164,7 +211,7 @@ public class UserController {
         
         // RefreshToken 쿠키 삭제
         Cookie refreshTokenCookie = new Cookie("refresh_token", null);
-        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setHttpOnly(false);
         refreshTokenCookie.setSecure(false);
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setMaxAge(0); // 쿠키 즉시 삭제

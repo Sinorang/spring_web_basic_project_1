@@ -1,5 +1,12 @@
 <div th:replace="~{/base}"> <!-- base.html을 상속 -->
     <div class="p-5 mb-4 bg-light rounded-3" th:fragment="content">
+        <!-- 회원가입 성공 메시지 -->
+        <div th:if="${signupSuccess}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            회원가입이 성공적으로 완료되었습니다! 이제 로그인하여 서비스를 이용하세요.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
         <div class="row">
             <div class="col-md-6">
                 <img th:src="@{/images/playlistWebImage_GIF.gif}" width="90%" alt="mainImage" />
@@ -14,4 +21,15 @@
             </div>
         </div>
     </div>
+    
+    <!-- 회원가입 성공 시 쿠키 삭제 -->
+    <script th:inline="javascript">
+        // 회원가입 성공 메시지가 표시되면 쿠키 삭제
+        if (/*[[${signupSuccess}]]*/ false) {
+            // 3초 후 쿠키 삭제
+            setTimeout(function() {
+                document.cookie = "signupSuccess=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }, 3000);
+        }
+    </script>
 </div>

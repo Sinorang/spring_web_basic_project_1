@@ -11,6 +11,10 @@ import com.elice.boardproject.admin.repository.PermissionRepository;
 import com.elice.boardproject.board.repository.BoardRepository;
 import com.elice.boardproject.comment.repository.CommentRepository;
 import com.elice.boardproject.post.repository.PostRepository;
+import com.elice.boardproject.playlist.entity.Playlist;
+import com.elice.boardproject.playlist.entity.PlaylistSong;
+import com.elice.boardproject.playlist.repository.PlaylistRepository;
+import com.elice.boardproject.playlist.repository.PlaylistSongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,17 +31,21 @@ public class DataInit implements CommandLineRunner {
     private final CommentRepository commentRepository;
     private final AdminRoleRepository adminRoleRepository;
     private final PermissionRepository permissionRepository;
+    private final PlaylistRepository playlistRepository;
+    private final PlaylistSongRepository playlistSongRepository;
 
     @Autowired
     private UserService userService;
 
-    public DataInit(UserRepository userRepository, BoardRepository boardRepository, PostRepository postRepository, CommentRepository commentRepository, AdminRoleRepository adminRoleRepository, PermissionRepository permissionRepository) {
+    public DataInit(UserRepository userRepository, BoardRepository boardRepository, PostRepository postRepository, CommentRepository commentRepository, AdminRoleRepository adminRoleRepository, PermissionRepository permissionRepository, PlaylistRepository playlistRepository, PlaylistSongRepository playlistSongRepository) {
         this.userRepository = userRepository;
         this.boardRepository = boardRepository;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.adminRoleRepository = adminRoleRepository;
         this.permissionRepository = permissionRepository;
+        this.playlistRepository = playlistRepository;
+        this.playlistSongRepository = playlistSongRepository;
     }
 
     @Override
@@ -138,6 +146,53 @@ public class DataInit implements CommandLineRunner {
         var comment2 = new com.elice.boardproject.comment.entity.Comment(post2, user1, "유저가 남긴 댓글입니다.");
         commentRepository.save(comment1);
         commentRepository.save(comment2);
+
+        // Playlist 생성
+        var playlist1 = Playlist.builder()
+                .title("테스트 플레이리스트 1")
+                .description("테스트용 플레이리스트입니다.")
+                .owner(user1)
+                .coverImageUrl("https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg")
+                .createdAt(java.time.LocalDateTime.now())
+                .build();
+        var playlist2 = Playlist.builder()
+                .title("테스트 플레이리스트 2")
+                .description("관리자가 만든 플레이리스트입니다.")
+                .owner(user2)
+                .coverImageUrl("https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg")
+                .createdAt(java.time.LocalDateTime.now())
+                .build();
+        playlistRepository.save(playlist1);
+        playlistRepository.save(playlist2);
+
+        // PlaylistSong 생성
+        var song1 = new PlaylistSong();
+        song1.setPlaylist(playlist1);
+        song1.setYoutubeVideoId("dQw4w9WgXcQ");
+        song1.setTitle("Never Gonna Give You Up");
+        song1.setArtist("Rick Astley");
+        song1.setThumbnailUrl("https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg");
+        song1.setOrderIndex(1);
+        
+        var song2 = new PlaylistSong();
+        song2.setPlaylist(playlist1);
+        song2.setYoutubeVideoId("9bZkp7q19f0");
+        song2.setTitle("PSY - GANGNAM STYLE");
+        song2.setArtist("PSY");
+        song2.setThumbnailUrl("https://img.youtube.com/vi/9bZkp7q19f0/maxresdefault.jpg");
+        song2.setOrderIndex(2);
+        
+        var song3 = new PlaylistSong();
+        song3.setPlaylist(playlist2);
+        song3.setYoutubeVideoId("kJQP7kiw5Fk");
+        song3.setTitle("Luis Fonsi - Despacito ft. Daddy Yankee");
+        song3.setArtist("Luis Fonsi");
+        song3.setThumbnailUrl("https://img.youtube.com/vi/kJQP7kiw5Fk/maxresdefault.jpg");
+        song3.setOrderIndex(1);
+        
+        playlistSongRepository.save(song1);
+        playlistSongRepository.save(song2);
+        playlistSongRepository.save(song3);
     }
 
     /**

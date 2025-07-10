@@ -34,6 +34,9 @@ public enum ErrorCode {
     EMAIL_ALREADY_EXISTS(3004, HttpStatus.CONFLICT, "이메일 {0}은(는) 이미 사용 중입니다."),
     NICKNAME_ALREADY_EXISTS(3005, HttpStatus.CONFLICT, "닉네임 {0}은(는) 이미 사용 중입니다."),
     OAUTH_USER_UPDATE_RESTRICTED(3006, HttpStatus.BAD_REQUEST, "OAuth 사용자는 이 정보를 수정할 수 없습니다."),
+    ACCOUNT_SUSPENDED(3007, HttpStatus.FORBIDDEN, "정지된 계정입니다. 관리자에게 문의하세요."),
+    ACCOUNT_WITHDRAWN(3008, HttpStatus.FORBIDDEN, "탈퇴된 계정입니다."),
+    ACCOUNT_INACTIVE(3009, HttpStatus.FORBIDDEN, "비활성화된 계정입니다."),
     
     // 게시판 관련 에러 (4000번대)
     BOARD_NOT_FOUND(4000, HttpStatus.NOT_FOUND, "게시판 ID: {0}을(를) 찾을 수 없습니다."),
