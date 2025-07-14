@@ -64,6 +64,10 @@ public class PostService {
     public void deletePost(Long postId){
         Post deletePost = postRepository.findById(postId)
             .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다"));
+        
+        // 게시글 삭제 전에 연관된 댓글들을 먼저 삭제
+        commentService.deleteCommentsByPostId(postId);
+        
         postRepository.delete(deletePost);
     }
     
@@ -71,5 +75,20 @@ public class PostService {
         return postRepository.findBoardIdxByPostId(postId);
     }
 
+    /**
+     * 전체 게시글 목록을 조회합니다.
+     * @return 전체 게시글 목록
+     */
+    public List<Post> getAllPosts() {
+        return postRepository.findAll();
+    }
+
+    /**
+     * 전체 게시글 개수를 반환합니다.
+     * @return 전체 게시글 개수
+     */
+    public long getPostCount() {
+        return postRepository.count();
+    }
 
 }

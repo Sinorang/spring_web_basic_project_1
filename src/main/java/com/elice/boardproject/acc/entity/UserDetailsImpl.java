@@ -24,12 +24,21 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (user.getAdminRole() != null && user.getAdminRole().getPermissions() != null) {
-            return user.getAdminRole().getPermissions().stream()
-                .map(p -> new SimpleGrantedAuthority(p.getPermissionName()))
-                .collect(Collectors.toList());
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        
+        // 관리자인 경우 ADMIN 역할 추가
+        if (user.isAdmin()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
-        return Collections.emptyList();
+        
+        // AdminRole의 권한들 추가
+        if (user.getAdminRole() != null && user.getAdminRole().getPermissions() != null) {
+            authorities.addAll(user.getAdminRole().getPermissions().stream()
+                .map(p -> new SimpleGrantedAuthority(p.getPermissionName()))
+                .collect(Collectors.toList()));
+        }
+        
+        return authorities;
     }
 
     @Override

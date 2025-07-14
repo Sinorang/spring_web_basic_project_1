@@ -48,7 +48,7 @@ public class UserApiController {
         
         // 3. 쿠키에 JWT 토큰 설정
         Cookie jwtCookie = new Cookie("jwt_token", token);
-        jwtCookie.setHttpOnly(true);
+        jwtCookie.setHttpOnly(false); // JavaScript에서 읽을 수 있도록 false로 설정
         jwtCookie.setSecure(false); // HTTPS 환경에서는 true로 설정
         jwtCookie.setPath("/");
         jwtCookie.setMaxAge(3600); // 1시간
@@ -62,7 +62,7 @@ public class UserApiController {
     public ResponseEntity<?> logout(HttpServletResponse response) {
         // 쿠키에서 JWT 토큰 삭제
         Cookie jwtCookie = new Cookie("jwt_token", null);
-        jwtCookie.setHttpOnly(true);
+        jwtCookie.setHttpOnly(false);
         jwtCookie.setSecure(false);
         jwtCookie.setPath("/");
         jwtCookie.setMaxAge(0); // 즉시 삭제

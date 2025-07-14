@@ -13,6 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -35,6 +37,10 @@ public class Comment {
 
     @Column(name="comment_content", length = 500)
     private String commentContent;
+
+    @Column(name="comment_date")
+    @CreationTimestamp
+    private LocalDateTime commentDate;
 
     public Comment(Post post,User user, String commentContent){
         this.post = post;

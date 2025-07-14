@@ -49,4 +49,29 @@ public class CommentService {
         commentRepository.delete(deleteComment);
     }
 
+    @Transactional
+    public void deleteCommentsByPostId(Long postId){ // 게시글 ID로 모든 댓글 삭제
+        List<Comment> comments = commentRepository.findCommentsByPostId(postId);
+        commentRepository.deleteAll(comments);
+    }
+
+    /**
+     * 전체 댓글 목록을 조회합니다.
+     * @return 전체 댓글 목록
+     */
+    public List<Comment> getAllComments() {
+        return commentRepository.findAll();
+    }
+
+    /**
+     * 전체 댓글 개수를 반환합니다.
+     * @return 전체 댓글 개수
+     */
+    public long getCommentCount() {
+        return commentRepository.count();
+    }
+
+    public List<Comment> findCommentsByBoardId(Long boardIdx) {
+        return commentRepository.findAllByPost_Board_Idx(boardIdx);
+    }
 }

@@ -300,7 +300,38 @@ feat: 게시글 생성 기능 구현
 
 ---
 
+## 🔐 인증 및 토큰 관리 (JWT + RefreshToken)
 
+### 1. 도입 배경 및 목적
+- 기존에는 화면(Web) 기반의 단순 JWT 쿠키 삭제 방식 로그아웃만 제공
+- 추후 SPA(React, Vue 등), 모바일 앱, 외부 서비스 연동, refreshToken 기반 보안 고도화, API 일관성 확보 등을 위해 REST 인증/토큰 관리 API를 미리 구현
+- refreshToken은 DB에 저장되어 서버에서 폐기/블랙리스트 관리 가능
+- accessToken/refreshToken 모두 쿠키로 관리하며, API 기반 인증 체계로 점진적 전환 가능
+
+### 2. 주요 API
+- `/api/auth/refresh` : refreshToken으로 accessToken 재발급
+- `/api/auth/logout`  : refreshToken 및 accessToken 폐기(쿠키/DB)
+  - 현재 화면(Web)에서는 직접 사용하지 않지만, SPA/앱/외부 연동, 보안 고도화, API 일관성 확보 등을 위해 미리 구현
+
+### 3. 기존 로그아웃과의 차이
+- UserController의 `/acc/logout` : 화면(Web) 중심, JWT 쿠키만 삭제
+- AuthController의 `/api/auth/logout` : REST API, refreshToken까지 서버에서 폐기, API 기반 인증/보안 고도화에 적합
+
+### 4. 예시 (curl)
+```bash
+# accessToken 재발급
+curl -X POST http://localhost:8080/api/auth/refresh --cookie "refresh_token={refreshToken}"
+
+# 로그아웃
+curl -X POST http://localhost:8080/api/auth/logout --cookie "jwt_token={accessToken}; refresh_token={refreshToken}"
+```
+
+### 5. 향후 활용
+- SPA 프론트엔드, 모바일 앱, 외부 서비스 연동 시 REST 인증 체계로 확장 가능
+- refreshToken 기반 강제 로그아웃, 블랙리스트, 세션 관리 등 보안 고도화에 활용
+- RefreshToken을 Redis 등 인메모리 저장소로 관리하면 대규모 트래픽, 빠른 만료/블랙리스트 처리, 분산 서버 환경에서의 확장성 등에서 장점이 큼
+
+---
 
 ## 🚀 향후 고도화 계획
 
@@ -355,6 +386,22 @@ feat: 게시글 생성 기능 구현
 - 플레이리스트 공유 및 재생 기능
 - 푸시 알림 시스템
 
+### 10. RefreshToken Redis 도입
+- RefreshToken을 Redis 등 인메모리 저장소로 관리
+- 대규모 트래픽 대응 및 빠른 만료/블랙리스트 처리
+- 분산 서버 환경에서의 확장성 확보
+
+### 11. JWT 토큰 보안 고도화 ⚠️
+- **현재 상태**: 개발 편의성을 위해 `HttpOnly=false`로 설정하여 JavaScript에서 토큰 읽기 가능
+- **보안 위험**: XSS(Cross-Site Scripting) 공격에 취약할 수 있음
+- **향후 개선 방안**:
+  - `HttpOnly=true`로 변경하여 JavaScript에서 토큰 접근 차단
+  - 서버 사이드 토큰 검증 API 구현으로 대체
+  - CSP(Content Security Policy) 헤더 설정으로 XSS 방지
+  - 토큰 만료 시간 단축 (현재 30분 → 15분)
+  - 하이브리드 접근법 고려 (AccessToken은 HttpOnly=false, RefreshToken은 HttpOnly=true)
+- **우선순위**: 프로덕션 환경 배포 전 반드시 구현 필요
+
 ---
 
 ## 🚩 구현 현황 (2024.07 기준)
@@ -367,6 +414,9 @@ feat: 게시글 생성 기능 구현
 - **관리자 전용 컨텐츠 삭제 API**: 게시글/댓글/플레이리스트 삭제는 관리자만 가능한 별도 API 구현
 - **관리자 전용 플레이리스트 통계 API**: 전체 플레이리스트 개수 등 통계 제공
 - **테스트 자동화**: SpringBootTest 기반 통합 테스트, 권한/보안 정책 변경 시 테스트 연동
+- **관리자 페이지 게시글/댓글 관리**: 게시판별 필터/탭 기능을 통한 효율적인 컨텐츠 관리
+- **관리자 전용 플레이리스트 삭제 기능**: 관리자 권한으로 플레이리스트 삭제 가능
+- **사용자 관리 페이지 구현**: 사용자 목록과 상세 정보 모달, JWT 토큰 인증 처리, 자기 자신에 대한 상태 변경 버튼 숨김
 
 ### ⏳ 향후 구현 예정
 - **권한 검증 강화**: AOP 기반 권한 체크의 예외/실패 케이스 보강, 일관된 에러코드/메시지 반환, 상세 로깅

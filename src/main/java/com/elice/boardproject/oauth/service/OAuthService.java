@@ -41,6 +41,7 @@ public class OAuthService {
                 existingUser.setOauthProvider(provider);
                 existingUser.setOauthId(oauthId);
                 existingUser.setOauthEmail(email);
+                existingUser.setIsActive(true); // 활성 상태로 설정
                 return userRepository.save(existingUser);
             }
         }
@@ -59,6 +60,7 @@ public class OAuthService {
                 .oauthProvider(provider)
                 .oauthId(oauthId)
                 .oauthEmail(email)
+                .isActive(true) // 활성 상태로 명시적 설정
                 .build();
 
         return userRepository.save(newUser);

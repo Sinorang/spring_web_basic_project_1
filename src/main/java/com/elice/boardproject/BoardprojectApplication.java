@@ -6,6 +6,8 @@ import com.elice.boardproject.admin.repository.PermissionRepository;
 import com.elice.boardproject.board.repository.BoardRepository;
 import com.elice.boardproject.comment.repository.CommentRepository;
 import com.elice.boardproject.post.repository.PostRepository;
+import com.elice.boardproject.playlist.repository.PlaylistRepository;
+import com.elice.boardproject.playlist.repository.PlaylistSongRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -22,8 +24,8 @@ public class BoardprojectApplication {
 
 //	@Bean
 //	@Profile("local")
-	public DataInit stubDataInit(UserRepository userRepository, BoardRepository boardRepository, PostRepository postRepository, CommentRepository commentRepository, AdminRoleRepository adminRoleRepository, PermissionRepository permissionRepository) {
-		return new DataInit(userRepository, boardRepository, postRepository, commentRepository, adminRoleRepository, permissionRepository);
+	public DataInit stubDataInit(UserRepository userRepository, BoardRepository boardRepository, PostRepository postRepository, CommentRepository commentRepository, AdminRoleRepository adminRoleRepository, PermissionRepository permissionRepository, PlaylistRepository playlistRepository, PlaylistSongRepository playlistSongRepository) {
+		return new DataInit(userRepository, boardRepository, postRepository, commentRepository, adminRoleRepository, permissionRepository, playlistRepository, playlistSongRepository);
 	}
 
 }

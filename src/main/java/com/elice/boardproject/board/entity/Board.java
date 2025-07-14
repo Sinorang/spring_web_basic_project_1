@@ -13,7 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -51,7 +51,7 @@ public class Board {
 
     @Column(name = "board_date")
     @CreationTimestamp
-    private Timestamp date;
+    private LocalDateTime date;
 
     // posts getter에 null 체크 추가
     public List<Post> getPosts() {

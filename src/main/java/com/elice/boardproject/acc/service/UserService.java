@@ -46,9 +46,35 @@ public class UserService {
     public List<User> getLoginUser(String id, String rawPwd) {
         logger.debug("로그인 검증 시작 - ID: {}", id);
         
-        User user = ExceptionUtils.requireNonNull(userRepository.findById(id), ErrorCode.USER_NOT_FOUND, id);
+        User user = ExceptionUtils.requireNonNull(userRepository.findByIdForAdmin(id), ErrorCode.USER_NOT_FOUND, id);
         
         logger.debug("사용자 발견 - ID: {}, 저장된 해시: {}", id, user.getPwd());
+        
+        // 사용자 상태별 처리 (isActive 체크보다 먼저)
+        switch (user.getStatus()) {
+            case SUSPENDED:
+                logger.warn("정지된 계정 로그인 시도 - ID: {}", id);
+                ExceptionUtils.throwException(ErrorCode.ACCOUNT_SUSPENDED);
+                return List.of(); // 이 라인은 실행되지 않음
+            case WITHDRAWN:
+                logger.warn("탈퇴된 계정 로그인 시도 - ID: {}", id);
+                ExceptionUtils.throwException(ErrorCode.ACCOUNT_WITHDRAWN);
+                return List.of(); // 이 라인은 실행되지 않음
+            case ACTIVE:
+                // 정상 상태이므로 계속 진행
+                break;
+            default:
+                logger.warn("알 수 없는 계정 상태 - ID: {}, 상태: {}", id, user.getStatus());
+                ExceptionUtils.throwException(ErrorCode.ACCOUNT_INACTIVE);
+                return List.of(); // 이 라인은 실행되지 않음
+        }
+        
+        // isActive 체크는 마지막에
+        if (!user.isActive()) {
+            logger.warn("비활성화된 계정 로그인 시도 - ID: {}", id);
+            ExceptionUtils.throwException(ErrorCode.ACCOUNT_INACTIVE);
+            return List.of(); // 이 라인은 실행되지 않음
+        }
         
         boolean passwordMatches = passwordEncoder.matches(rawPwd, user.getPwd());
         logger.debug("비밀번호 검증 결과 - ID: {}, 일치: {}", id, passwordMatches);

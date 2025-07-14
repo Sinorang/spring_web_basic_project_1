@@ -21,7 +21,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.id = :id AND u.isActive = true")
     User findById(@Param("id") String id);
     
-    // 관리자용 - 모든 사용자 조회 (활성/비활성 구분 없음)
+    // JWT 인증 전용 - AdminRole과 Permission을 함께 조회
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.adminRole ar LEFT JOIN FETCH ar.permissions WHERE u.id = :id AND u.isActive = true")
+    User findByIdWithAdminRole(@Param("id") String id);
+    
+    // 사용자 조회 (활성/비활성 구분 없음)
     @Query("SELECT u FROM User u WHERE u.id = :id")
     User findByIdForAdmin(@Param("id") String id);
     
