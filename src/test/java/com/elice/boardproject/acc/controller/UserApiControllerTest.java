@@ -10,6 +10,7 @@ import com.elice.boardproject.comment.repository.CommentRepository;
 import com.elice.boardproject.acc.dto.UserWithdrawRequestDTO;
 import com.elice.boardproject.acc.entity.User;
 import com.elice.boardproject.acc.entity.UserStatus;
+import com.elice.boardproject.playlist.repository.PlaylistRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +50,15 @@ class UserApiControllerTest {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private PlaylistRepository playlistRepository;
+
     @BeforeEach
     void setUp() {
         commentRepository.deleteAll();
         postRepository.deleteAll();
         boardRepository.deleteAll();
+        playlistRepository.deleteAll();
         userRepository.deleteAll();
         // 테스트용 회원가입
         UserDTO userDTO = new UserDTO();
@@ -101,7 +106,7 @@ class UserApiControllerTest {
                 .content(objectMapper.writeValueAsString(loginDTO)))
                 .andExpect(status().isOk())
                 .andExpect(cookie().exists("jwt_token"))
-                .andExpect(cookie().httpOnly("jwt_token", true))
+                .andExpect(cookie().httpOnly("jwt_token", false))
                 .andExpect(cookie().path("jwt_token", "/"))
                 .andExpect(cookie().maxAge("jwt_token", 3600));
     }

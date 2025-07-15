@@ -13,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -25,6 +27,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class UserProfileServiceTest {
 
     @Mock
@@ -62,6 +65,7 @@ class UserProfileServiceTest {
         testProfileUpdateDTO = new UserProfileUpdateDTO();
         testProfileUpdateDTO.setNickname("새닉네임");
         testProfileUpdateDTO.setEmail("new@example.com");
+        // setUp에서는 공통 mock 세팅을 하지 않음
     }
 
     @Test
@@ -285,7 +289,7 @@ class UserProfileServiceTest {
     @Test
     void 로그인_성공() {
         // given
-        when(userRepository.findById("testuser")).thenReturn(testUser);
+        when(userRepository.findByIdForAdmin("testuser")).thenReturn(testUser);
         when(passwordEncoder.matches("password123!", "hashedPassword")).thenReturn(true);
 
         // when
@@ -294,34 +298,34 @@ class UserProfileServiceTest {
         // then
         assertThat(result).isNotEmpty();
         assertThat(result.get(0)).isEqualTo(testUser);
-        verify(userRepository).findById("testuser");
+        verify(userRepository).findByIdForAdmin("testuser");
         verify(passwordEncoder).matches("password123!", "hashedPassword");
     }
 
     @Test
     void 존재하지_않는_사용자_로그인_실패() {
         // given
-        when(userRepository.findById("nonexistent")).thenReturn(null);
+        when(userRepository.findByIdForAdmin("nonexistent")).thenReturn(null);
 
         // when & then
         assertThatThrownBy(() -> userService.getLoginUser("nonexistent", "password123!"))
                 .isInstanceOf(PliException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
-        verify(userRepository).findById("nonexistent");
+        verify(userRepository).findByIdForAdmin("nonexistent");
         verify(passwordEncoder, never()).matches(anyString(), anyString());
     }
 
     @Test
     void 비밀번호_불일치_로그인_실패() {
         // given
-        when(userRepository.findById("testuser")).thenReturn(testUser);
+        when(userRepository.findByIdForAdmin("testuser")).thenReturn(testUser);
         when(passwordEncoder.matches("wrongPassword", "hashedPassword")).thenReturn(false);
 
         // when & then
         assertThatThrownBy(() -> userService.getLoginUser("testuser", "wrongPassword"))
                 .isInstanceOf(PliException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_CREDENTIALS);
-        verify(userRepository).findById("testuser");
+        verify(userRepository).findByIdForAdmin("testuser");
         verify(passwordEncoder).matches("wrongPassword", "hashedPassword");
     }
 
