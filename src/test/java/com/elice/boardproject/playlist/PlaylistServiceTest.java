@@ -39,6 +39,9 @@ class PlaylistServiceTest {
 
     @BeforeEach
     void setUp() {
+        // 테스트 데이터 정리
+        playlistSongRepository.deleteAll();
+        playlistRepository.deleteAll();
         // 테스트용 사용자 생성
         testUser = new User();
         testUser.setId("testuser");
